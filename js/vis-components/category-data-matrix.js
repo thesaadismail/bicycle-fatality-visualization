@@ -6,6 +6,7 @@ function CategoryDataMatrix() { // constructor function
 	};
 	this.updateData = function(xAxisCategoryNames, yAxisCategoryNames, dataMatrix) {};
 }
+
 var numPoints = 1500,
 	size = 300,
 	numRows = 16,
@@ -61,15 +62,7 @@ var randomizeData = function() {
 			cells[row][col].points.push(data[data.length - 1]);
 		}
 	};
-var selectPoints = function(points) {
-		d3.selectAll(points).attr("r", 4).attr("stroke", "#f00").attr("stroke-width", 3);
-		for (var i = 0; i < points.length; i++) {
-			points[i].parentNode.appendChild(points[i]);
-		}
-	};
-var deselectPoints = function(points) {
-		d3.selectAll(points).attr("r", 2).attr("stroke", "none");
-	};
+
 var selectCell = function(cell) {
 		d3.select(cell).attr("stroke", "#f00").attr("stroke-width", 3);
 		cell.parentNode.parentNode.appendChild(cell.parentNode);
@@ -78,66 +71,16 @@ var selectCell = function(cell) {
 var deselectCell = function(cell) {
 		d3.select(cell).attr("stroke", "#fff").attr("stroke-width", 1);
 	};
-var onPointOver = function(point, data) {
-		selectPoints([point]);
-		var cell = d3.select("div#heatchart").select('[cell="r' + data.row + 'c' + data.col + '"]');
-		selectCell(cell.node());
-	};
-var onPointOut = function(point, data) {
-		deselectPoints([point]);
-		var cell = d3.select("div#heatchart").select('[cell="r' + data.row + 'c' + data.col + '"]');
-		deselectCell(cell.node());
-	};
-var createScatterplot = function() {
-		var scatterplot = d3.select("div#scatterplot").append("svg:svg").attr("width", size).attr("height", size);
-		scatterplot.selectAll("circle").data(data).enter().append("svg:circle").attr("cx", function(d, i) {
-			return d.x;
-		}).attr("cy", function(d, i) {
-			return d.y;
-		}).attr("r", 2).attr("ind", function(d) {
-			return d.ind;
-		}).on("mouseover", function(d) {
-			onPointOver(this, d);
-		}).on("mouseout", function(d) {
-			onPointOut(this, d);
-		});
-	};
+
+
 var onCellOver = function(cell, data) {
 		selectCell(cell);
 	};
 var onCellOut = function(cell, data) {
 		deselectCell(cell);
 	};
-var updateScatterplot = function() {
-		// select
-		var dots = d3.select("div#scatterplot").select("svg").selectAll("circle").data(data);
-		// enter
-		dots.enter().append("svg:circle").attr("cx", function(d, i) {
-			return d.x;
-		}).attr("cy", function(d, i) {
-			return d.y;
-		}).attr("r", 2).attr("ind", function(d) {
-			return d.ind;
-		}).on("mouseover", function(d) {
-			onPointOver(this, d);
-		}).on("mouseout", function(d) {
-			onPointOut(this, d);
-		});
-		// update
-		dots.attr("cx", function(d, i) {
-			return d.x;
-		}).attr("cy", function(d, i) {
-			return d.y;
-		}).attr("ind", function(d) {
-			return d.ind;
-		}).on("mouseover", function(d) {
-			onPointOver(this, d);
-		}).on("mouseout", function(d) {
-			onPointOut(this, d);
-		});
-		// exit
-		dots.exit().remove();
-	};
+
+	
 var createHeatchart = function() {
 		var min = 999;
 		var max = -999;
@@ -153,6 +96,14 @@ var createHeatchart = function() {
 				}
 			}
 		}
+		var tooltip = d3.select("body")
+		.append("div")
+		.style("position", "absolute")
+		.style("z-index", "10")
+		.style("visibility", "hidden")
+		.text("a simple tooltip");
+    
+		
 		var heatchart = d3.select("div#heatchart").append("svg:svg").attr("width", size).attr("height", size);
 		heatchart.selectAll("g").data(cells).enter().append("svg:g").selectAll("rect").data(function(d) {
 			return d;
@@ -166,8 +117,15 @@ var createHeatchart = function() {
 			return "r" + d.row + "c" + d.col;
 		}).on("mouseover", function(d) {
 			onCellOver(this, d);
+			tooltip.text("Cell: ["+d.col+","+d.row+"]");
+			tooltip.style("visibility", "visible");
+		}).on("mousemove", function(d) {
+			tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
 		}).on("mouseout", function(d) {
 			onCellOut(this, d);
+			tooltip.style("visibility", "hidden");
+		}).on("click", function(d) {
+			console.log("clicking: ["+d.col+","+d.row+"]");
 		});
 	};
 var updateHeatchart = function() {
@@ -199,6 +157,8 @@ var updateHeatchart = function() {
 			onCellOver(this, d);
 		}).on("mouseout", function(d) {
 			onCellOut(this, d);
+		}).on("click", function(d) {
+			console.log("clicking: ["+d.col+","+d.row+"]");
 		});
 	};
 var onRandomizeClick = function() {
