@@ -1,9 +1,12 @@
-function init(){
-  chart = d3.select('#vis').append('svg')
-  vis = chart.append('svg:g')
-  //PUT YOUR INIT CODE BELOW
+var dataMatrix;
 
-  
-  dataMatrix = new CategoryDataMatrix("#heatchartContainer"); 
-  dataMatrix.initDataMatrix(); 
+function init() {
+	randomData = generateRandomDataForCategoryDataMatrix(8, 8, 1500, 300);
+	dataMatrix = new CategoryDataMatrix("#heatchartContainer", randomData, 300);
+	dataMatrix.initDataMatrix();
+}
+
+function updateClicked() {
+	dataMatrix.matrixDataset = generateRandomDataForCategoryDataMatrix(8, 8, 1500, 300);
+	dataMatrix.updateHeatchart();
 }
