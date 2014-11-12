@@ -1,5 +1,7 @@
-function CategoryDataMatrix(elementName, cells, size) { // constructor function
-	//var elementName;
+function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr) { // constructor function
+	
+	var width = widthAttr, 
+		height = heightAttr;
 	var matrixDataset = cells;
 	var numRows = matrixDataset.length,
 		numCols = matrixDataset[0].length,
@@ -36,14 +38,14 @@ function CategoryDataMatrix(elementName, cells, size) { // constructor function
 			}
 			var tooltip = d3.select("body").append("div").style("position", "absolute").style("z-index", "10").style("visibility", "hidden").text("a simple tooltip");
 			//setup x & y axes
-			var heatchart = d3.select(elementName).append("svg:svg").attr("width", size).attr("height", size);
+			var heatchart = d3.select(elementName).append("svg:svg").attr("width", width).attr("height", height);
 			heatchart.selectAll("g").data(matrixDataset).enter().append("svg:g").selectAll("rect").data(function(d) {
 				return d;
 			}).enter().append("svg:rect").attr("x", function(d, i) {
-				return d.col * (size / numCols);
+				return d.col * (width / numCols);
 			}).attr("y", function(d, i) {
-				return d.row * (size / numRows);
-			}).attr("width", size / numCols).attr("height", size / numRows).attr("fill", function(d, i) {
+				return d.row * (height / numRows);
+			}).attr("width", width / numCols).attr("height", height / numRows).attr("fill", function(d, i) {
 				return color((d.points.length - min) / (max - min));
 			}).attr("stroke", "#fff").attr("cell", function(d) {
 				return "r" + d.row + "c" + d.col;
@@ -61,6 +63,7 @@ function CategoryDataMatrix(elementName, cells, size) { // constructor function
 			});
 		};
 	this.updateHeatchart = function() {
+		console.log("update heat chart");
 		var min = 999;
 		var max = -999;
 		var l;
@@ -78,9 +81,9 @@ function CategoryDataMatrix(elementName, cells, size) { // constructor function
 		d3.select(elementName).select("svg").selectAll("g").data(matrixDataset).selectAll("rect").data(function(d) {
 			return d;
 		}).attr("x", function(d, i) {
-			return d.col * (size / numCols);
+			return d.col * (width / numCols);
 		}).attr("y", function(d, i) {
-			return d.row * (size / numRows);
+			return d.row * (height / numRows);
 		}).attr("fill", function(d, i) {
 			return color((d.points.length - min) / (max - min));
 		}).attr("cell", function(d) {
@@ -96,4 +99,11 @@ function CategoryDataMatrix(elementName, cells, size) { // constructor function
 	this.initDataMatrix = function() {
 		createHeatchart();
 	};
+	
+	this.updateDataset = function(newCells) {
+		matrixDataset = newCells;
+	}
+	this.getDataset = function() {
+		return matrixDataset;
+	}
 }

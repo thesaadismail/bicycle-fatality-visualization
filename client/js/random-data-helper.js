@@ -1,10 +1,13 @@
-var cells = null;
-var generateRandomDataForCategoryDataMatrix = function(numRows, numCols, numPoints, size) {
+var generateRandomDataForCategoryDataMatrix = function(cells, numRows, numCols, numPoints, size) {
+		//cells = null;
 		data = [];
 		if (cells === null) {
 			cells = getEmptyCells(numRows, numCols);
 		} else {
-			clearCells(numRows, numCols);
+			console.log("clear cells");
+			console.log(cells);
+			clearCells(cells, numRows, numCols);
+
 		}
 		var x, y, col, row;
 		for (var i = 0; i < numPoints; i++) {
@@ -56,7 +59,7 @@ var createRandomCells = function(numRows, numCols) {
 		}
 		return emptyCells;
 	};
-var clearCells = function(numRows, numCols) {
+var clearCells = function(cells, numRows, numCols) {
 		for (var rowNum = 0; rowNum < numRows; rowNum++) {
 			for (var colNum = 0; colNum < numCols; colNum++) {
 				cells[rowNum][colNum].density = 0;

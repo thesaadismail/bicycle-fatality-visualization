@@ -53,6 +53,16 @@ div#heatchartContainer {
     margin-bottom: 20px;
 }
 
+#data-matrix-yaxis-container {
+    float: left;
+    margin-left: 10px;
+}
+
+#data-matrix-xaxis-container {
+    margin-top:10px;
+	
+}
+
 /* Filter Styles */
 #filter-container {
     border: 1px solid;
