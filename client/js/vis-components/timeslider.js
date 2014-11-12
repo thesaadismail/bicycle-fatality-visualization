@@ -8,7 +8,7 @@ var parseDate = d3.time.format("%b-%Y").parse;
 
 
 //Gets called when the page is loaded.
-function init(){
+function initTimeSlider(){
 
   ///////////////////////////////
   // Year Overview Line Graph
@@ -105,7 +105,7 @@ function init(){
 }
 
 //Called when the update button is clicked
-function updateClicked(){
+function updateTimeSlider(){
   d3.csv('data/CoffeeData.csv', update)
 }
 //date,sales,profit,region,state,category,type,caffeination
