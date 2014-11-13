@@ -18,6 +18,7 @@ function init() {
 	dataMatrixXAxis.initDataMatrix();
 	
 	initTimeSlider();
+	initTimeOfDay();
 }
 
 function updateClicked() {
