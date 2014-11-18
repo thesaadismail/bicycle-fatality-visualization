@@ -3,10 +3,14 @@ var data_month_day_obj;
 var data_month_day;
 var data_day_avg;
 var linesSVG;					//linesSVG will hold a grouping of all the lines to be graphed.  it will be positited in same place as vis (the temp var that has all all the other drawn object) in the initTimeOfDay() fucntion
+var pointsSVG; 					//pointsSVG will hold a grouping of all the circles of 1 line to be graphed.  it will be positited in same place as vis (the temp var that has all all the other drawn object) in the initTimeOfDay() fucntion
 var mousedLine;
+var xScale;
+var yScale;
 
-var test;
-
+var test0;
+var test1;
+var test2;
 
 var margin = {top: 12, right: 30, bottom: 20, left: 55},
     width = 770 - margin.left - margin.right,
@@ -19,16 +23,16 @@ mousedLine = -1;
 function initTimeOfDay(){
 console.log('-------- INIT() -----------\n');
 
-  var x = d3.scale.linear()
+  xScale = d3.scale.linear()
     .range([0, width]);
 
-  var y = d3.scale.linear()
+  yScale = d3.scale.linear()
     .range([height, 0]);
 
   var weekdaysEnum =  ['Sun.', 'Mon.', 'Tues.', 'Wed.', 'Thur.', 'Fri.', 'Sat.'];
 
   var xAxis = d3.svg.axis()
-    .scale(x)
+    .scale(xScale)
     .orient("bottom")
 	.ticks(weekdaysEnum.length)
     .tickSize(10, 0)
@@ -36,25 +40,28 @@ console.log('-------- INIT() -----------\n');
 	.tickFormat(function(d, i){return weekdaysEnum[d];})
 
   var yAxis = d3.svg.axis()
-    .scale(y)
+    .scale(yScale)
     .ticks(4)
     .orient("left");
 
   var line = d3.svg.line()
-    .x(function(d) { return x(d.key); })
-    .y(function(d) { return y(d.values); });
+    .x(function(d) { return xScale(d.key); })
+    .y(function(d) { return yScale(d.values); });
 
   var brush = d3.svg.brush()
-    .x(x)
+    .x(xScale)
     .on("brush", brushed);
 
-  var chart = d3.select('#timeOfDay').append('svg')
+  chart = d3.select('#timeOfDay').append('svg')
     .attr("style", "outline: thin solid gray;") 
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom);
 
   var vis = chart.append('svg:g')
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	
+	pointsSVG = chart.append('svg:g')
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");	
 	
 	linesSVG = chart.append('svg:g')
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");							
@@ -89,9 +96,9 @@ for(d = 0; d < dayCount; d ++){
 
 	
     //x.domain(d3.extent(data_agg, function(d) { return d.key; }));
-	x.domain([0,6]);
+	xScale.domain([0,6]);
     //y.domain(d3.extent(data_agg, function(d) { return d.values; }));
-	y.domain([150,300]);
+	yScale.domain([150,300]);
 
 
     vis.append("g")
@@ -114,28 +121,20 @@ for(d = 0; d < dayCount; d ++){
         .style("text-anchor", "end")
         .text("Fatalities");
 
-
-/*
-console.log('-------- BATCH GRAPHING ALL LINES OF All MONTHS -----------\n'); 
-data_month_day.forEach(function(d) {   
-	vis.append("path")
-        .attr("class", "line")
-        .attr("d", line(d.values))
-        .attr("stroke-width", 2)
-		.attr("stroke-opacity", 0.5)
-        .attr("stroke", "rgb(0, 0, 255)")
-        .attr("fill", "none");
+console.log('-------- ADDING HIDDEN POINTS -----------\n'); 
+data_day_avg.values.forEach(function(d) {
+	pointsSVG.append("circle")
+		.attr("cx", xScale(d.key))
+		.attr("cy", yScale(d.values))
+		.attr("r", 4)
+		.attr("idKey", d.key)
+        .attr("stroke-width", 1)
+		.attr("stroke-opacity", 0)
+        .attr("stroke", "rgb(64, 64, 64)")
+        .attr("fill", "rgb(255, 0, 0)")
+		.attr("fill-opacity", 0)
 });
 
-console.log('-------- GRAPHING AVERAGE OF ALL LINES -----------\n'); 
-	vis.append("path")
-        .attr("class", "line")
-        .attr("d", line(data_day_avg))
-        .attr("stroke-width", 5)
-		.attr("stroke-opacity", 0.5)
-        .attr("stroke", "rgb(255, 0, 0)")
-        .attr("fill", "none");
-*/
 console.log('-------- GRAPHING AVERAGE OF ALL LINES -----------\n'); 
 	linesSVG.append("path")
         .attr("class", "line")
@@ -144,8 +143,27 @@ console.log('-------- GRAPHING AVERAGE OF ALL LINES -----------\n');
         .attr("stroke-width", 4)
 		.attr("stroke-opacity", 0.5)
         .attr("stroke", "rgb(255, 0, 0)")
-        .attr("fill", "none");
+        .attr("fill", "none")		.on('mouseover', function(d){
+			console.log('path-line ' + this.getAttribute('idKey') + ' mouseover\n'); 
+			mousedLine = this.getAttribute('idKey');
+			//d3.select(this).attr("stroke-opacity", 1.0);
+			update();
+		})
+		.on('mousemove', function(d){
+			mousedLine = this.getAttribute('idKey');
+			//d3.select(this).attr("stroke-opacity", 1.0);
+			update();
+		})
+		.on('mouseout', function(d){
+			mousedLine = -1;
+			//d3.select(this).attr("stroke-opacity", 0.5);
+			update();
+		})
+		.append("title").text("title");
 		
+
+
+
 		
 console.log('-------- BATCH GRAPHING ALL LINES OF All MONTHS -----------\n'); 
 data_month_day.forEach(function(d) {   
@@ -158,13 +176,12 @@ data_month_day.forEach(function(d) {
         .attr("stroke", "rgb(0, 0, 255)")
         .attr("fill", "none")
 		.on('mouseover', function(d){
-			console.log('path-line ' + this.getAttribute('idKey') + ' mouseover\n'); 
 			mousedLine = this.getAttribute('idKey');
 			//d3.select(this).attr("stroke-opacity", 1.0);
 			update();
 		})
 		.on('mousemove', function(d){
-			console.log('path-line ' + this.getAttribute('idKey') + ' mousemove\n'); 
+			//console.log('path-line ' + this.getAttribute('idKey') + ' mousemove\n'); 
 			mousedLine = this.getAttribute('idKey');
 			//d3.select(this).attr("stroke-opacity", 1.0);
 			update();
@@ -178,7 +195,8 @@ data_month_day.forEach(function(d) {
 
 
 
-
+test1 = linesSVG.selectAll("path.line");
+test2 = pointsSVG.selectAll("circle");
 			
     vis.append("g")
         .append("rect")
@@ -204,41 +222,70 @@ function updateClicked(){
 //Callback for when data is loaded
 //update will be used to redraw the lines and apply the mouseover color intensity effects
 function update(rawdata){
-	//test = linesSVG.selectAll("path.line");
-	console.log('---> UPDATING\n'); 	
+console.log('----WARNING: ITEMS ARE DRAWN IN LAYERS IN THE ODER IN WHICH THEIR SVG ELEMENT WAS CREATED------\n'); 
+	//test = linesSVG.selectAll("path.line");	
 	linesSVG.selectAll("path.line").each(function(d){						//<----------use .each for d3 selections (can use 'this'), and .forEach for traditional arrays 
 		if(mousedLine !== -1){
-			if(mousedLine === this.getAttribute('idKey')){
+			//----DO NOT CHANGE THE ORDER OF THESE CHECKS...
+			//....THE COLORING OF THE DATA POINTS IMPLICITLY DEPENDS ON IT!!!!!!-----
+			if( "US Average" === this.getAttribute('idKey')) {
+				console.log('modifying line ' + mousedLine + '\n'); 
+				d3.select(this).attr("stroke-opacity", 0.75);
+				d3.select(this).attr("stroke-width", 4);
+					pointsSVG.selectAll("circle").each(function(d,i){	
+						d3.select(this).attr("cx", xScale(parseInt(data_day_avg.values[i].key)))								//-1 because its 0 indexed, but the months are 1 indexed
+						d3.select(this).attr("cy", yScale(parseInt(data_day_avg.values[i].values)))							//-1 because its 0 indexed, but the months are 1 indexed
+						d3.select(this).attr("r", 6)
+						//d3.select(this).attr("idKey", data_month_day[parseInt(mousedLine)-1].key)
+						d3.select(this).attr("idKey", parseInt(mousedLine))
+						d3.select(this).attr("stroke-width", 1)
+						d3.select(this).attr("stroke-opacity", 0.85)
+						d3.select(this).attr("stroke", "rgb(64, 64, 64)")
+						//d3.select(this).attr("fill", "rgb(255, 0, 0)")
+						//d3.select(this).attr("fill-opacity", 0.5)	
+					}); 
+			} else if(mousedLine === this.getAttribute('idKey')){
 				//apply no oppacity to the line that has been mousedOver.
-				//make theline thicker
-				console.log('modifying line ' + mousedLine + '\n'); 
+				//make the line thicker
 				d3.select(this).attr("stroke-opacity", 0.75);
-				d3.select(this).attr("stroke-width", 4)
-			} else if( "US Average" === this.getAttribute('idKey')) {
-				console.log('modifying line ' + mousedLine + '\n'); 
-				d3.select(this).attr("stroke-opacity", 0.75);
-				d3.select(this).attr("stroke-width", 4)
-
+				d3.select(this).attr("stroke-width", 4);
+				//-------move the points to the one for the selected line-----
+					pointsSVG.selectAll("circle").each(function(d,i){	
+						d3.select(this).attr("cx", xScale(parseInt(data_month_day[parseInt(mousedLine)-1].values[i].key)))								//-1 because its 0 indexed, but the months are 1 indexed
+						d3.select(this).attr("cy", yScale(parseInt(data_month_day[parseInt(mousedLine)-1].values[i].values)))							//-1 because its 0 indexed, but the months are 1 indexed
+						d3.select(this).attr("r", 6)
+						//d3.select(this).attr("idKey", data_month_day[parseInt(mousedLine)-1].key)
+						d3.select(this).attr("idKey", parseInt(mousedLine))
+						d3.select(this).attr("stroke-width", 1)
+						d3.select(this).attr("stroke-opacity", 0.85)
+						d3.select(this).attr("stroke", "rgb(64, 64, 64)")
+						//d3.select(this).attr("fill", "rgb(0, 0, 255)")
+						//d3.select(this).attr("fill-opacity", 0.5)	
+					}); 
 			} else {
 				// dim the non-moused over lines
 				d3.select(this).attr("stroke-opacity", 0.2);
-				d3.select(this).attr("stroke-width", 2)
+				d3.select(this).attr("stroke-width", 2);
 			}
 		} else {
 			if( "US Average" === this.getAttribute('idKey')) {
 				// reset the US Average line
 				d3.select(this).attr("stroke-opacity", 0.5);
-				d3.select(this).attr("stroke-width", 4)
+				d3.select(this).attr("stroke-width", 4);
 			} else {
 				// reset all the other lines
 				d3.select(this).attr("stroke-opacity", 0.5);
-				d3.select(this).attr("stroke-width", 2)
+				d3.select(this).attr("stroke-width", 2);
 			}
+			//-------hide all the points-----
+				pointsSVG.selectAll("circle").each(function(d,i){	
+					d3.select(this).attr("stroke-opacity", 0)
+					d3.select(this).attr("fill-opacity", 0)	
+				}); 
 		}
 		
 	});
-		
-	
+test2 = pointsSVG.selectAll("circle");
 }
 
 // Returns the selected option in the X-axis dropdown. Use d[getXSelectedOption()] to retrieve value instead of d.getXSelectedOption()
