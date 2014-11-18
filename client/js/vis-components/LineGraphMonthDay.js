@@ -2,12 +2,18 @@ var chart;
 var data_month_day_obj;
 var data_month_day;
 var data_day_avg;
+var linesSVG;					//linesSVG will hold a grouping of all the lines to be graphed.  it will be positited in same place as vis (the temp var that has all all the other drawn object) in the initTimeOfDay() fucntion
+var mousedLine;
+
+var test;
 
 
 var margin = {top: 12, right: 30, bottom: 20, left: 55},
     width = 770 - margin.left - margin.right,
     //height = 70 - margin.top - margin.bottom;
 	height = 200 - margin.top - margin.bottom;
+	
+mousedLine = -1;
 
 //Gets called when the page is loaded.
 function initTimeOfDay(){
@@ -49,11 +55,13 @@ console.log('-------- INIT() -----------\n');
 
   var vis = chart.append('svg:g')
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	
+	linesSVG = chart.append('svg:g')
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");							
 
 //WILL GRAPH 12 LINES (1 FOR EACH MONTH) AND SHOW THE SUMMED VALUES FOR THAT MOTHN EACH DAY TICK ON THE X AXIS
 	
 //----------------Month & Daily data-----------
-
   data_month_day_obj = d3.csv('data/CoffeeRandDatesCopiedTime.csv', function(rawdata) {
  
     var format = d3.time.format("%m/%d/%Y");
@@ -70,13 +78,13 @@ console.log('-------- Starting Month & Day Gouprings -----------\n');
 console.log('-------- Starting Day Averages ----------\n');
 monthCount = data_month_day.length;
 dayCount = data_month_day[0].values.length;
-data_day_avg = [dayCount];
+data_day_avg = {key: 'US Average', values: [dayCount]};
 for(d = 0; d < dayCount; d ++){
 	daySum = 0;
 	for(m = 0; m < monthCount; m++){
 		daySum += +data_month_day[m].values[d].values;
 	}
-	data_day_avg[d] = { key: d.toString(), values: (daySum/monthCount) };
+	data_day_avg.values[d] = { key: d.toString(), values: (daySum/monthCount) };
 }
 
 	
@@ -107,7 +115,7 @@ for(d = 0; d < dayCount; d ++){
         .text("Fatalities");
 
 
-
+/*
 console.log('-------- BATCH GRAPHING ALL LINES OF All MONTHS -----------\n'); 
 data_month_day.forEach(function(d) {   
 	vis.append("path")
@@ -119,7 +127,7 @@ data_month_day.forEach(function(d) {
         .attr("fill", "none");
 });
 
-
+console.log('-------- GRAPHING AVERAGE OF ALL LINES -----------\n'); 
 	vis.append("path")
         .attr("class", "line")
         .attr("d", line(data_day_avg))
@@ -127,8 +135,51 @@ data_month_day.forEach(function(d) {
 		.attr("stroke-opacity", 0.5)
         .attr("stroke", "rgb(255, 0, 0)")
         .attr("fill", "none");
+*/
+console.log('-------- GRAPHING AVERAGE OF ALL LINES -----------\n'); 
+	linesSVG.append("path")
+        .attr("class", "line")
+		.attr("idKey", data_day_avg.key)
+        .attr("d", line(data_day_avg.values))
+        .attr("stroke-width", 4)
+		.attr("stroke-opacity", 0.5)
+        .attr("stroke", "rgb(255, 0, 0)")
+        .attr("fill", "none");
+		
+		
+console.log('-------- BATCH GRAPHING ALL LINES OF All MONTHS -----------\n'); 
+data_month_day.forEach(function(d) {   
+	linesSVG.append("path")
+        .attr("class", "line")
+		.attr("idKey", d.key)
+        .attr("d", line(d.values))
+        .attr("stroke-width", 2)
+		.attr("stroke-opacity", 0.5)
+        .attr("stroke", "rgb(0, 0, 255)")
+        .attr("fill", "none")
+		.on('mouseover', function(d){
+			console.log('path-line ' + this.getAttribute('idKey') + ' mouseover\n'); 
+			mousedLine = this.getAttribute('idKey');
+			//d3.select(this).attr("stroke-opacity", 1.0);
+			update();
+		})
+		.on('mousemove', function(d){
+			console.log('path-line ' + this.getAttribute('idKey') + ' mousemove\n'); 
+			mousedLine = this.getAttribute('idKey');
+			//d3.select(this).attr("stroke-opacity", 1.0);
+			update();
+		})
+		.on('mouseout', function(d){
+			mousedLine = -1;
+			//d3.select(this).attr("stroke-opacity", 0.5);
+			update();
+		});
+});
 
 
+
+
+			
     vis.append("g")
         .append("rect")
 
@@ -151,7 +202,43 @@ function updateClicked(){
 //date,sales,profit,region,state,category,type,caffeination
 
 //Callback for when data is loaded
+//update will be used to redraw the lines and apply the mouseover color intensity effects
 function update(rawdata){
+	//test = linesSVG.selectAll("path.line");
+	console.log('---> UPDATING\n'); 	
+	linesSVG.selectAll("path.line").each(function(d){						//<----------use .each for d3 selections (can use 'this'), and .forEach for traditional arrays 
+		if(mousedLine !== -1){
+			if(mousedLine === this.getAttribute('idKey')){
+				//apply no oppacity to the line that has been mousedOver.
+				//make theline thicker
+				console.log('modifying line ' + mousedLine + '\n'); 
+				d3.select(this).attr("stroke-opacity", 0.75);
+				d3.select(this).attr("stroke-width", 4)
+			} else if( "US Average" === this.getAttribute('idKey')) {
+				console.log('modifying line ' + mousedLine + '\n'); 
+				d3.select(this).attr("stroke-opacity", 0.75);
+				d3.select(this).attr("stroke-width", 4)
+
+			} else {
+				// dim the non-moused over lines
+				d3.select(this).attr("stroke-opacity", 0.2);
+				d3.select(this).attr("stroke-width", 2)
+			}
+		} else {
+			if( "US Average" === this.getAttribute('idKey')) {
+				// reset the US Average line
+				d3.select(this).attr("stroke-opacity", 0.5);
+				d3.select(this).attr("stroke-width", 4)
+			} else {
+				// reset all the other lines
+				d3.select(this).attr("stroke-opacity", 0.5);
+				d3.select(this).attr("stroke-width", 2)
+			}
+		}
+		
+	});
+		
+	
 }
 
 // Returns the selected option in the X-axis dropdown. Use d[getXSelectedOption()] to retrieve value instead of d.getXSelectedOption()
