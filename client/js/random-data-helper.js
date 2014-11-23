@@ -4,8 +4,8 @@ var generateRandomDataForCategoryDataMatrix = function(cells, numRows, numCols, 
 		if (cells === null) {
 			cells = getEmptyCells(numRows, numCols);
 		} else {
-			console.log("clear cells");
-			console.log(cells);
+			//console.log("clear cells");
+			//console.log(cells);
 			clearCells(cells, numRows, numCols);
 
 		}

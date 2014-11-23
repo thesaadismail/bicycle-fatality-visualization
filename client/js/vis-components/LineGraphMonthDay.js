@@ -214,7 +214,7 @@ test2 = pointsSVG.selectAll("circle");
 }
 
 //Called when the update button is clicked
-function updateClicked(){
+function updateClickedForLineGraphMonthDay(){
   d3.csv('data/CoffeeData.csv', update)
 }
 //date,sales,profit,region,state,category,type,caffeination
