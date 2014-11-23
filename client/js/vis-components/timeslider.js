@@ -121,7 +121,7 @@ function initTimeSlider(){
 
 //Called when the update button is clicked
 function updateTimeSlider(){
-  d3.csv('data/CoffeeData.csv', update)
+  d3.csv('client/data/CoffeeData.csv', update)
 }
 //date,sales,profit,region,state,category,type,caffeination
 
