@@ -1,0 +1,310 @@
+{
+	"data_group_id": 2,
+	"weather_category_data":[
+		{
+			"category_weather": "rainy",
+			"location_category_data":
+			[
+				{
+					"category_location": "sidewalk",
+					"num_of_fatalities": 60 
+				},
+				{
+					"category_location": "crosswalk",
+					"num_of_fatalities": 50
+				},
+				{
+					"category_location": "road",
+					"num_of_fatalities": 75
+				},
+				{
+					"category_location": "building",
+					"num_of_fatalities": 83 
+				},
+				{
+					"category_location": "intersection",
+					"num_of_fatalities": 43 
+				},
+				{
+					"category_location": "middle lane",
+					"num_of_fatalities": 23 
+				},
+				{
+					"category_location": "right lane",
+					"num_of_fatalities": 41 
+				},
+				{
+					"category_location": "bicycle lane",
+					"num_of_fatalities": 68 
+				}
+			]
+		},
+		{
+			"category_weather": "sunny",
+			"location_category_data":
+			[
+				{
+					"category_location": "sidewalk",
+					"num_of_fatalities": 60 
+				},
+				{
+					"category_location": "crosswalk",
+					"num_of_fatalities": 50
+				},
+				{
+					"category_location": "road",
+					"num_of_fatalities": 75
+				},
+				{
+					"category_location": "building",
+					"num_of_fatalities": 83 
+				},
+				{
+					"category_location": "intersection",
+					"num_of_fatalities": 43 
+				},
+				{
+					"category_location": "middle lane",
+					"num_of_fatalities": 23 
+				},
+				{
+					"category_location": "right lane",
+					"num_of_fatalities": 41 
+				},
+				{
+					"category_location": "bicycle lane",
+					"num_of_fatalities": 68 
+				}
+			]
+		},
+		{
+			"category_weather": "windy",
+			"location_category_data":
+			[
+				{
+					"category_location": "sidewalk",
+					"num_of_fatalities": 60 
+				},
+				{
+					"category_location": "crosswalk",
+					"num_of_fatalities": 50
+				},
+				{
+					"category_location": "road",
+					"num_of_fatalities": 75
+				},
+				{
+					"category_location": "building",
+					"num_of_fatalities": 83 
+				},
+				{
+					"category_location": "intersection",
+					"num_of_fatalities": 43 
+				},
+				{
+					"category_location": "middle lane",
+					"num_of_fatalities": 23 
+				},
+				{
+					"category_location": "right lane",
+					"num_of_fatalities": 41 
+				},
+				{
+					"category_location": "bicycle lane",
+					"num_of_fatalities": 68 
+				}
+			]
+		},
+		{
+			"category_weather": "blowing snow",
+			"location_category_data":
+			[
+				{
+					"category_location": "sidewalk",
+					"num_of_fatalities": 60 
+				},
+				{
+					"category_location": "crosswalk",
+					"num_of_fatalities": 50
+				},
+				{
+					"category_location": "road",
+					"num_of_fatalities": 75
+				},
+				{
+					"category_location": "building",
+					"num_of_fatalities": 83 
+				},
+				{
+					"category_location": "intersection",
+					"num_of_fatalities": 43 
+				},
+				{
+					"category_location": "middle lane",
+					"num_of_fatalities": 23 
+				},
+				{
+					"category_location": "right lane",
+					"num_of_fatalities": 41 
+				},
+				{
+					"category_location": "bicycle lane",
+					"num_of_fatalities": 68 
+				}
+			]
+		},
+		{
+			"category_weather": "thunder",
+			"location_category_data":
+			[
+				{
+					"category_location": "sidewalk",
+					"num_of_fatalities": 60 
+				},
+				{
+					"category_location": "crosswalk",
+					"num_of_fatalities": 50
+				},
+				{
+					"category_location": "road",
+					"num_of_fatalities": 75
+				},
+				{
+					"category_location": "building",
+					"num_of_fatalities": 83 
+				},
+				{
+					"category_location": "intersection",
+					"num_of_fatalities": 43 
+				},
+				{
+					"category_location": "middle lane",
+					"num_of_fatalities": 23 
+				},
+				{
+					"category_location": "right lane",
+					"num_of_fatalities": 41 
+				},
+				{
+					"category_location": "bicycle lane",
+					"num_of_fatalities": 68 
+				}
+			]
+		},
+		{
+			"category_weather": "clear",
+			"location_category_data":
+			[
+				{
+					"category_location": "sidewalk",
+					"num_of_fatalities": 60 
+				},
+				{
+					"category_location": "crosswalk",
+					"num_of_fatalities": 50
+				},
+				{
+					"category_location": "road",
+					"num_of_fatalities": 75
+				},
+				{
+					"category_location": "building",
+					"num_of_fatalities": 83 
+				},
+				{
+					"category_location": "intersection",
+					"num_of_fatalities": 43 
+				},
+				{
+					"category_location": "middle lane",
+					"num_of_fatalities": 23 
+				},
+				{
+					"category_location": "right lane",
+					"num_of_fatalities": 41 
+				},
+				{
+					"category_location": "bicycle lane",
+					"num_of_fatalities": 68 
+				}
+			]
+		},
+		{
+			"category_weather": "foggy",
+			"location_category_data":
+			[
+				{
+					"category_location": "sidewalk",
+					"num_of_fatalities": 60 
+				},
+				{
+					"category_location": "crosswalk",
+					"num_of_fatalities": 50
+				},
+				{
+					"category_location": "road",
+					"num_of_fatalities": 75
+				},
+				{
+					"category_location": "building",
+					"num_of_fatalities": 83 
+				},
+				{
+					"category_location": "intersection",
+					"num_of_fatalities": 43 
+				},
+				{
+					"category_location": "middle lane",
+					"num_of_fatalities": 23 
+				},
+				{
+					"category_location": "right lane",
+					"num_of_fatalities": 41 
+				},
+				{
+					"category_location": "bicycle lane",
+					"num_of_fatalities": 68 
+				}
+			]
+		},
+		{
+			"category_weather": "hurricane",
+			"location_category_data":
+			[
+				{
+					"category_location": "sidewalk",
+					"num_of_fatalities": 60 
+				},
+				{
+					"category_location": "crosswalk",
+					"num_of_fatalities": 50
+				},
+				{
+					"category_location": "road",
+					"num_of_fatalities": 75
+				},
+				{
+					"category_location": "building",
+					"num_of_fatalities": 83 
+				},
+				{
+					"category_location": "intersection",
+					"num_of_fatalities": 43 
+				},
+				{
+					"category_location": "middle lane",
+					"num_of_fatalities": 23 
+				},
+				{
+					"category_location": "right lane",
+					"num_of_fatalities": 41 
+				},
+				{
+					"category_location": "bicycle lane",
+					"num_of_fatalities": 68 
+				}
+			]
+		}
+	]
+
+}

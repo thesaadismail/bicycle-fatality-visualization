@@ -3,27 +3,27 @@
     <meta charset="UTF-8">
 
     <title>Bicycle Fatality Vis</title>
-    <script src='lib/d3.v3.js' type="text/javascript">
+    <script src='client/lib/d3.v3.js' type="text/javascript">
 </script>
-    <script src='js/bicycle-vis.js' type="text/javascript">
+    <script src='client/js/bicycle-vis.js' type="text/javascript">
 </script>
-    <script src='js/vis-components/timeslider.js' type="text/javascript">
+    <script src='client/js/vis-components/timeslider.js' type="text/javascript">
 </script>
-    <script src='js/vis-components/category-data-matrix.js' type="text/javascript">
+    <script src='client/js/vis-components/category-data-matrix.js' type="text/javascript">
 </script>
-    <script src='js/random-data-helper.js' type="text/javascript">
+    <script src='client/js/random-data-helper.js' type="text/javascript">
 </script>
-	<script src='js/vis-components/LineGraphMonthDay.js'>
+	<script src='client/js/vis-components/LineGraphMonthDay.js'>
 </script>  
   
-    <link rel="stylesheet" type="text/css" href="./css/bicycle-vis-stylesheet.css">
+    <link rel="stylesheet" type="text/css" href="client/css/bicycle-vis-stylesheet.css">
 </head>
 
 <body onLoad="init()">
     <div id="timeslider">
         <h3>Overview</h3>
     </div>
-
+    
     <div id="category-filter-overview">
         <div id="data-matrix-yaxis-container"></div>
 
@@ -36,11 +36,12 @@
             <button id="update-button" onClick="updateClicked()">Refresh Information</button>
         </div>
     </div>
+    
 
     <div id="timeOfDay">
         <div id="vis" style="margin:75;">
         
-            <svg id="visualisation" width="1000" height="500"></svg>
+            <svg id="visualisation" width="1000"></svg>
         
         </div>
     </div>
