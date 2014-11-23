@@ -2,11 +2,18 @@ var chart;
 var data_month_day_obj;
 var data_month_day;
 var data_day_avg;
+//----DO NOT CHANGE THE ODER OF linesSVG, pointsSVG, and tooltipsSVG.....order creation acts as 'layers'---
 var linesSVG;					//linesSVG will hold a grouping of all the lines to be graphed.  it will be positited in same place as vis (the temp var that has all all the other drawn object) in the initTimeOfDay() fucntion
 var pointsSVG; 					//pointsSVG will hold a grouping of all the circles of 1 line to be graphed.  it will be positited in same place as vis (the temp var that has all all the other drawn object) in the initTimeOfDay() fucntion
+var tooltipsSVG;
+
+var tooltipsDiv;
+
 var mousedLine;
 var xScale;
 var yScale;
+
+var weekdaysEnum;
 
 var test0;
 var test1;
@@ -29,7 +36,7 @@ console.log('-------- INIT() -----------\n');
   yScale = d3.scale.linear()
     .range([height, 0]);
 
-  var weekdaysEnum =  ['Sun.', 'Mon.', 'Tues.', 'Wed.', 'Thur.', 'Fri.', 'Sat.'];
+  weekdaysEnum =  ['Sun.', 'Mon.', 'Tues.', 'Wed.', 'Thur.', 'Fri.', 'Sat.'];
 
   var xAxis = d3.svg.axis()
     .scale(xScale)
@@ -59,12 +66,20 @@ console.log('-------- INIT() -----------\n');
 
   var vis = chart.append('svg:g')
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-	
-	pointsSVG = chart.append('svg:g')
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");	
-	
-	linesSVG = chart.append('svg:g')
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");							
+
+
+//tooltipsDiv = d3.select('#timeOfDay').append(append("div").style("position", "absolute").style("z-index", "10").style("visibility", "hidden").text("tooltip div's container");
+
+
+	//----DO NOT CHANGE THE ODER OF linesSVG, pointsSVG, and tooltipsSVG.....order creation acts as 'layers'---	
+		pointsSVG = chart.append('svg:g')
+			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");	
+		
+		linesSVG = chart.append('svg:g')
+			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");	
+		
+		tooltipsSVG = chart.append('svg:g')
+			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");							
 
 //WILL GRAPH 12 LINES (1 FOR EACH MONTH) AND SHOW THE SUMMED VALUES FOR THAT MOTHN EACH DAY TICK ON THE X AXIS
 	
@@ -134,6 +149,76 @@ data_day_avg.values.forEach(function(d) {
         .attr("fill", "rgb(255, 0, 0)")
 		.attr("fill-opacity", 0)
 });
+
+console.log('-------- ADDING HIDDEN TOOLTIPS -----------\n'); 
+data_day_avg.values.forEach(function(d,i) {
+	g = tooltipsSVG.append('svg:g')
+		.attr("transform", "translate(" + xScale(d.key) + "," + yScale(d.values+20) + ")");
+	g.append("rect")
+		.attr("width", 75)
+		.attr("height", 35)
+		.attr("x", -38)
+		.attr("y", -18)
+		.attr("stroke-width", 1)
+		.attr("stroke-opacity", 1)
+		.attr("stroke", "rgb(64, 64, 64)")
+		.attr("fill", "rgb(220, 220, 220)")
+		.attr("fill-opacity", 0.75);
+	t = g.append("text")
+		.attr("y", "0")
+		.attr("font-size", 11)
+		.attr("font-family", "arial")
+		.attr("text-anchor", "middle")
+		.attr("fill", "rgb(0, 0, 0)");
+	t.append("tspan")
+		.attr("x", 0)
+		.text("Rhode Island");
+	t.append("tspan")
+		.attr("x", 0)
+		.attr("y", "1em")
+		//.attr("dY", "0")
+		.text(Math.round(d.values * 100)/100);
+});
+tooltipsSVG.attr("opacity", 0);
+
+
+
+
+/*
+tooltipsSVG.selectAll('g')
+	.data(data_day_avg.values[1])
+	.enter()
+	.append('g')
+	.text('test text');
+*/
+/*
+data_day_avg.values.forEach(function(d) {
+	tooltipsSVG.append("circle")
+		.attr("cx", xScale(d.key))
+		.attr("cy", yScale(d.values))
+		.attr("r", 4)
+		.attr("idKey", d.key)
+        .attr("stroke-width", 1)
+		.attr("stroke-opacity", 0)
+        .attr("stroke", "rgb(64, 64, 64)")
+        .attr("fill", "rgb(255, 0, 0)")
+		.attr("fill-opacity", 0)
+});
+//Select the div element
+selectExample = d3.select("#data_example1");
+
+var tooltip = d3.select("body").append("div").style("position", "absolute").style("z-index", "10").style("visibility", "hidden").text("a simple tooltip");
+
+			}).on("mouseover", function(d) {
+				onCellOver(this, d);
+				tooltip.text("Cell: [" + d.col + "," + d.row + "]");
+				tooltip.style("visibility", "visible");
+			}).on("mousemove", function(d) {
+				tooltip.style("top", (d3.event.pageY - 10) + "px").style("left", (d3.event.pageX + 10) + "px");
+			}).on("mouseout", function(d) {
+				onCellOut(this, d);
+				tooltip.style("visibility", "hidden");
+*/
 
 console.log('-------- GRAPHING AVERAGE OF ALL LINES -----------\n'); 
 	linesSVG.append("path")
@@ -267,7 +352,51 @@ console.log('----WARNING: ITEMS ARE DRAWN IN LAYERS IN THE ODER IN WHICH THEIR S
 				d3.select(this).attr("stroke-opacity", 0.2);
 				d3.select(this).attr("stroke-width", 2);
 			}
+			
+			
+			tooltipsSVG.selectAll('g').each(function(d,i) {	
+					d3.select(this).attr("transform", "translate(" + xScale(parseInt(data_month_day[parseInt(mousedLine)-1].values[i].key)) + "," + yScale(parseInt(data_month_day[parseInt(mousedLine)-1].values[i].values) + 20) + ")");
+					t = d3.select(this).select("text");
+					t.selectAll("tspan").each( function(d,i) {
+						d3.select(this).attr("x", 0);
+						d3.select(this).attr("dy", "1em");
+						d3.select(this).text(Math.round( data_month_day[parseInt(mousedLine)-1].values[i].values * 100)/100);
+						
+					});
+
+/*
+				g.append("rect")
+					.attr("width", 75)
+					.attr("height", 35)
+					.attr("x", -38)
+					.attr("y", -18)
+					.attr("stroke-width", 1)
+					.attr("stroke-opacity", 1)
+					.attr("stroke", "rgb(64, 64, 64)")
+					.attr("fill", "rgb(220, 220, 220)")
+					.attr("fill-opacity", 0.75);
+				t = g.append("text")
+					.attr("y", "0")
+					.attr("font-size", 11)
+					.attr("font-family", "arial")
+					.attr("text-anchor", "middle")
+					.attr("fill", "rgb(0, 0, 0)");
+				t.append("tspan")
+					.attr("x", 0)
+					.text("Rhode Island");
+				t.append("tspan")
+					.attr("x", 0)
+					.attr("y", "1em")
+					//.attr("dY", "0")
+					.text(Math.round(d.values * 100)/100);
+	*/
+					
+			});
+			tooltipsSVG.attr("opacity", 0.75);	
+			
 		} else {
+			tooltipsSVG.attr("opacity", 0);
+			
 			if( "US Average" === this.getAttribute('idKey')) {
 				// reset the US Average line
 				d3.select(this).attr("stroke-opacity", 0.5);
@@ -283,8 +412,9 @@ console.log('----WARNING: ITEMS ARE DRAWN IN LAYERS IN THE ODER IN WHICH THEIR S
 					d3.select(this).attr("fill-opacity", 0)	
 				}); 
 		}
-		
+	
 	});
+	
 test2 = pointsSVG.selectAll("circle");
 }
 

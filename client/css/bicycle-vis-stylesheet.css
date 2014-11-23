@@ -71,3 +71,33 @@ div#heatchartContainer {
     padding-top: 10px;
     padding-left: 10px;
 }
+
+
+/*   Multi Line Graph  
+
+	...may be missing one or two (in the above code)
+*/
+
+	//---from http://bl.ocks.org/rveciana/5181105 ---
+	.tooltip{ background-color:rgba(68,136,187,0.5);;
+			  margin: 10px;
+			  height: 50px;
+			  width: 150px;
+			  padding-left: 10px; 
+			  padding-top: 10px;
+		-webkit-border-radius:10px;
+		-moz-border-radius:10px;
+		border-radius:10px;
+			}
+			
+
+g.tooltip:not(.css) {
+  fill:currentColor;
+}
+g.tooltip rect {
+    fill: lightblue;
+    stroke: gray;
+}
+circle:hover + g.tooltip.css {
+  opacity:1;
+}
