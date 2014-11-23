@@ -46,7 +46,7 @@ function initTimeSlider(){
   var vis = chart.append('svg:g')
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
   
-  d3.csv('data/CoffeeData.csv', function(rawdata) {
+  d3.csv('client/data/CoffeeData.csv', function(rawdata) {
     var format = d3.time.format("%m/%d/%Y");
     var monthNameFormat = d3.time.format("%m");
     data_agg = d3.nest()

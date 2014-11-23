@@ -69,7 +69,7 @@ console.log('-------- INIT() -----------\n');
 //WILL GRAPH 12 LINES (1 FOR EACH MONTH) AND SHOW THE SUMMED VALUES FOR THAT MOTHN EACH DAY TICK ON THE X AXIS
 	
 //----------------Month & Daily data-----------
-  data_month_day_obj = d3.csv('data/CoffeeRandDatesCopiedTime.csv', function(rawdata) {
+  data_month_day_obj = d3.csv('client/data/CoffeeRandDatesCopiedTime.csv', function(rawdata) {
  
     var format = d3.time.format("%m/%d/%Y");
     var monthNameFormat = d3.time.format("%m");
@@ -215,7 +215,7 @@ test2 = pointsSVG.selectAll("circle");
 
 //Called when the update button is clicked
 function updateClickedForLineGraphMonthDay(){
-  d3.csv('data/CoffeeData.csv', update)
+  d3.csv('client/data/CoffeeData.csv', update)
 }
 //date,sales,profit,region,state,category,type,caffeination
 
