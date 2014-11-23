@@ -27,9 +27,12 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr) {
 			var min = 999;
 			var max = -999;
 			var l;
-			console.log(sampleJsonData);
+			//console.log(sampleJsonData);
 			for (var rowNum = 0; rowNum < sampleJsonData.length; rowNum++) {
 				for (var colNum = 0; colNum < sampleJsonData[0]["location_category_data"].length; colNum++) {
+					sampleJsonData[rowNum]["location_category_data"][colNum]['row'] = rowNum;
+					sampleJsonData[rowNum]["location_category_data"][colNum]['col'] = colNum;
+					
 					l = sampleJsonData[rowNum]["location_category_data"][colNum]["num_of_fatalities"];
 					if (l > max) {
 						max = l;
@@ -79,7 +82,7 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr) {
 			var selectedRectangles;
 			if (update) {
 				selectedRectangles = selectedHeatChart.selectAll("rect").data(function(d) {
-					console.log(d);
+					//console.log(d);
 					return d;
 				});
 			} else {
@@ -131,7 +134,7 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr) {
 				//console.log(firstPoint + " " + secondPoint + " " + thirdPoint);
 				return firstPoint + " " + secondPoint + " " + thirdPoint;
 			}).attr("fill", function(d, i) {
-				console.log(d);
+				//console.log(d);
 				return lawmodeAllowedColor((d["num_of_fatalities"] - min) / (max - min));
 			}).attr("stroke", cellStrokeColor).attr("cell", function(d) {
 				return "r" + d.row + "c" + d.col;
@@ -150,7 +153,7 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr) {
 				//console.log(firstPoint + " " + secondPoint + " " + thirdPoint);
 				return firstPoint + " " + secondPoint + " " + thirdPoint;
 			}).attr("fill", function(d, i) {
-				console.log(d);
+				//console.log(d);
 				return lawmodeProhibitedColor(d["num_of_fatalities"] / (max - min));
 			}).attr("stroke", cellStrokeColor).attr("cell", function(d) {
 				return "r" + d.row + "c" + d.col;
@@ -255,50 +258,34 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr) {
 			"location_category_data":
 			[
 				{
-					"row": 0,
-					"col": 0,
 					"category_location": "sidewalk",
 					"num_of_fatalities": 60 
 				},
 				{
-					"row": 0,
-					"col": 1,
 					"category_location": "crosswalk",
 					"num_of_fatalities": 50
 				},
 				{
-					"row": 0,
-					"col": 2,
 					"category_location": "road",
 					"num_of_fatalities": 75
 				},
 				{
-					"row": 0,
-					"col": 3,
 					"category_location": "building",
 					"num_of_fatalities": 83 
 				},
 				{
-					"row": 0,
-					"col": 4,
 					"category_location": "intersection",
 					"num_of_fatalities": 43 
 				},
 				{
-					"row": 0,
-					"col": 5,
 					"category_location": "middle lane",
 					"num_of_fatalities": 23 
 				},
 				{
-					"row": 0,
-					"col": 6,
 					"category_location": "right lane",
 					"num_of_fatalities": 41 
 				},
 				{
-					"row": 0,
-					"col": 7,
 					"category_location": "bicycle lane",
 					"num_of_fatalities": 68 
 				}
@@ -309,50 +296,34 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr) {
 			"location_category_data":
 			[
 				{
-					"row": 1,
-					"col": 0,
 					"category_location": "sidewalk",
 					"num_of_fatalities": 60 
 				},
 				{
-					"row": 1,
-					"col": 1,
 					"category_location": "crosswalk",
 					"num_of_fatalities": 15
 				},
 				{
-					"row": 1,
-					"col": 2,
 					"category_location": "road",
 					"num_of_fatalities": 93
 				},
 				{
-					"row": 1,
-					"col": 3,
 					"category_location": "building",
 					"num_of_fatalities": 3 
 				},
 				{
-					"row": 1,
-					"col": 4,
 					"category_location": "intersection",
 					"num_of_fatalities": 43 
 				},
 				{
-					"row": 1,
-					"col": 5,
 					"category_location": "middle lane",
 					"num_of_fatalities": 23 
 				},
 				{
-					"row": 1,
-					"col": 6,
 					"category_location": "right lane",
 					"num_of_fatalities": 41 
 				},
 				{
-					"row": 1,
-					"col": 7,
 					"category_location": "bicycle lane",
 					"num_of_fatalities": 18 
 				}
@@ -363,50 +334,34 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr) {
 			"location_category_data":
 			[
 				{
-					"row": 2,
-					"col": 0,
 					"category_location": "sidewalk",
 					"num_of_fatalities": 40 
 				},
 				{
-					"row": 2,
-					"col": 1,
 					"category_location": "crosswalk",
 					"num_of_fatalities": 51
 				},
 				{
-					"row": 2,
-					"col": 2,
 					"category_location": "road",
 					"num_of_fatalities": 35
 				},
 				{
-					"row": 2,
-					"col": 3,
 					"category_location": "building",
 					"num_of_fatalities": 43 
 				},
 				{
-					"row": 2,
-					"col": 4,
 					"category_location": "intersection",
 					"num_of_fatalities": 13 
 				},
 				{
-					"row": 2,
-					"col": 5,
 					"category_location": "middle lane",
 					"num_of_fatalities": 73 
 				},
 				{
-					"row": 2,
-					"col": 6,
 					"category_location": "right lane",
 					"num_of_fatalities": 11 
 				},
 				{
-					"row": 2,
-					"col": 7,
 					"category_location": "bicycle lane",
 					"num_of_fatalities": 8 
 				}
@@ -417,50 +372,34 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr) {
 			"location_category_data":
 			[
 				{
-					"row": 3,
-					"col": 0,
 					"category_location": "sidewalk",
 					"num_of_fatalities": 67 
 				},
 				{
-					"row": 3,
-					"col": 1,
 					"category_location": "crosswalk",
 					"num_of_fatalities": 10
 				},
 				{
-					"row": 3,
-					"col": 2,
 					"category_location": "road",
 					"num_of_fatalities": 75
 				},
 				{
-					"row": 3,
-					"col": 3,
 					"category_location": "building",
 					"num_of_fatalities": 53 
 				},
 				{
-					"row": 3,
-					"col": 4,
 					"category_location": "intersection",
 					"num_of_fatalities": 43 
 				},
 				{
-					"row": 3,
-					"col": 5,
 					"category_location": "middle lane",
 					"num_of_fatalities": 3 
 				},
 				{
-					"row": 3,
-					"col": 6,
 					"category_location": "right lane",
 					"num_of_fatalities": 40 
 				},
 				{
-					"row": 3,
-					"col": 7,
 					"category_location": "bicycle lane",
 					"num_of_fatalities": 8 
 				}
@@ -471,50 +410,34 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr) {
 			"location_category_data":
 			[
 				{
-					"row": 4,
-					"col": 0,
 					"category_location": "sidewalk",
 					"num_of_fatalities": 60 
 				},
 				{
-					"row": 4,
-					"col": 1,
 					"category_location": "crosswalk",
 					"num_of_fatalities": 50
 				},
 				{
-					"row": 4,
-					"col": 2,
 					"category_location": "road",
 					"num_of_fatalities": 75
 				},
 				{
-					"row": 4,
-					"col": 3,
 					"category_location": "building",
 					"num_of_fatalities": 83 
 				},
 				{
-					"row": 4,
-					"col": 4,
 					"category_location": "intersection",
 					"num_of_fatalities": 43 
 				},
 				{
-					"row": 4,
-					"col": 5,
 					"category_location": "middle lane",
 					"num_of_fatalities": 23 
 				},
 				{
-					"row": 4,
-					"col": 6,
 					"category_location": "right lane",
 					"num_of_fatalities": 41 
 				},
 				{
-					"row": 4,
-					"col": 7,
 					"category_location": "bicycle lane",
 					"num_of_fatalities": 68 
 				}
@@ -525,50 +448,34 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr) {
 			"location_category_data":
 			[
 				{
-					"row": 5,
-					"col": 0,
 					"category_location": "sidewalk",
 					"num_of_fatalities": 60 
 				},
 				{
-					"row": 5,
-					"col": 1,
 					"category_location": "crosswalk",
 					"num_of_fatalities": 50
 				},
 				{
-					"row": 5,
-					"col": 2,
 					"category_location": "road",
 					"num_of_fatalities": 75
 				},
 				{
-					"row": 5,
-					"col": 3,
 					"category_location": "building",
 					"num_of_fatalities": 83 
 				},
 				{
-					"row": 5,
-					"col": 4,
 					"category_location": "intersection",
 					"num_of_fatalities": 43 
 				},
 				{
-					"row": 5,
-					"col": 5,
 					"category_location": "middle lane",
 					"num_of_fatalities": 23 
 				},
 				{
-					"row": 5,
-					"col": 6,
 					"category_location": "right lane",
 					"num_of_fatalities": 41 
 				},
 				{
-					"row": 5,
-					"col": 7,
 					"category_location": "bicycle lane",
 					"num_of_fatalities": 68 
 				}
@@ -579,50 +486,34 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr) {
 			"location_category_data":
 			[
 				{
-					"row": 6,
-					"col": 0,
 					"category_location": "sidewalk",
 					"num_of_fatalities": 60 
 				},
 				{
-					"row": 6,
-					"col": 1,
 					"category_location": "crosswalk",
 					"num_of_fatalities": 50
 				},
 				{
-					"row": 6,
-					"col": 2,
 					"category_location": "road",
 					"num_of_fatalities": 75
 				},
 				{
-					"row": 6,
-					"col": 3,
 					"category_location": "building",
 					"num_of_fatalities": 83 
 				},
 				{
-					"row": 6,
-					"col": 4,
 					"category_location": "intersection",
 					"num_of_fatalities": 43 
 				},
 				{
-					"row": 6,
-					"col": 5,
 					"category_location": "middle lane",
 					"num_of_fatalities": 23 
 				},
 				{
-					"row": 6,
-					"col": 6,
 					"category_location": "right lane",
 					"num_of_fatalities": 41 
 				},
 				{
-					"row": 6,
-					"col": 7,
 					"category_location": "bicycle lane",
 					"num_of_fatalities": 68 
 				}
@@ -633,50 +524,34 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr) {
 			"location_category_data":
 			[
 				{
-					"row": 7,
-					"col": 0,
 					"category_location": "sidewalk",
 					"num_of_fatalities": 60 
 				},
 				{
-					"row": 7,
-					"col": 1,
 					"category_location": "crosswalk",
 					"num_of_fatalities": 50
 				},
 				{
-					"row": 7,
-					"col": 2,
 					"category_location": "road",
 					"num_of_fatalities": 75
 				},
 				{
-					"row": 7,
-					"col": 3,
 					"category_location": "building",
 					"num_of_fatalities": 83 
 				},
 				{
-					"row": 7,
-					"col": 4,
 					"category_location": "intersection",
 					"num_of_fatalities": 43 
 				},
 				{
-					"row": 7,
-					"col": 5,
 					"category_location": "middle lane",
 					"num_of_fatalities": 23 
 				},
 				{
-					"row": 7,
-					"col": 6,
 					"category_location": "right lane",
 					"num_of_fatalities": 41 
 				},
 				{
-					"row": 7,
-					"col": 7,
 					"category_location": "bicycle lane",
 					"num_of_fatalities": 68 
 				}
