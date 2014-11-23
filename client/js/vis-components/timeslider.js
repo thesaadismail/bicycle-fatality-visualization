@@ -58,7 +58,7 @@ function initTimeSlider(){
   var OVvis = OVchart.append('svg:g')
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
   
-  d3.csv('data/CoffeeData.csv', function(rawdata) {
+  d3.csv('client/data/CoffeeData.csv', function(rawdata) {
     var OVformat = d3.time.format("%m/%d/%Y");
     var OVmonthNameFormat = d3.time.format("%m");
     OVdata_agg = d3.nest()
