@@ -22,12 +22,15 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr) {
 	===========================================
 	*/
 	var createHeatchart = function() {
+			var sampleJsonData = sampleJsonDataForCDM["weather_category_data"];
+			
 			var min = 999;
 			var max = -999;
 			var l;
-			for (var rowNum = 0; rowNum < matrixDataset.length; rowNum++) {
-				for (var colNum = 0; colNum < numCols; colNum++) {
-					l = matrixDataset[rowNum][colNum].points.length;
+			console.log(sampleJsonData);
+			for (var rowNum = 0; rowNum < sampleJsonData.length; rowNum++) {
+				for (var colNum = 0; colNum < sampleJsonData[0]["location_category_data"].length; colNum++) {
+					l = sampleJsonData[rowNum]["location_category_data"][colNum]["num_of_fatalities"];
 					if (l > max) {
 						max = l;
 					}
@@ -38,95 +41,84 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr) {
 			}
 			var tooltip = d3.select("body").append("div").style("position", "absolute").style("z-index", "10").style("visibility", "hidden").text("a simple tooltip");
 			var heatchart = d3.select(elementName).append("svg").attr("width", width).attr("height", height);
-			var selectedHeatChart = heatchart.selectAll("g").data(matrixDataset).enter().append("g");
+			//console.log(samplejson);
+			var selectedHeatChart = heatchart.selectAll("g").data(sampleJsonData).enter().append("g");
 			addLawModeGrid(false, selectedHeatChart, min, max);
 		};
-		
-		/*
+/*
 	===========================================
 					UPDATE ELEMENTS
 	===========================================
 	*/
-		this.updateHeatchart = function() {
-			var min = 999;
-			var max = -999;
-			var l;
-			for (var rowNum = 0; rowNum < matrixDataset.length; rowNum++) {
-				for (var colNum = 0; colNum < numCols; colNum++) {
-					l = matrixDataset[rowNum][colNum].points.length;
-					if (l > max) {
-						max = l;
-					}
-					if (l < min) {
-						min = l;
-					}
+	this.updateHeatchart = function() {
+		var min = 999;
+		var max = -999;
+		var l;
+		for (var rowNum = 0; rowNum < matrixDataset.length; rowNum++) {
+			for (var colNum = 0; colNum < numCols; colNum++) {
+				l = matrixDataset[rowNum][colNum].points.length;
+				if (l > max) {
+					max = l;
+				}
+				if (l < min) {
+					min = l;
 				}
 			}
-			
-			var tooltip = d3.select("body").append("div").style("position", "absolute").style("z-index", "10").style("visibility", "hidden").text("a simple tooltip");
-			var heatchart = d3.select(elementName).select("svg");
-			var selectedHeatChart = heatchart.selectAll("g").data(matrixDataset);
-			addLawModeGrid(true, selectedHeatChart, min, max);
-			
-		};
-	/*
+		}
+		var tooltip = d3.select("body").append("div").style("position", "absolute").style("z-index", "10").style("visibility", "hidden").text("a simple tooltip");
+		var heatchart = d3.select(elementName).select("svg");
+		var selectedHeatChart = heatchart.selectAll("g").data(matrixDataset);
+		addLawModeGrid(true, selectedHeatChart, min, max);
+	};
+/*
 	===========================================
 	  Category Data Matrix Component Helpers
 	===========================================
-	*/	
-		
+	*/
 	var addRegularGrid = function(update, selectedHeatChart, min, max) {
 			var selectedRectangles;
-			if(update)
-			{
+			if (update) {
 				selectedRectangles = selectedHeatChart.selectAll("rect").data(function(d) {
-				return d;
-				});
-			}
-			else
-			{
-				selectedRectangles = selectedHeatChart.selectAll("rect").data(function(d) {
+					console.log(d);
 					return d;
-					}).enter().append("rect");
+				});
+			} else {
+				selectedRectangles = selectedHeatChart.selectAll("rect").data(function(d) {
+					return d["location_category_data"];
+				}).enter().append("rect");
 			}
-			
 			selectedElements = selectedRectangles.attr("x", function(d, i) {
 				return d.col * (width / numCols);
 			}).attr("y", function(d, i) {
 				return d.row * (height / numRows);
-			}).attr("width", width / numCols).attr("height", height / numRows).attr("fill", function(d, i) {
-				return color((d.points.length - min) / (max - min));
+			}).attr("width", width / numCols)
+			.attr("height", height / numRows)
+			.attr("fill", function(d, i) {
+				return color((d["num_of_fatalities"] - min) / (max - min));
 			}).attr("stroke", cellStrokeColor).attr("cell", function(d) {
 				return "r" + d.row + "c" + d.col;
 			});
 			addHoverClickAttributes(selectedElements);
 		}
 	var addLawModeGrid = function(update, selectedHeatChart, min, max) {
-	
 			var tooltip = d3.select("body").append("div").style("position", "absolute").style("z-index", "10").style("visibility", "hidden").text("a simple tooltip");
-			
 			//work on top triangles
 			var topSelectedPolygons;
 			var bottomSelectedPolygons;
-			if(update)
-			{
+			if (update) {
 				bottomSelectedPolygons = selectedHeatChart.selectAll("polygon#bottomTriangle").data(function(d) {
-					return d;
+					return d["location_category_data"];
 				});
 				topSelectedPolygons = selectedHeatChart.selectAll("polygon#topTriangle").data(function(d) {
-					return d;
+					return d["location_category_data"];
 				});
-				
-			}
-			else
-			{
+			} else {
 				selectedPolygons = selectedHeatChart.selectAll("polygon").data(function(d) {
-					return d;
+					return d["location_category_data"];
 				}).enter();
 				topSelectedPolygons = selectedPolygons.append("polygon").attr('id', 'topTriangle');
 				bottomSelectedPolygons = selectedPolygons.append("polygon").attr('id', 'bottomTriangle');
 			}
-			
 			selectedTopTriangles = topSelectedPolygons.attr("points", function(d, i) {
 				//top triangle
 				var topX = d.col * (width / numCols);
@@ -139,12 +131,12 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr) {
 				//console.log(firstPoint + " " + secondPoint + " " + thirdPoint);
 				return firstPoint + " " + secondPoint + " " + thirdPoint;
 			}).attr("fill", function(d, i) {
-				return lawmodeAllowedColor((d.points.length - min) / (max - min));
+				console.log(d);
+				return lawmodeAllowedColor((d["num_of_fatalities"] - min) / (max - min));
 			}).attr("stroke", cellStrokeColor).attr("cell", function(d) {
 				return "r" + d.row + "c" + d.col;
 			});
 			addHoverClickAttributes(selectedTopTriangles);
-			
 			//work with bottom triangles
 			selectedBottomTriangles = bottomSelectedPolygons.attr("points", function(d, i) {
 				//bottom triangle
@@ -158,20 +150,19 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr) {
 				//console.log(firstPoint + " " + secondPoint + " " + thirdPoint);
 				return firstPoint + " " + secondPoint + " " + thirdPoint;
 			}).attr("fill", function(d, i) {
-				return lawmodeProhibitedColor((d.points.length - min) / (max - min));
+				console.log(d);
+				return lawmodeProhibitedColor(d["num_of_fatalities"] / (max - min));
 			}).attr("stroke", cellStrokeColor).attr("cell", function(d) {
 				return "r" + d.row + "c" + d.col;
 			});
 			addHoverClickAttributes(selectedBottomTriangles);
 		}
-
-		
-	/*
+/*
 	===========================================
 			D3 CELL INTERACTIONS
 	===========================================
-	*/	
-			var addHoverClickAttributes = function(selectedElements) {
+	*/
+	var addHoverClickAttributes = function(selectedElements) {
 			var tooltip = d3.select("body").append("div").style("position", "absolute").style("z-index", "10").style("visibility", "hidden").text("a simple tooltip");
 			selectedElements.on("mouseover", function(d) {
 				onCellOver(this, d);
@@ -255,6 +246,445 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr) {
 				}
 			}
 		}
+		
+		var sampleJsonDataForCDM = {
+	"data_group_id": 2,
+	"weather_category_data":[
+		{
+			"category_weather": "rainy",
+			"location_category_data":
+			[
+				{
+					"row": 0,
+					"col": 0,
+					"category_location": "sidewalk",
+					"num_of_fatalities": 60 
+				},
+				{
+					"row": 0,
+					"col": 1,
+					"category_location": "crosswalk",
+					"num_of_fatalities": 50
+				},
+				{
+					"row": 0,
+					"col": 2,
+					"category_location": "road",
+					"num_of_fatalities": 75
+				},
+				{
+					"row": 0,
+					"col": 3,
+					"category_location": "building",
+					"num_of_fatalities": 83 
+				},
+				{
+					"row": 0,
+					"col": 4,
+					"category_location": "intersection",
+					"num_of_fatalities": 43 
+				},
+				{
+					"row": 0,
+					"col": 5,
+					"category_location": "middle lane",
+					"num_of_fatalities": 23 
+				},
+				{
+					"row": 0,
+					"col": 6,
+					"category_location": "right lane",
+					"num_of_fatalities": 41 
+				},
+				{
+					"row": 0,
+					"col": 7,
+					"category_location": "bicycle lane",
+					"num_of_fatalities": 68 
+				}
+			]
+		},
+		{
+			"category_weather": "sunny",
+			"location_category_data":
+			[
+				{
+					"row": 1,
+					"col": 0,
+					"category_location": "sidewalk",
+					"num_of_fatalities": 60 
+				},
+				{
+					"row": 1,
+					"col": 1,
+					"category_location": "crosswalk",
+					"num_of_fatalities": 15
+				},
+				{
+					"row": 1,
+					"col": 2,
+					"category_location": "road",
+					"num_of_fatalities": 93
+				},
+				{
+					"row": 1,
+					"col": 3,
+					"category_location": "building",
+					"num_of_fatalities": 3 
+				},
+				{
+					"row": 1,
+					"col": 4,
+					"category_location": "intersection",
+					"num_of_fatalities": 43 
+				},
+				{
+					"row": 1,
+					"col": 5,
+					"category_location": "middle lane",
+					"num_of_fatalities": 23 
+				},
+				{
+					"row": 1,
+					"col": 6,
+					"category_location": "right lane",
+					"num_of_fatalities": 41 
+				},
+				{
+					"row": 1,
+					"col": 7,
+					"category_location": "bicycle lane",
+					"num_of_fatalities": 18 
+				}
+			]
+		},
+		{
+			"category_weather": "windy",
+			"location_category_data":
+			[
+				{
+					"row": 2,
+					"col": 0,
+					"category_location": "sidewalk",
+					"num_of_fatalities": 40 
+				},
+				{
+					"row": 2,
+					"col": 1,
+					"category_location": "crosswalk",
+					"num_of_fatalities": 51
+				},
+				{
+					"row": 2,
+					"col": 2,
+					"category_location": "road",
+					"num_of_fatalities": 35
+				},
+				{
+					"row": 2,
+					"col": 3,
+					"category_location": "building",
+					"num_of_fatalities": 43 
+				},
+				{
+					"row": 2,
+					"col": 4,
+					"category_location": "intersection",
+					"num_of_fatalities": 13 
+				},
+				{
+					"row": 2,
+					"col": 5,
+					"category_location": "middle lane",
+					"num_of_fatalities": 73 
+				},
+				{
+					"row": 2,
+					"col": 6,
+					"category_location": "right lane",
+					"num_of_fatalities": 11 
+				},
+				{
+					"row": 2,
+					"col": 7,
+					"category_location": "bicycle lane",
+					"num_of_fatalities": 8 
+				}
+			]
+		},
+		{
+			"category_weather": "blowing snow",
+			"location_category_data":
+			[
+				{
+					"row": 3,
+					"col": 0,
+					"category_location": "sidewalk",
+					"num_of_fatalities": 67 
+				},
+				{
+					"row": 3,
+					"col": 1,
+					"category_location": "crosswalk",
+					"num_of_fatalities": 10
+				},
+				{
+					"row": 3,
+					"col": 2,
+					"category_location": "road",
+					"num_of_fatalities": 75
+				},
+				{
+					"row": 3,
+					"col": 3,
+					"category_location": "building",
+					"num_of_fatalities": 53 
+				},
+				{
+					"row": 3,
+					"col": 4,
+					"category_location": "intersection",
+					"num_of_fatalities": 43 
+				},
+				{
+					"row": 3,
+					"col": 5,
+					"category_location": "middle lane",
+					"num_of_fatalities": 3 
+				},
+				{
+					"row": 3,
+					"col": 6,
+					"category_location": "right lane",
+					"num_of_fatalities": 40 
+				},
+				{
+					"row": 3,
+					"col": 7,
+					"category_location": "bicycle lane",
+					"num_of_fatalities": 8 
+				}
+			]
+		},
+		{
+			"category_weather": "thunder",
+			"location_category_data":
+			[
+				{
+					"row": 4,
+					"col": 0,
+					"category_location": "sidewalk",
+					"num_of_fatalities": 60 
+				},
+				{
+					"row": 4,
+					"col": 1,
+					"category_location": "crosswalk",
+					"num_of_fatalities": 50
+				},
+				{
+					"row": 4,
+					"col": 2,
+					"category_location": "road",
+					"num_of_fatalities": 75
+				},
+				{
+					"row": 4,
+					"col": 3,
+					"category_location": "building",
+					"num_of_fatalities": 83 
+				},
+				{
+					"row": 4,
+					"col": 4,
+					"category_location": "intersection",
+					"num_of_fatalities": 43 
+				},
+				{
+					"row": 4,
+					"col": 5,
+					"category_location": "middle lane",
+					"num_of_fatalities": 23 
+				},
+				{
+					"row": 4,
+					"col": 6,
+					"category_location": "right lane",
+					"num_of_fatalities": 41 
+				},
+				{
+					"row": 4,
+					"col": 7,
+					"category_location": "bicycle lane",
+					"num_of_fatalities": 68 
+				}
+			]
+		},
+		{
+			"category_weather": "clear",
+			"location_category_data":
+			[
+				{
+					"row": 5,
+					"col": 0,
+					"category_location": "sidewalk",
+					"num_of_fatalities": 60 
+				},
+				{
+					"row": 5,
+					"col": 1,
+					"category_location": "crosswalk",
+					"num_of_fatalities": 50
+				},
+				{
+					"row": 5,
+					"col": 2,
+					"category_location": "road",
+					"num_of_fatalities": 75
+				},
+				{
+					"row": 5,
+					"col": 3,
+					"category_location": "building",
+					"num_of_fatalities": 83 
+				},
+				{
+					"row": 5,
+					"col": 4,
+					"category_location": "intersection",
+					"num_of_fatalities": 43 
+				},
+				{
+					"row": 5,
+					"col": 5,
+					"category_location": "middle lane",
+					"num_of_fatalities": 23 
+				},
+				{
+					"row": 5,
+					"col": 6,
+					"category_location": "right lane",
+					"num_of_fatalities": 41 
+				},
+				{
+					"row": 5,
+					"col": 7,
+					"category_location": "bicycle lane",
+					"num_of_fatalities": 68 
+				}
+			]
+		},
+		{
+			"category_weather": "foggy",
+			"location_category_data":
+			[
+				{
+					"row": 6,
+					"col": 0,
+					"category_location": "sidewalk",
+					"num_of_fatalities": 60 
+				},
+				{
+					"row": 6,
+					"col": 1,
+					"category_location": "crosswalk",
+					"num_of_fatalities": 50
+				},
+				{
+					"row": 6,
+					"col": 2,
+					"category_location": "road",
+					"num_of_fatalities": 75
+				},
+				{
+					"row": 6,
+					"col": 3,
+					"category_location": "building",
+					"num_of_fatalities": 83 
+				},
+				{
+					"row": 6,
+					"col": 4,
+					"category_location": "intersection",
+					"num_of_fatalities": 43 
+				},
+				{
+					"row": 6,
+					"col": 5,
+					"category_location": "middle lane",
+					"num_of_fatalities": 23 
+				},
+				{
+					"row": 6,
+					"col": 6,
+					"category_location": "right lane",
+					"num_of_fatalities": 41 
+				},
+				{
+					"row": 6,
+					"col": 7,
+					"category_location": "bicycle lane",
+					"num_of_fatalities": 68 
+				}
+			]
+		},
+		{
+			"category_weather": "hurricane",
+			"location_category_data":
+			[
+				{
+					"row": 7,
+					"col": 0,
+					"category_location": "sidewalk",
+					"num_of_fatalities": 60 
+				},
+				{
+					"row": 7,
+					"col": 1,
+					"category_location": "crosswalk",
+					"num_of_fatalities": 50
+				},
+				{
+					"row": 7,
+					"col": 2,
+					"category_location": "road",
+					"num_of_fatalities": 75
+				},
+				{
+					"row": 7,
+					"col": 3,
+					"category_location": "building",
+					"num_of_fatalities": 83 
+				},
+				{
+					"row": 7,
+					"col": 4,
+					"category_location": "intersection",
+					"num_of_fatalities": 43 
+				},
+				{
+					"row": 7,
+					"col": 5,
+					"category_location": "middle lane",
+					"num_of_fatalities": 23 
+				},
+				{
+					"row": 7,
+					"col": 6,
+					"category_location": "right lane",
+					"num_of_fatalities": 41 
+				},
+				{
+					"row": 7,
+					"col": 7,
+					"category_location": "bicycle lane",
+					"num_of_fatalities": 68 
+				}
+			]
+		}
+	]
+
+};
 /*
 	===========================================
 			Functions to Execute on Load
