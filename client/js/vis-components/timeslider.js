@@ -27,22 +27,18 @@ function initTimeSlider(){
 
   var OVyAxis = d3.svg.axis()
     .scale(OVy)
-    .ticks(4)
+    .ticks(3)
     .orient("left");
 
   var OVbrush = d3.svg.brush()
     .x(OVx)
     .on("brush", OVbrushed);
 
-  // var line = d3.svg.line()
-  //   .x(function(d) { return x(d.key); })
-  //   .y(function(d) { return y(d.values); });
-
   var OVarea = d3.svg.area()
     .interpolate("monotone")
-    .x(function(d) { return OVx(d.key); })
+    .x(function(d) { return OVx(d["month_id"]); })
     .y0(height)
-    .y1(function(d) { return OVy(d.values); });
+    .y1(function(d) { return OVy(d["num_of_fatalities"]); });
 
   var OVchart = d3.select('#timeslider').append('svg')
     .attr("style", "outline: thin solid gray;") 
@@ -58,22 +54,78 @@ function initTimeSlider(){
   var OVvis = OVchart.append('svg:g')
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
   
-  d3.csv('client/data/CoffeeData.csv', function(rawdata) {
-    var OVformat = d3.time.format("%m/%d/%Y");
-    var OVmonthNameFormat = d3.time.format("%m");
-    OVdata_agg = d3.nest()
-          .key(function(d) {return OVmonthNameFormat(OVformat.parse(d.date));})
-          .rollup(function(d) {return d3.sum(d, function(g) {return g.sales;});})
-          .entries(rawdata);
+  // d3.csv('client/data/CoffeeData.csv', function(data) {
+    // rawdata = d3.csv('client/data/CoffeeData.csv');
+    // var OVformat = d3.time.format("%m/%d/%Y");
+    // var OVmonthNameFormat = d3.time.format("%m");
+    // OVdata_agg = d3.nest()
+    //       .key(function(d) {return OVmonthNameFormat(OVformat.parse(d.date));})
+    //       .rollup(function(d) {return d3.sum(d, function(g) {return g.sales;});})
+    //       .entries(rawdata);
+    // });
 
+    var sampledata = {
+      "data_group_id":1,
+      "overview_data":[
+        {
+        "month_id":0,
+        "num_of_fatalities":45
+        },
+        {
+        "month_id":1,
+        "num_of_fatalities":45
+        },
+        {
+        "month_id":2,
+        "num_of_fatalities":45
+        },
+        {
+        "month_id":3,
+        "num_of_fatalities":45
+        },
+        {
+        "month_id":4,
+        "num_of_fatalities":45
+        },
+        {
+        "month_id":5,
+        "num_of_fatalities":45
+        },
+        {
+        "month_id":6,
+        "num_of_fatalities":43
+        },
+        {
+        "month_id":7,
+        "num_of_fatalities":42
+        },
+        {
+        "month_id":8,
+        "num_of_fatalities":45
+        },
+        {
+        "month_id":9,
+        "num_of_fatalities":45
+        },
+        {
+        "month_id":10,
+        "num_of_fatalities":45
+        },
+        {
+        "month_id":11,
+        "num_of_fatalities":40
+        }
+      ]       
+      };
+
+    var OVdata_agg = sampledata["overview_data"];
     OVdata_agg.forEach(function(d) {
-      d.key = new Date(2014, d.key-1, 1);
-      d.values = +d.values;
+      d["month_id"] = new Date(2014, d["month_id"], 1);
     });
 
-    OVx.domain(d3.extent(OVdata_agg, function(d) { return d.key; }));
-    OVy.domain(d3.extent(OVdata_agg, function(d) { return d.values; }));
-
+    OVx.domain(d3.extent(OVdata_agg, function(d) { return d["month_id"]; }));
+    OVy.domain(d3.extent(OVdata_agg, function(d) { return d["num_of_fatalities"]; }));
+    
     OVvis.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + OVheight + ")")
@@ -109,10 +161,11 @@ function initTimeSlider(){
     OVvis.append("g")
         .append("rect")
 
-  });
 
   function OVbrushed() {
     OVbrush.empty() ? tmp = OVx.domain() : tmp = OVbrush.extent();
+    var OVmonthNameFormat = d3.time.format("%m");
+    console.log(OVmonthNameFormat(tmp[0])+"---"+OVmonthNameFormat(tmp[1]));
     // vis.select(".area").attr("d", area);
     // vis.select(".x.axis").call(xAxis);
   }
