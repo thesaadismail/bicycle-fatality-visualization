@@ -8,7 +8,7 @@ var OVparseDate = d3.time.format("%b-%Y").parse;
 
 
 //Gets called when the page is loaded.
-function initTimeSlider(){
+function initTimeSlider(overviewDataset){
 
   ///////////////////////////////
   // Year Overview Line Graph
@@ -64,61 +64,8 @@ function initTimeSlider(){
     //       .entries(rawdata);
     // });
 
-    var sampledata = {
-      "data_group_id":1,
-      "overview_data":[
-        {
-        "month_id":0,
-        "num_of_fatalities":45
-        },
-        {
-        "month_id":1,
-        "num_of_fatalities":45
-        },
-        {
-        "month_id":2,
-        "num_of_fatalities":45
-        },
-        {
-        "month_id":3,
-        "num_of_fatalities":45
-        },
-        {
-        "month_id":4,
-        "num_of_fatalities":45
-        },
-        {
-        "month_id":5,
-        "num_of_fatalities":45
-        },
-        {
-        "month_id":6,
-        "num_of_fatalities":43
-        },
-        {
-        "month_id":7,
-        "num_of_fatalities":42
-        },
-        {
-        "month_id":8,
-        "num_of_fatalities":45
-        },
-        {
-        "month_id":9,
-        "num_of_fatalities":45
-        },
-        {
-        "month_id":10,
-        "num_of_fatalities":45
-        },
-        {
-        "month_id":11,
-        "num_of_fatalities":40
-        }
-      ]       
-      };
-
-    var OVdata_agg = sampledata["overview_data"];
+    
+    var OVdata_agg = overviewDataset["overview_data"];
     OVdata_agg.forEach(function(d) {
       d["month_id"] = new Date(2014, d["month_id"], 1);
     });

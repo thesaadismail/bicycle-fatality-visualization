@@ -14,10 +14,19 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr, axisType)
 		height = heightAttr;
 	var cellStrokeColor = "#7e7e7e",
 		selectedCellStrokeColor = "#ffff00";
-	var matrixDataset = cells;
-	var numRows = matrixDataset.length,
-		numCols = matrixDataset[0].length,
-		data = null,
+	var sampleJsonDataForCDM = cells;
+	if (axisType == CategoryDataMatrix.Axis.AxisType_None) {
+		var numRows = cells["category_data"].length,
+			numCols = cells["category_data"][0]["category_data"].length;
+	} else if (axisType == CategoryDataMatrix.Axis.AxisType_X) {
+		//console.log(cells);
+		var numRows = 1,
+			numCols = cells["category_data"].length;
+	} else if (axisType == CategoryDataMatrix.Axis.AxisType_Y) {
+		var numRows = cells["category_data"].length,
+			numCols = 1;
+	}
+	var data = null,
 		color = d3.interpolateRgb("#fff", "#f00"),
 		lawmodeAllowedColor = d3.interpolateRgb("#fff", "#00f"),
 		lawmodeProhibitedColor = d3.interpolateRgb("#fff", "#f00");
@@ -29,16 +38,16 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr, axisType)
 	===========================================
 	*/
 	var createHeatchart = function() {
-			var sampleJsonData = sampleJsonDataForCDM["weather_category_data"];
+			var sampleJsonData = sampleJsonDataForCDM["category_data"];
 			var min = 999;
 			var max = -999;
 			var l;
 			//console.log(sampleJsonData);
-			for (var rowNum = 0; rowNum < sampleJsonData.length; rowNum++) {
-				for (var colNum = 0; colNum < sampleJsonData[0]["location_category_data"].length; colNum++) {
-					sampleJsonData[rowNum]["location_category_data"][colNum]['row'] = rowNum;
-					sampleJsonData[rowNum]["location_category_data"][colNum]['col'] = colNum;
-					l = sampleJsonData[rowNum]["location_category_data"][colNum]["num_of_fatalities"];
+			for (var rowNum = 0; rowNum < numRows; rowNum++) {
+				for (var colNum = 0; colNum < numCols; colNum++) {
+					sampleJsonData[rowNum]["category_data"][colNum]['row'] = rowNum;
+					sampleJsonData[rowNum]["category_data"][colNum]['col'] = colNum;
+					l = sampleJsonData[rowNum]["category_data"][colNum]["num_of_fatalities"];
 					if (l > max) {
 						max = l;
 					}
@@ -58,23 +67,70 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr, axisType)
 			var selectedHeatChart = heatchartCanvas.selectAll("g").data(sampleJsonData).enter().append("g");
 			addRegularGrid(false, selectedHeatChart, min, max);
 		};
+	var createYAxisComponent = function() {
+			var sampleJsonData = [sampleJsonDataForCDM["category_data"],];
+			var min = 999;
+			var max = -999;
+			var l;
+			//console.log(sampleJsonData);
+			for (var rowNum = 0; rowNum < numRows; rowNum++) {
+				sampleJsonData[0][rowNum]['row'] = rowNum;
+				sampleJsonData[0][rowNum]['col'] = 0;
+				l = sampleJsonData[0][rowNum]["num_of_fatalities"];
+				if (l > max) {
+					max = l;
+				}
+				if (l < min) {
+					min = l;
+				}
+			}
+			var tooltip = d3.select("body").append("div").style("position", "absolute").style("z-index", "10").style("visibility", "hidden").text("a simple tooltip");
+			var heatchartCanvas = d3.select(elementName).append("svg").attr("width", width).attr("height", height);
+			//console.log(samplejson);
+			buildYAxis(sampleJsonData, heatchartCanvas);
+			var selectedHeatChart = heatchartCanvas.selectAll("g").data(sampleJsonData).enter().append("g");
+			addRegularGrid(false, selectedHeatChart, min, max);
+		};
+	var createXAxisComponent = function() {
+			var sampleJsonData = sampleJsonDataForCDM["category_data"];
+			var min = 999;
+			var max = -999;
+			var l;
+			//console.log(sampleJsonData);
+			for (var colNum = 0; colNum < numCols; colNum++) {
+				l = sampleJsonData[colNum]["num_of_fatalities"];
+				sampleJsonData[colNum]["category_data"] = [{"num_of_fatalities":l, 'row':0, 'col':colNum}];
+				if (l > max) {
+					max = l;
+				}
+				if (l < min) {
+					min = l;
+				}
+			}
+			var tooltip = d3.select("body").append("div").style("position", "absolute").style("z-index", "10").style("visibility", "hidden").text("a simple tooltip");
+			var heatchartCanvas = d3.select(elementName).append("svg").attr("width", width).attr("height", height);
+			//console.log(samplejson);
+			buildXAxis(sampleJsonData, heatchartCanvas);
+			var selectedHeatChart = heatchartCanvas.selectAll("g").data(sampleJsonData).enter().append("g");
+			addRegularGrid(false, selectedHeatChart, min, max);
+		};
 /*
 	===========================================
 					UPDATE ELEMENTS
 	===========================================
 	*/
 	this.updateHeatchart = function() {
-		var sampleJsonData = sampleJsonDataForCDM["weather_category_data"];
+		var sampleJsonData = sampleJsonDataForCDM["category_data"];
 		//console.log(sampleJsonData);
 		var min = 999;
 		var max = -999;
 		var l;
 		for (var rowNum = 0; rowNum < sampleJsonData.length; rowNum++) {
-			for (var colNum = 0; colNum < sampleJsonData[0]["location_category_data"].length; colNum++) {
-				sampleJsonData[rowNum]["location_category_data"][colNum]['row'] = rowNum;
-				sampleJsonData[rowNum]["location_category_data"][colNum]['col'] = colNum;
-				sampleJsonData[rowNum]["location_category_data"][colNum]['num_of_fatalities'] = Math.floor(Math.random() * 111);
-				l = sampleJsonData[rowNum]["location_category_data"][colNum]["num_of_fatalities"];
+			for (var colNum = 0; colNum < sampleJsonData[0]["category_data"].length; colNum++) {
+				sampleJsonData[rowNum]["category_data"][colNum]['row'] = rowNum;
+				sampleJsonData[rowNum]["category_data"][colNum]['col'] = colNum;
+				sampleJsonData[rowNum]["category_data"][colNum]['num_of_fatalities'] = Math.floor(Math.random() * 111);
+				l = sampleJsonData[rowNum]["category_data"][colNum]["num_of_fatalities"];
 				if (l > max) {
 					max = l;
 				}
@@ -103,7 +159,7 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr, axisType)
 			for (var rowNum = 0; rowNum < sampleJsonData.length; rowNum++) {
 				yAxisCategories[yAxisCategories.length] = sampleJsonData[rowNum]["category_weather"];
 			}
-			console.log(yAxisCategories);
+			//console.log(yAxisCategories);
 			var yscale = d3.scale.linear().domain([0, yAxisCategories.length]).range([0, 480]);
 			var yAxis = d3.svg.axis();
 			yAxis.orient('left').scale(yscale).tickSize(2).tickFormat(function(d, i) {
@@ -114,10 +170,11 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr, axisType)
 	var buildXAxis = function(sampleJsonData) {
 			var xAxisCategories = [];
 			//console.log(sampleJsonData);
-			for (var colNum = 0; colNum < sampleJsonData[0]["location_category_data"].length; colNum++) {
-				xAxisCategories[xAxisCategories.length] = sampleJsonData[0]["location_category_data"][colNum]["category_location"];
+			//console.log(sampleJsonData);
+			for (var colNum = 0; colNum < sampleJsonData.length; colNum++) {
+				xAxisCategories[xAxisCategories.length] = sampleJsonData[colNum]["category_location"];
 			}
-			console.log(xAxisCategories);
+			//console.log(xAxisCategories);
 		};
 /*
 	===========================================
@@ -128,12 +185,19 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr, axisType)
 			var selectedRectangles;
 			if (update) {
 				selectedRectangles = selectedHeatChart.selectAll("rect").data(function(d) {
-					//console.log(d);
 					return d;
 				});
 			} else {
 				selectedRectangles = selectedHeatChart.selectAll("rect").data(function(d) {
-					return d["location_category_data"];
+					if (axisType == CategoryDataMatrix.Axis.AxisType_None) {
+						return d["category_data"];
+					} else if (axisType == CategoryDataMatrix.Axis.AxisType_X) {
+						//console.log(d);
+						return d["category_data"];
+					} else if (axisType == CategoryDataMatrix.Axis.AxisType_Y) {
+						//console.log(d);
+						return d;
+					}
 				}).enter().append("rect");
 			}
 			selectedElements = selectedRectangles.attr("x", function(d, i) {
@@ -154,14 +218,14 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr, axisType)
 			var bottomSelectedPolygons;
 			if (update) {
 				bottomSelectedPolygons = selectedHeatChart.selectAll("polygon#bottomTriangle").data(function(d) {
-					return d["location_category_data"];
+					return d["category_data"];
 				});
 				topSelectedPolygons = selectedHeatChart.selectAll("polygon#topTriangle").data(function(d) {
-					return d["location_category_data"];
+					return d["category_data"];
 				});
 			} else {
 				selectedPolygons = selectedHeatChart.selectAll("polygon").data(function(d) {
-					return d["location_category_data"];
+					return d["category_data"];
 				}).enter();
 				topSelectedPolygons = selectedPolygons.append("polygon").attr('id', 'topTriangle');
 				bottomSelectedPolygons = selectedPolygons.append("polygon").attr('id', 'bottomTriangle');
@@ -214,7 +278,7 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr, axisType)
 			selectedElements.on("mouseover", function(d) {
 				onCellOver(this, d);
 				//console.log(d);
-				tooltip.text("Num of Fatalities: "+d["num_of_fatalities"]+" Cell: [" + d.col + "," + d.row + "]");
+				tooltip.text("Num of Fatalities: " + d["num_of_fatalities"] + " Cell: [" + d.col + "," + d.row + "]");
 				tooltip.style("visibility", "visible");
 			}).on("mousemove", function(d) {
 				tooltip.style("top", (d3.event.pageY - 10) + "px").style("left", (d3.event.pageX + 10) + "px");
@@ -267,7 +331,16 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr, axisType)
 			//unhighlightCell(cell, data);
 		};
 	this.initDataMatrix = function() {
-		createHeatchart();
+		if (axisType == CategoryDataMatrix.Axis.AxisType_None) {
+			console.log("Create Main Heatchart");
+			createHeatchart();
+		} else if (axisType == CategoryDataMatrix.Axis.AxisType_X) {
+			console.log("Create X Axis");
+			createXAxisComponent();
+		} else if (axisType == CategoryDataMatrix.Axis.AxisType_Y) {
+			console.log("Create Y Axis");
+			createYAxisComponent();
+		}
 	};
 /*
 	===========================================
@@ -294,230 +367,10 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr, axisType)
 				}
 			}
 		}
-	var sampleJsonDataForCDM = {
-		"data_group_id": 2,
-		"weather_category_data": [{
-			"category_weather": "rainy",
-			"location_category_data": [{
-				"category_location": "sidewalk",
-				"num_of_fatalities": 60
-			}, {
-				"category_location": "crosswalk",
-				"num_of_fatalities": 50
-			}, {
-				"category_location": "road",
-				"num_of_fatalities": 75
-			}, {
-				"category_location": "building",
-				"num_of_fatalities": 83
-			}, {
-				"category_location": "intersection",
-				"num_of_fatalities": 43
-			}, {
-				"category_location": "middle lane",
-				"num_of_fatalities": 23
-			}, {
-				"category_location": "right lane",
-				"num_of_fatalities": 41
-			}, {
-				"category_location": "bicycle lane",
-				"num_of_fatalities": 68
-			}]
-		}, {
-			"category_weather": "sunny",
-			"location_category_data": [{
-				"category_location": "sidewalk",
-				"num_of_fatalities": 60
-			}, {
-				"category_location": "crosswalk",
-				"num_of_fatalities": 15
-			}, {
-				"category_location": "road",
-				"num_of_fatalities": 93
-			}, {
-				"category_location": "building",
-				"num_of_fatalities": 3
-			}, {
-				"category_location": "intersection",
-				"num_of_fatalities": 43
-			}, {
-				"category_location": "middle lane",
-				"num_of_fatalities": 23
-			}, {
-				"category_location": "right lane",
-				"num_of_fatalities": 41
-			}, {
-				"category_location": "bicycle lane",
-				"num_of_fatalities": 18
-			}]
-		}, {
-			"category_weather": "windy",
-			"location_category_data": [{
-				"category_location": "sidewalk",
-				"num_of_fatalities": 40
-			}, {
-				"category_location": "crosswalk",
-				"num_of_fatalities": 51
-			}, {
-				"category_location": "road",
-				"num_of_fatalities": 35
-			}, {
-				"category_location": "building",
-				"num_of_fatalities": 43
-			}, {
-				"category_location": "intersection",
-				"num_of_fatalities": 13
-			}, {
-				"category_location": "middle lane",
-				"num_of_fatalities": 73
-			}, {
-				"category_location": "right lane",
-				"num_of_fatalities": 11
-			}, {
-				"category_location": "bicycle lane",
-				"num_of_fatalities": 8
-			}]
-		}, {
-			"category_weather": "blowing snow",
-			"location_category_data": [{
-				"category_location": "sidewalk",
-				"num_of_fatalities": 67
-			}, {
-				"category_location": "crosswalk",
-				"num_of_fatalities": 10
-			}, {
-				"category_location": "road",
-				"num_of_fatalities": 75
-			}, {
-				"category_location": "building",
-				"num_of_fatalities": 53
-			}, {
-				"category_location": "intersection",
-				"num_of_fatalities": 43
-			}, {
-				"category_location": "middle lane",
-				"num_of_fatalities": 3
-			}, {
-				"category_location": "right lane",
-				"num_of_fatalities": 40
-			}, {
-				"category_location": "bicycle lane",
-				"num_of_fatalities": 8
-			}]
-		}, {
-			"category_weather": "thunder",
-			"location_category_data": [{
-				"category_location": "sidewalk",
-				"num_of_fatalities": 60
-			}, {
-				"category_location": "crosswalk",
-				"num_of_fatalities": 50
-			}, {
-				"category_location": "road",
-				"num_of_fatalities": 75
-			}, {
-				"category_location": "building",
-				"num_of_fatalities": 83
-			}, {
-				"category_location": "intersection",
-				"num_of_fatalities": 43
-			}, {
-				"category_location": "middle lane",
-				"num_of_fatalities": 23
-			}, {
-				"category_location": "right lane",
-				"num_of_fatalities": 41
-			}, {
-				"category_location": "bicycle lane",
-				"num_of_fatalities": 68
-			}]
-		}, {
-			"category_weather": "clear",
-			"location_category_data": [{
-				"category_location": "sidewalk",
-				"num_of_fatalities": 60
-			}, {
-				"category_location": "crosswalk",
-				"num_of_fatalities": 50
-			}, {
-				"category_location": "road",
-				"num_of_fatalities": 75
-			}, {
-				"category_location": "building",
-				"num_of_fatalities": 83
-			}, {
-				"category_location": "intersection",
-				"num_of_fatalities": 43
-			}, {
-				"category_location": "middle lane",
-				"num_of_fatalities": 23
-			}, {
-				"category_location": "right lane",
-				"num_of_fatalities": 41
-			}, {
-				"category_location": "bicycle lane",
-				"num_of_fatalities": 68
-			}]
-		}, {
-			"category_weather": "foggy",
-			"location_category_data": [{
-				"category_location": "sidewalk",
-				"num_of_fatalities": 60
-			}, {
-				"category_location": "crosswalk",
-				"num_of_fatalities": 50
-			}, {
-				"category_location": "road",
-				"num_of_fatalities": 75
-			}, {
-				"category_location": "building",
-				"num_of_fatalities": 83
-			}, {
-				"category_location": "intersection",
-				"num_of_fatalities": 43
-			}, {
-				"category_location": "middle lane",
-				"num_of_fatalities": 23
-			}, {
-				"category_location": "right lane",
-				"num_of_fatalities": 41
-			}, {
-				"category_location": "bicycle lane",
-				"num_of_fatalities": 68
-			}]
-		}, {
-			"category_weather": "hurricane",
-			"location_category_data": [{
-				"category_location": "sidewalk",
-				"num_of_fatalities": 60
-			}, {
-				"category_location": "crosswalk",
-				"num_of_fatalities": 50
-			}, {
-				"category_location": "road",
-				"num_of_fatalities": 75
-			}, {
-				"category_location": "building",
-				"num_of_fatalities": 83
-			}, {
-				"category_location": "intersection",
-				"num_of_fatalities": 43
-			}, {
-				"category_location": "middle lane",
-				"num_of_fatalities": 23
-			}, {
-				"category_location": "right lane",
-				"num_of_fatalities": 41
-			}, {
-				"category_location": "bicycle lane",
-				"num_of_fatalities": 68
-			}]
-		}]
-	};
 /*
 	===========================================
 			Functions to Execute on Load
 	===========================================
 	*/
-	createDefaultSelectedCells();
+		createDefaultSelectedCells();
 }
