@@ -15,6 +15,7 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr, axisType)
 	var cellStrokeColor = "#7e7e7e",
 		selectedCellStrokeColor = "#ffff00";
 	var sampleJsonDataForCDM = cells;
+	
 	if (axisType == CategoryDataMatrix.Axis.AxisType_None) {
 		var numRows = cells["category_data"].length,
 			numCols = cells["category_data"][0]["category_data"].length;
@@ -26,12 +27,14 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr, axisType)
 		var numRows = cells["category_data"].length,
 			numCols = 1;
 	}
+	
 	var data = null,
 		color = d3.interpolateRgb("#fff", "#f00"),
 		lawmodeAllowedColor = d3.interpolateRgb("#fff", "#00f"),
 		lawmodeProhibitedColor = d3.interpolateRgb("#fff", "#f00");
 	var selectedCells;
 	var matrixAxisType = axisType;
+	var enableLawMode = false;
 /*
 	===========================================
 					ADD ELEMENTS
@@ -47,6 +50,10 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr, axisType)
 				for (var colNum = 0; colNum < numCols; colNum++) {
 					sampleJsonData[rowNum]["category_data"][colNum]['row'] = rowNum;
 					sampleJsonData[rowNum]["category_data"][colNum]['col'] = colNum;
+					
+					//generate sample data - remove this when we have real data
+					sampleJsonData[rowNum]["category_data"][colNum]['num_of_fatalities_law_allowed'] = Math.floor(Math.random() * 111);
+					sampleJsonData[rowNum]["category_data"][colNum]['num_of_fatalities_law_prohibited'] = Math.floor(Math.random() * 111);
 					l = sampleJsonData[rowNum]["category_data"][colNum]["num_of_fatalities"];
 					if (l > max) {
 						max = l;
@@ -68,7 +75,7 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr, axisType)
 			addRegularGrid(false, selectedHeatChart, min, max);
 		};
 	var createYAxisComponent = function() {
-			var sampleJsonData = [sampleJsonDataForCDM["category_data"],];
+			var sampleJsonData = [sampleJsonDataForCDM["category_data"], ];
 			var min = 999;
 			var max = -999;
 			var l;
@@ -76,6 +83,10 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr, axisType)
 			for (var rowNum = 0; rowNum < numRows; rowNum++) {
 				sampleJsonData[0][rowNum]['row'] = rowNum;
 				sampleJsonData[0][rowNum]['col'] = 0;
+				
+				//generate sample data - remove this when we have real data
+				sampleJsonData[0][rowNum]['num_of_fatalities_law_allowed'] = Math.floor(Math.random() * 111);
+				sampleJsonData[0][rowNum]['num_of_fatalities_law_prohibited'] = Math.floor(Math.random() * 111);
 				l = sampleJsonData[0][rowNum]["num_of_fatalities"];
 				if (l > max) {
 					max = l;
@@ -98,8 +109,17 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr, axisType)
 			var l;
 			//console.log(sampleJsonData);
 			for (var colNum = 0; colNum < numCols; colNum++) {
+			
+				//generate sample data - remove this when we have real data
 				l = sampleJsonData[colNum]["num_of_fatalities"];
-				sampleJsonData[colNum]["category_data"] = [{"num_of_fatalities":l, 'row':0, 'col':colNum}];
+				//console.log(sampleJsonData);
+				sampleJsonData[colNum]["category_data"] = [{
+					"num_of_fatalities": l,
+					'row': 0,
+					'col': colNum,
+					'num_of_fatalities_law_allowed' : Math.floor(Math.random() * 111),
+					'num_of_fatalities_law_prohibited' : Math.floor(Math.random() * 111)
+				}];
 				if (l > max) {
 					max = l;
 				}
@@ -139,10 +159,12 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr, axisType)
 				}
 			}
 		}
-		var yAxis = d3.svg.axis();
+	/*
+	var yAxis = d3.svg.axis();
 		yAxis.orient('left').scale(yscale).tickSize(2).tickFormat(function(d, i) {
 			return categories[i];
 		}).tickValues(d3.range(17));
+*/
 		var tooltip = d3.select("body").append("div").style("position", "absolute").style("z-index", "10").style("visibility", "hidden").text("a simple tooltip");
 		var heatchartCanvas = d3.select(elementName).select("svg");
 		var selectedHeatChart = heatchartCanvas.selectAll("g").data(sampleJsonData);
@@ -212,20 +234,44 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr, axisType)
 			addHoverClickAttributes(selectedElements);
 		}
 	var addLawModeGrid = function(update, selectedHeatChart, min, max) {
-			var tooltip = d3.select("body").append("div").style("position", "absolute").style("z-index", "10").style("visibility", "hidden").text("a simple tooltip");
+			//var tooltip = d3.select("body").append("div").style("position", "absolute").style("z-index", "10").style("visibility", "hidden").text("a simple tooltip");
 			//work on top triangles
 			var topSelectedPolygons;
 			var bottomSelectedPolygons;
 			if (update) {
 				bottomSelectedPolygons = selectedHeatChart.selectAll("polygon#bottomTriangle").data(function(d) {
-					return d["category_data"];
+					if (axisType == CategoryDataMatrix.Axis.AxisType_None) {
+						return d["category_data"];
+					} else if (axisType == CategoryDataMatrix.Axis.AxisType_X) {
+						//console.log(d);
+						return d["category_data"];
+					} else if (axisType == CategoryDataMatrix.Axis.AxisType_Y) {
+						//console.log(d);
+						return d;
+					}
 				});
 				topSelectedPolygons = selectedHeatChart.selectAll("polygon#topTriangle").data(function(d) {
-					return d["category_data"];
+					if (axisType == CategoryDataMatrix.Axis.AxisType_None) {
+						return d["category_data"];
+					} else if (axisType == CategoryDataMatrix.Axis.AxisType_X) {
+						//console.log(d);
+						return d["category_data"];
+					} else if (axisType == CategoryDataMatrix.Axis.AxisType_Y) {
+						//console.log(d);
+						return d;
+					}
 				});
 			} else {
 				selectedPolygons = selectedHeatChart.selectAll("polygon").data(function(d) {
-					return d["category_data"];
+					if (axisType == CategoryDataMatrix.Axis.AxisType_None) {
+						return d["category_data"];
+					} else if (axisType == CategoryDataMatrix.Axis.AxisType_X) {
+						//console.log(d);
+						return d["category_data"];
+					} else if (axisType == CategoryDataMatrix.Axis.AxisType_Y) {
+						//console.log(d);
+						return d;
+					}
 				}).enter();
 				topSelectedPolygons = selectedPolygons.append("polygon").attr('id', 'topTriangle');
 				bottomSelectedPolygons = selectedPolygons.append("polygon").attr('id', 'bottomTriangle');
@@ -243,7 +289,7 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr, axisType)
 				return firstPoint + " " + secondPoint + " " + thirdPoint;
 			}).attr("fill", function(d, i) {
 				//console.log(d);
-				return lawmodeAllowedColor((d["num_of_fatalities"] - min) / (max - min));
+				return lawmodeAllowedColor((d["num_of_fatalities_law_allowed"] - min) / (max - min));
 			}).attr("stroke", cellStrokeColor).attr("cell", function(d) {
 				return "r" + d.row + "c" + d.col;
 			});
@@ -262,7 +308,7 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr, axisType)
 				return firstPoint + " " + secondPoint + " " + thirdPoint;
 			}).attr("fill", function(d, i) {
 				//console.log(d);
-				return lawmodeProhibitedColor(d["num_of_fatalities"] / (max - min));
+				return lawmodeProhibitedColor(d["num_of_fatalities_law_prohibited"] / (max - min));
 			}).attr("stroke", cellStrokeColor).attr("cell", function(d) {
 				return "r" + d.row + "c" + d.col;
 			});
@@ -278,7 +324,7 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr, axisType)
 			selectedElements.on("mouseover", function(d) {
 				onCellOver(this, d);
 				//console.log(d);
-				tooltip.text("Num of Fatalities: " + d["num_of_fatalities"] + " Cell: [" + d.col + "," + d.row + "]");
+				tooltip.text("Num of Fatalities: " + d["num_of_fatalities"] + "Num of Fatalities Allowed: " + d["num_of_fatalities_law_allowed"] + "Num of Fatalities Prohibited: " + d["num_of_fatalities_law_prohibited"]  + " Cell: [" + d.col + "," + d.row + "]");
 				tooltip.style("visibility", "visible");
 			}).on("mousemove", function(d) {
 				tooltip.style("top", (d3.event.pageY - 10) + "px").style("left", (d3.event.pageX + 10) + "px");
@@ -350,6 +396,12 @@ function CategoryDataMatrix(elementName, cells, widthAttr, heightAttr, axisType)
 	this.updateDataset = function(newCells) {
 		matrixDataset = newCells;
 	}
+	
+	this.updateLawModeDatasets = function(newCellsAllowed, newCellsProhibited) {
+		matrixDataset = newCells;
+	}
+	
+	
 	this.getDataset = function() {
 		return matrixDataset;
 	}
