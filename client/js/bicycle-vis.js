@@ -1,23 +1,7 @@
-var dataMatrix;
-var dataMatrixXAxis;
-var dataMatrixYAxis;
-var overviewTimeSlider;
+var categoryDataMatrix;
 
-function init() {
-	randomData = generateRandomDataForCategoryDataMatrix(null, 8, 8, 1500, 300);
-	dataMatrix = new CategoryDataMatrix("#data-matrix-container", sampleJsonDataForCDM, 300, 300, CategoryDataMatrix.Axis.AxisType_None);
-	//dataMatrix.updateDataset(randomData);
-	dataMatrix.initDataMatrix();
-	
-	randomDataForYAxis = generateRandomDataForCategoryDataMatrix(null, 8, 1, 1500, 300);
-	dataMatrixYAxis = new CategoryDataMatrix("#data-matrix-yaxis-container", sampleJsonDataForCDM_YAxis, 37.5, 300, CategoryDataMatrix.Axis.AxisType_Y);
-	//dataMatrix.updateDataset(randomDataForYAxis);
-	dataMatrixYAxis.initDataMatrix();
-	
-	randomDataForXAxis = generateRandomDataForCategoryDataMatrix(null, 1, 8, 1500, 300);
-	dataMatrixXAxis = new CategoryDataMatrix("#data-matrix-xaxis-container", sampleJsonDataForCDM_XAxis, 300, 37.5, CategoryDataMatrix.Axis.AxisType_X);
-	//dataMatrix.updateDataset(randomDataForXAxis);
-	dataMatrixXAxis.initDataMatrix();
+function init() {	
+	categoryDataMatrix = new CategoryDataMatrix("#data-matrix-container", sampleJsonDataForCDM, "#data-matrix-xaxis-container", sampleJsonDataForCDM_XAxis, "#data-matrix-yaxis-container", sampleJsonDataForCDM_YAxis);
 	
 	initTimeSlider(sampleOverviewTimesliderData);
 	initTimeOfDay();
