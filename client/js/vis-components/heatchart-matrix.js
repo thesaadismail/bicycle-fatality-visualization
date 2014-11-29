@@ -64,7 +64,6 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType) {
 					}
 				}
 			}
-			var tooltip = d3.select("body").append("div").style("position", "absolute").style("z-index", "10").style("visibility", "hidden").text("a simple tooltip");
 			var heatchartCanvas = d3.select(elementName).append("svg").attr("width", width).attr("height", height);
 			//console.log(samplejson);
 			if (matrixAxisType == HeatchartMatrix.Axis.AxisType_Y) {
@@ -96,7 +95,6 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType) {
 					min = l;
 				}
 			}
-			var tooltip = d3.select("body").append("div").style("position", "absolute").style("z-index", "10").style("visibility", "hidden").text("a simple tooltip");
 			var heatchartCanvas = d3.select(elementName).append("svg").attr("width", width).attr("height", height);
 			//console.log(samplejson);
 			buildYAxis(sampleJsonData, heatchartCanvas);
@@ -128,7 +126,6 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType) {
 					min = l;
 				}
 			}
-			var tooltip = d3.select("body").append("div").style("position", "absolute").style("z-index", "10").style("visibility", "hidden").text("a simple tooltip");
 			var heatchartCanvas = d3.select(elementName).append("svg").attr("width", width).attr("height", height);
 			//console.log(samplejson);
 			buildXAxis(sampleJsonData, heatchartCanvas);
@@ -328,11 +325,26 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType) {
 	===========================================
 	*/
 	var addHoverClickAttributes = function(selectedElements) {
-			var tooltip = d3.select("body").append("div").style("position", "absolute").style("z-index", "10").style("visibility", "hidden").text("a simple tooltip");
+			var tooltip = d3.select("body")
+							.append("div")
+							.style("position", "absolute")
+							.style("z-index", "10")
+							.style("visibility", "hidden")
+							.style("background-color", "rgba(255, 255, 255, 0.7)")
+							.style('border', '2px solid')
+							.style("border-radius", "5px")
+							.style("padding", "5px");
+			
 			selectedElements.on("mouseover", function(d) {
 				onCellOver(this, d);
-				//console.log(d);
-				tooltip.text("Num of Fatalities: " + d["num_of_fatalities"] + "Num of Fatalities Allowed: " + d["num_of_fatalities_law_allowed"] + "Num of Fatalities Prohibited: " + d["num_of_fatalities_law_prohibited"]  + " Cell: [" + d.col + "," + d.row + "]");
+				allPs = tooltip.selectAll('p');
+				allPs.remove();
+				
+				tooltip.append('p').text("Num of Fatalities: " + d["num_of_fatalities"]);
+				tooltip.append('p').text("Num of Fatalities (Allowed): " + d["num_of_fatalities_law_allowed"]);
+				tooltip.append('p').text("Num of Fatalities (Prohibited): " + d["num_of_fatalities_law_prohibited"]);
+				tooltip.append('p').text("Cell Information: [" + d.col + "," + d.row + "]");
+				
 				tooltip.style("visibility", "visible");
 			}).on("mousemove", function(d) {
 				tooltip.style("top", (d3.event.pageY - 10) + "px").style("left", (d3.event.pageX + 10) + "px");
