@@ -4,19 +4,21 @@ HeatchartMatrix.Axis = {
 	AxisType_Y: 2
 }
 
-function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType) {
+function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, cellSelectionCallback) {
 /*
 	===========================================
 					VARIABLES
 	===========================================
 	*/
+	//generic graph attributes
 	var width = widthAttr,
 		height = heightAttr;
-	var cellStrokeColor = "#7e7e7e",
-		selectedCellStrokeColor = "#663300";
+	//dataset attributes
 	var sampleJsonDataForCDM = cells;
+	var matrixAxisType = axisType;
+	var enableLawMode = false;
+	//cell attributes
 	var cellMargin = 2.5;
-	
 	if (axisType == HeatchartMatrix.Axis.AxisType_None) {
 		var numRows = cells["category_data"].length,
 			numCols = cells["category_data"][0]["category_data"].length;
@@ -28,14 +30,14 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType) {
 		var numRows = cells["category_data"].length,
 			numCols = 1;
 	}
-	
-	var data = null,
-		color = d3.interpolateRgb("#fff", "#f00"),
+	//color attributes
+	var color = d3.interpolateRgb("#fff", "#f00"),
 		lawmodeAllowedColor = d3.interpolateRgb("#fff", "#00f"),
-		lawmodeProhibitedColor = d3.interpolateRgb("#fff", "#f00");
-	var selectedCells;
-	var matrixAxisType = axisType;
-	var enableLawMode = false;
+		lawmodeProhibitedColor = d3.interpolateRgb("#fff", "#f00"),
+		cellStrokeColor = "#7e7e7e",
+		selectedCellStrokeColor = "#663300";
+	//selected cell matrix
+	var selectedCellsBoolMatrix;
 /*
 	===========================================
 					ADD ELEMENTS
@@ -51,7 +53,6 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType) {
 				for (var colNum = 0; colNum < numCols; colNum++) {
 					sampleJsonData[rowNum]["category_data"][colNum]['row'] = rowNum;
 					sampleJsonData[rowNum]["category_data"][colNum]['col'] = colNum;
-					
 					//generate sample data - remove this when we have real data
 					sampleJsonData[rowNum]["category_data"][colNum]['num_of_fatalities_law_allowed'] = Math.floor(Math.random() * 111);
 					sampleJsonData[rowNum]["category_data"][colNum]['num_of_fatalities_law_prohibited'] = Math.floor(Math.random() * 111);
@@ -83,7 +84,6 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType) {
 			for (var rowNum = 0; rowNum < numRows; rowNum++) {
 				sampleJsonData[0][rowNum]['row'] = rowNum;
 				sampleJsonData[0][rowNum]['col'] = 0;
-				
 				//generate sample data - remove this when we have real data
 				sampleJsonData[0][rowNum]['num_of_fatalities_law_allowed'] = Math.floor(Math.random() * 111);
 				sampleJsonData[0][rowNum]['num_of_fatalities_law_prohibited'] = Math.floor(Math.random() * 111);
@@ -108,7 +108,6 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType) {
 			var l;
 			//console.log(sampleJsonData);
 			for (var colNum = 0; colNum < numCols; colNum++) {
-			
 				//generate sample data - remove this when we have real data
 				l = sampleJsonData[colNum]["num_of_fatalities"];
 				//console.log(sampleJsonData);
@@ -116,8 +115,8 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType) {
 					"num_of_fatalities": l,
 					'row': 0,
 					'col': colNum,
-					'num_of_fatalities_law_allowed' : Math.floor(Math.random() * 111),
-					'num_of_fatalities_law_prohibited' : Math.floor(Math.random() * 111)
+					'num_of_fatalities_law_allowed': Math.floor(Math.random() * 111),
+					'num_of_fatalities_law_prohibited': Math.floor(Math.random() * 111)
 				}];
 				if (l > max) {
 					max = l;
@@ -157,7 +156,7 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType) {
 				}
 			}
 		}
-	/*
+/*
 	var yAxis = d3.svg.axis();
 		yAxis.orient('left').scale(yscale).tickSize(2).tickFormat(function(d, i) {
 			return categories[i];
@@ -221,15 +220,18 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType) {
 				}).enter().append("rect");
 			}
 			selectedElements = selectedRectangles.attr("x", function(d, i) {
-				return (d.col * (width / numCols))+cellMargin;
+				return (d.col * (width / numCols)) + cellMargin;
 			}).attr("y", function(d, i) {
-				return (d.row * (height / numRows))+cellMargin;
-			}).attr("width", (width / numCols)-(cellMargin*2)).attr("height", (height / numRows)-(cellMargin*2)).attr("fill", function(d, i) {
+				return (d.row * (height / numRows)) + cellMargin;
+			}).attr("width", (width / numCols) - (cellMargin * 2)).attr("height", (height / numRows) - (cellMargin * 2)).attr("fill", function(d, i) {
 				return color((d["num_of_fatalities"] - min) / (max - min));
-			}).attr("stroke", cellStrokeColor)
-			.attr("cell", function(d) {
+			}).attr("stroke", cellStrokeColor).attr("cell", function(d) {
 				return "r" + d.row + "c" + d.col;
-			})
+			}).attr("row", function(d, i) { //for debugging purposes
+				return d.row + "";
+			}).attr("col", function(d, i) { //for debugging purposes
+				return d.col + "";
+			});
 			addHoverClickAttributes(selectedElements);
 		}
 	var addLawModeGrid = function(update, selectedHeatChart, min, max) {
@@ -282,7 +284,7 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType) {
 				var heightOfSquare = height / numRows;
 				var widthOfSquare = width / numCols;
 				//top left corner
-				var firstPoint = (topX+cellMargin) + "," + (topY+cellMargin);
+				var firstPoint = (topX + cellMargin) + "," + (topY + cellMargin);
 				//top right corner
 				var secondPoint = (topX + widthOfSquare - cellMargin) + "," + (topY + cellMargin);
 				//bottom left corner
@@ -308,7 +310,7 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType) {
 				//bottom right corner
 				var secondPoint = (topX + widthOfSquare - cellMargin) + "," + (topY + heightOfSquare - cellMargin);
 				//bottom left corner
-				var thirdPoint = (topX+cellMargin) + "," + (topY + heightOfSquare - cellMargin);
+				var thirdPoint = (topX + cellMargin) + "," + (topY + heightOfSquare - cellMargin);
 				//console.log(firstPoint + " " + secondPoint + " " + thirdPoint);
 				return firstPoint + " " + secondPoint + " " + thirdPoint;
 			}).attr("fill", function(d, i) {
@@ -325,26 +327,15 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType) {
 	===========================================
 	*/
 	var addHoverClickAttributes = function(selectedElements) {
-			var tooltip = d3.select("body")
-							.append("div")
-							.style("position", "absolute")
-							.style("z-index", "10")
-							.style("visibility", "hidden")
-							.style("background-color", "rgba(255, 255, 255, 0.7)")
-							.style('border', '2px solid')
-							.style("border-radius", "5px")
-							.style("padding", "5px");
-			
+			var tooltip = d3.select("body").append("div").style("position", "absolute").style("z-index", "10").style("visibility", "hidden").style("background-color", "rgba(255, 255, 255, 0.7)").style('border', '2px solid').style("border-radius", "5px").style("padding", "5px");
 			selectedElements.on("mouseover", function(d) {
 				onCellOver(this, d);
 				allPs = tooltip.selectAll('p');
 				allPs.remove();
-				
 				tooltip.append('p').text("Num of Fatalities: " + d["num_of_fatalities"]);
 				tooltip.append('p').text("Num of Fatalities (Allowed): " + d["num_of_fatalities_law_allowed"]);
 				tooltip.append('p').text("Num of Fatalities (Prohibited): " + d["num_of_fatalities_law_prohibited"]);
 				tooltip.append('p').text("Cell Information: [" + d.col + "," + d.row + "]");
-				
 				tooltip.style("visibility", "visible");
 			}).on("mousemove", function(d) {
 				tooltip.style("top", (d3.event.pageY - 10) + "px").style("left", (d3.event.pageX + 10) + "px");
@@ -353,7 +344,11 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType) {
 				tooltip.style("visibility", "hidden");
 			}).on("click", function(d) {
 				//console.log("clicking: [" + d.col + "," + d.row + "]");
-				toggleCellSelection(this, d);
+				if (cellSelectionCallback != null) {
+					cellSelectionCallback(axisType, this, d);
+				} else {
+					this.toggleCellSelection(this, d);
+				}
 			});
 		}
 /*
@@ -361,35 +356,61 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType) {
 			CELL SELECTION AND MOUSEOVER
 	===========================================
 	*/
-	var toggleCellSelection = function(cell, data) {
-			if (selectedCells[data.row][data.col] == false) {
-				selectCell(cell, data);
+		this.toggleCellSelection = function(cell, data) {
+			if (selectedCellsBoolMatrix[data.row][data.col] == false) {
+				this.selectCellWithCellData(cell, data);
+				selectedCellsBoolMatrix[data.row][data.col] = true;
 			} else {
-				unselectCell(cell, data);
+				this.unselectCellWithCellData(cell, data);
+				selectedCellsBoolMatrix[data.row][data.col] = false;
 			}
 		}
-	var selectCell = function(cell, data) {
-			selectedCells[data.row][data.col] = true;
-			d3.select(cell).attr("stroke", selectedCellStrokeColor).attr("stroke-width", 3);
-			cell.parentNode.parentNode.appendChild(cell.parentNode);
-			cell.parentNode.appendChild(cell);
-		};
-	var unselectCell = function(cell, data) {
-			selectedCells[data.row][data.col] = false;
-			d3.select(cell).attr("stroke", cellStrokeColor).attr("stroke-width", 1);
-		};
+	this.selectCellWithCellData = function(cell, data) {
+		d3.select(cell).attr("stroke", selectedCellStrokeColor).attr("stroke-width", 3);
+		cell.parentNode.parentNode.appendChild(cell.parentNode);
+		cell.parentNode.appendChild(cell);
+	};
+	this.unselectCellWithCellData = function(cell, data) {
+		d3.select(cell).attr("stroke", cellStrokeColor).attr("stroke-width", 1);
+	};
+	this.selectCellInMatrix = function(row, col) {
+		var filteredMatrix = d3.select(elementName).select("svg").selectAll('g').selectAll("rect").filter(function(d) {
+			return d.row == row && d.col == col;
+		});
+		var cell = getSingleElementFromFilteredMatrix(filteredMatrix);
+		var data = sampleJsonDataForCDM["category_data"][row]["category_data"][col];
+		this.selectCellWithCellData(cell, data);
+	}
+	this.unselectCellInMatrix = function(row, col) {
+		var filteredMatrix = d3.select(elementName).select("svg").selectAll('g').selectAll("rect").filter(function(d) {
+			return d.row == row && d.col == col;
+		});
+		var cell = getSingleElementFromFilteredMatrix(filteredMatrix);
+		var data = sampleJsonDataForCDM["category_data"][row]["category_data"][col];
+		this.unselectCellWithCellData(cell, data);
+	}
+	var getSingleElementFromFilteredMatrix = function(filteredMatrix) {
+			for (i = 0; i < filteredMatrix.length; i++) {
+				if (filteredMatrix[i].length > 0) {
+					return filteredMatrix[i][0];
+				}
+			}
+			return null;
+		}
+/*
 	var highlightCell = function(cell, data) {
 			d3.select(cell).attr("stroke", "#f00").attr("stroke-width", 3);
 			cell.parentNode.parentNode.appendChild(cell.parentNode);
 			cell.parentNode.appendChild(cell);
 		};
 	var unhighlightCell = function(cell, data) {
-			if (selectedCells[data.row][data.col] == true) {
+			if (selectedCellsBoolMatrix[data.row][data.col] == true) {
 				d3.select(cell).attr("stroke", selectedCellStrokeColor).attr("stroke-width", 1);
 			} else {
 				d3.select(cell).attr("stroke", cellStrokeColor).attr("stroke-width", 1);
 			}
 		};
+*/
 	var onCellOver = function(cell, data) {
 			//highlightCell(cell, data);
 		};
@@ -416,26 +437,23 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType) {
 	this.updateDataset = function(newCells) {
 		matrixDataset = newCells;
 	}
-	
 	this.updateLawModeDatasets = function(newCellsAllowed, newCellsProhibited) {
 		matrixDataset = newCells;
 	}
-	
-	
 	this.getDataset = function() {
 		return matrixDataset;
 	}
 /*
 	===========================================
-			CELLS CREATION
+			SELECTED CELLS CREATION
 	===========================================
 	*/
-	var createDefaultSelectedCells = function() {
-			selectedCells = new Array(numRows);
+	var createDefaultselectedCellsBoolMatrix = function() {
+			selectedCellsBoolMatrix = new Array(numRows);
 			for (i = 0; i < numRows; i++) {
-				selectedCells[i] = new Array(numCols);
+				selectedCellsBoolMatrix[i] = new Array(numCols);
 				for (j = 0; j < numCols; j++) {
-					selectedCells[i][j] = false;
+					selectedCellsBoolMatrix[i][j] = false;
 				}
 			}
 		}
@@ -444,5 +462,5 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType) {
 			Functions to Execute on Load
 	===========================================
 	*/
-		createDefaultSelectedCells();
+		createDefaultselectedCellsBoolMatrix();
 }
