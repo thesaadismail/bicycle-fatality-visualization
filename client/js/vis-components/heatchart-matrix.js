@@ -162,7 +162,7 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 			return categories[i];
 		}).tickValues(d3.range(17));
 */
-		var tooltip = d3.select("body").append("div").style("position", "absolute").style("z-index", "10").style("visibility", "hidden").text("a simple tooltip");
+		var tooltip = d3.select("#category-filter-overview").append("div").style("position", "absolute").style("z-index", "10").style("visibility", "hidden").text("a simple tooltip");
 		var heatchartCanvas = d3.select(elementName).select("svg");
 		var selectedHeatChart = heatchartCanvas.selectAll("g").data(sampleJsonData);
 		addRegularGrid(true, selectedHeatChart, min, max);
@@ -327,7 +327,7 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 	===========================================
 	*/
 	var addHoverClickAttributes = function(selectedElements) {
-			var tooltip = d3.select("body").append("div").style("position", "absolute").style("z-index", "10").style("visibility", "hidden").style("background-color", "rgba(255, 255, 255, 0.7)").style('border', '2px solid').style("border-radius", "5px").style("padding", "5px");
+			var tooltip = d3.select("#category-filter-overview").append("div").style("position", "absolute").style("z-index", "10").style("visibility", "hidden").style("background-color", "rgba(255, 255, 255, 0.7)").style('border', '2px solid').style("border-radius", "5px").style("padding", "5px");
 			selectedElements.on("mouseover", function(d) {
 				onCellOver(this, d);
 				allPs = tooltip.selectAll('p');

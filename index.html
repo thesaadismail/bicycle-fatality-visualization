@@ -1,51 +1,139 @@
 <html>
 <head>
     <meta charset="UTF-8">
-
     <title>Bicycle Fatality Vis</title>
-    <script src='client/lib/d3.v3.js' type="text/javascript">
-</script>
-    <script src='client/js/bicycle-vis.js' type="text/javascript">
-</script>
-    <script src='client/js/vis-components/timeslider.js' type="text/javascript">
-</script>
-    <script src='client/js/vis-components/heatchart-matrix.js' type="text/javascript">
-</script>
-    <script src='client/js/vis-components/category-data-matrix.js' type="text/javascript">
-</script>
-    <script src='client/js/random-data-helper.js' type="text/javascript">
-</script>
-	<script src='client/js/vis-components/LineGraphMonthDay.js'>
-</script>  
-  
-    <link rel="stylesheet" type="text/css" href="client/css/bicycle-vis-stylesheet.css">
-</head>
+
+    <script src='client/lib/d3.v3.js' type="text/javascript"></script>
+    <script src="client/lib/jquery-2.1.1.min.js"></script>
+    <script src="client/lib/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="client/lib/bootstrap.min.css">
+    
+    <script src='client/js/bicycle-vis.js' type="text/javascript"></script>
+    <script src='client/js/vis-components/timeslider.js' type="text/javascript"></script>
+    <script src='client/js/vis-components/heatchart-matrix.js' type="text/javascript"></script>
+    <script src='client/js/vis-components/category-data-matrix.js' type="text/javascript"></script>
+    <script src='client/js/random-data-helper.js' type="text/javascript"></script>
+	<script src='client/js/vis-components/LineGraphMonthDay.js'></script>  
+    <link rel="stylesheet" type="text/css" href="client/css/bicycle-vis-stylesheet.css"></head>
 
 <body onLoad="init()">
-    <div id="timeslider">
-        <h3>Overview</h3>
+    <div class="canvas">
+    <h4>Overview</h4>
+    <div class="row" id="timeslider">
     </div>
     
-    <div id="category-filter-overview">
-        <div id="data-matrix-yaxis-container"></div>
-
-        <div id="entire-data-matrix-container">
-            <div id="data-matrix-container"></div>
-            <div id="data-matrix-xaxis-container"></div>
+    <div class="row" id="category-filter-overview">
+        <div class="span3" id="data-matrix-yaxis-container"></div>
+        <div class="span3" id="entire-data-matrix-container">
+            <div class="row" id="data-matrix-container"></div>
+            <div class="row" id="data-matrix-xaxis-container"></div>
         </div>
-
+        <div class="span3">
         <div id="filter-container">
-            <button id="update-button" onClick="updateClicked()">Refresh Information</button>
+            <!-- <button id="update-button" onClick="updateClicked()">Refresh Information</button> -->
+            <div class="filter_options" style="padding-top:3px;">
+                <div class="row">
+                    <div class="col-md-5">
+                        <h5>Days of Week</h5>
+                        <input class="filter_button" id="DOW_all_button" type="checkbox"> All</input><br>
+                        <input class="filter_button" id="DOW_wd_button" type="checkbox"> Weekdays</input><br>
+                        <input class="filter_button" id="DOW_we_button" type="checkbox"> Weekends</input><br>
+                    </div>
+                    <div class="col-md-5">
+                        <button id="update-button" onClick="updateClicked()">Refresh Information</button>
+                        <br>
+                        <br>
+                        <h5>Law Mode</h5>
+                        <input class="filter_button" id="law_button" type="checkbox"> On</input><br>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h5>US States</h5>
+                        </div>
+                        <div class="col-md-2" style="padding-top:5px;">
+                            <input class="filter_button" id="state_all_button" type="checkbox"> All</input>
+                        </div>
+                        <div class="col-md-3" style="padding-top:5px;">
+                            <input class="filter_button" id="state_avg_button" type="checkbox"> Average</input>
+                        </div>
+                    </div>
+                    <div class="row">
+                    <div class="col-md-2">
+                        <input class="filter_button" id="state_1_button" type="checkbox"> AK</input><br>
+                        <input class="filter_button" id="state_2_button" type="checkbox"> AL</input><br>
+                        <input class="filter_button" id="state_3_button" type="checkbox"> AZ</input><br>
+                        <input class="filter_button" id="state_4_button" type="checkbox"> AR</input><br>
+                        <input class="filter_button" id="state_5_button" type="checkbox"> CA</input><br>
+                        <input class="filter_button" id="state_6_button" type="checkbox"> CO</input><br>
+                        <input class="filter_button" id="state_7_button" type="checkbox"> CT</input><br>
+                        <input class="filter_button" id="state_8_button" type="checkbox"> DE</input><br>
+                        <input class="filter_button" id="state_9_button" type="checkbox"> FL</input><br>
+                        <input class="filter_button" id="state_10_button" type="checkbox"> GA</input><br>
+                    </div>
+                    <div class="col-md-2">
+                        <input class="filter_button" id="state_11_button" type="checkbox"> HI</input><br>
+                        <input class="filter_button" id="state_12_button" type="checkbox"> ID</input><br>
+                        <input class="filter_button" id="state_13_button" type="checkbox"> IL</input><br>
+                        <input class="filter_button" id="state_14_button" type="checkbox"> IN</input><br>
+                        <input class="filter_button" id="state_15_button" type="checkbox"> IA</input><br>
+                        <input class="filter_button" id="state_16_button" type="checkbox"> KS</input><br>
+                        <input class="filter_button" id="state_17_button" type="checkbox"> KY</input><br>
+                        <input class="filter_button" id="state_18_button" type="checkbox"> LA</input><br>
+                        <input class="filter_button" id="state_19_button" type="checkbox"> ME</input><br>
+                        <input class="filter_button" id="state_20_button" type="checkbox"> MD</input><br>
+                    </div>
+                    <div class="col-md-2">
+                        <input class="filter_button" id="state_21_button" type="checkbox"> NV</input><br>
+                        <input class="filter_button" id="state_22_button" type="checkbox"> NH</input><br>
+                        <input class="filter_button" id="state_23_button" type="checkbox"> NJ</input><br>
+                        <input class="filter_button" id="state_24_button" type="checkbox"> MA</input><br>
+                        <input class="filter_button" id="state_25_button" type="checkbox"> MI</input><br>
+                        <input class="filter_button" id="state_26_button" type="checkbox"> MN</input><br>
+                        <input class="filter_button" id="state_27_button" type="checkbox"> MS</input><br>
+                        <input class="filter_button" id="state_28_button" type="checkbox"> MO</input><br>
+                        <input class="filter_button" id="state_29_button" type="checkbox"> MT</input><br>
+                        <input class="filter_button" id="state_30_button" type="checkbox"> NE</input><br>
+                    </div>
+                    <div class="col-md-2">
+                        <input class="filter_button" id="state_31_button" type="checkbox"> NM</input><br>
+                        <input class="filter_button" id="state_32_button" type="checkbox"> NY</input><br>
+                        <input class="filter_button" id="state_33_button" type="checkbox"> NC</input><br>
+                        <input class="filter_button" id="state_34_button" type="checkbox"> ND</input><br>
+                        <input class="filter_button" id="state_35_button" type="checkbox"> OH</input><br>
+                        <input class="filter_button" id="state_36_button" type="checkbox"> OK</input><br>
+                        <input class="filter_button" id="state_37_button" type="checkbox"> OR</input><br>
+                        <input class="filter_button" id="state_38_button" type="checkbox"> PA</input><br>
+                        <input class="filter_button" id="state_39_button" type="checkbox"> RI</input><br>
+                        <input class="filter_button" id="state_40_button" type="checkbox"> SC</input><br>
+                    </div>
+                    <div class="col-md-2">
+                        <input class="filter_button" id="state_41_button" type="checkbox"> SD</input><br>
+                        <input class="filter_button" id="state_42_button" type="checkbox"> TN</input><br>
+                        <input class="filter_button" id="state_43_button" type="checkbox"> TX</input><br>
+                        <input class="filter_button" id="state_44_button" type="checkbox"> UT</input><br>
+                        <input class="filter_button" id="state_45_button" type="checkbox"> VT</input><br>
+                        <input class="filter_button" id="state_46_button" type="checkbox"> VA</input><br>
+                        <input class="filter_button" id="state_47_button" type="checkbox">WA</input><br>
+                        <input class="filter_button" id="state_48_button" type="checkbox"> WV</input><br>
+                        <input class="filter_button" id="state_49_button" type="checkbox"> WI</input><br>
+                        <input class="filter_button" id="state_50_button" type="checkbox"> WY</input><br>
+                    </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-    
+        </div>
+    </div>    
 
-    <div id="timeOfDay">
-        <div id="vis" style="margin:75;">
-        
+    <div class="row" id="timeOfDay">
+        <div class="span3" id="vis" style="margin:75;">
             <svg id="visualisation" width="1000" height="500"></svg>
         
         </div>
+    </div>
     </div>
 </body>
 </html>
