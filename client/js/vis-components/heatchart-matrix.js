@@ -17,6 +17,8 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 	var sampleJsonDataForCDM = cells;
 	var matrixAxisType = axisType;
 	var enableLawMode = false;
+	var yAxisWidth = 100;
+	var xAxisHeight = 100;
 	//cell attributes
 	var cellMargin = 2.5;
 	if (axisType == HeatchartMatrix.Axis.AxisType_None) {
@@ -66,12 +68,6 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 				}
 			}
 			var heatchartCanvas = d3.select(elementName).append("svg").attr("width", width).attr("height", height);
-			//console.log(samplejson);
-			if (matrixAxisType == HeatchartMatrix.Axis.AxisType_Y) {
-				buildYAxis(sampleJsonData, heatchartCanvas);
-			} else if (matrixAxisType == HeatchartMatrix.Axis.AxisType_X) {
-				buildXAxis(sampleJsonData, heatchartCanvas);
-			}
 			var selectedHeatChart = heatchartCanvas.selectAll("g").data(sampleJsonData).enter().append("g");
 			addRegularGrid(false, selectedHeatChart, min, max);
 		};
@@ -95,11 +91,13 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 					min = l;
 				}
 			}
-			var heatchartCanvas = d3.select(elementName).append("svg").attr("width", width).attr("height", height);
+			var heatchartCanvas = d3.select(elementName).append("svg").attr("width", width+yAxisWidth).attr("height", height);
 			//console.log(samplejson);
-			buildYAxis(sampleJsonData, heatchartCanvas);
-			var selectedHeatChart = heatchartCanvas.selectAll("g").data(sampleJsonData).enter().append("g");
-			addRegularGrid(false, selectedHeatChart, min, max);
+			buildYAxisLabels(sampleJsonData, heatchartCanvas);
+			var selectedHeatChart = heatchartCanvas.append("svg").selectAll("g").data(sampleJsonData).enter().append("g");
+			var selectedComponents = addRegularGrid(false, selectedHeatChart, min, max);
+			//this is to shift the x axis over so there is room for the axes labels
+			selectedComponents.attr("transform", "translate("+yAxisWidth+"," + 0 + ")");
 		};
 	var createXAxisComponent = function() {
 			var sampleJsonData = sampleJsonDataForCDM["category_data"];
@@ -125,11 +123,13 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 					min = l;
 				}
 			}
-			var heatchartCanvas = d3.select(elementName).append("svg").attr("width", width).attr("height", height);
+			var heatchartCanvas = d3.select(elementName).append("svg").attr("width", width).attr("height", height+xAxisHeight);
 			//console.log(samplejson);
-			buildXAxis(sampleJsonData, heatchartCanvas);
-			var selectedHeatChart = heatchartCanvas.selectAll("g").data(sampleJsonData).enter().append("g");
-			addRegularGrid(false, selectedHeatChart, min, max);
+			//buildXAxis(sampleJsonData, heatchartCanvas);
+			buildXAxisLabels(sampleJsonData, heatchartCanvas);
+			var selectedHeatChart = heatchartCanvas.append("svg").selectAll("g").data(sampleJsonData).enter().append("g");
+			var selectedComponents = addRegularGrid(false, selectedHeatChart, min, max);
+			//selectedComponents.attr("transform", "translate("+0+"," + xAxisHeight + ")");
 		};
 /*
 	===========================================
@@ -161,9 +161,9 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 		yAxis.orient('left').scale(yscale).tickSize(2).tickFormat(function(d, i) {
 			return categories[i];
 		}).tickValues(d3.range(17));
-*/
-		var tooltip = d3.select("body").append("div").style("position", "absolute").style("z-index", "10").style("visibility", "hidden").text("a simple tooltip");
+*/		var tooltip = d3.select("body").append("div").style("position", "absolute").style("z-index", "10").style("visibility", "hidden").text("a simple tooltip");
 		var heatchartCanvas = d3.select(elementName).select("svg");
+		var yAxis = buildYAxis(sampleJsonData, heatchartCanvas);
 		var selectedHeatChart = heatchartCanvas.selectAll("g").data(sampleJsonData);
 		addRegularGrid(true, selectedHeatChart, min, max);
 	};
@@ -172,21 +172,29 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 	  Build Axes
 	===========================================
 	*/
-	var buildYAxis = function(sampleJsonData, canvas) {
+	var buildYAxisLabels = function(sampleJsonData, canvas) {
+			console.log("Build Y Axis Labels");
 			var yAxisCategories = [];
 			//console.log(sampleJsonData);
+			sampleJsonData = sampleJsonData[0];
 			for (var rowNum = 0; rowNum < sampleJsonData.length; rowNum++) {
+				//console.log(sampleJsonData[rowNum]);
 				yAxisCategories[yAxisCategories.length] = sampleJsonData[rowNum]["category_weather"];
 			}
 			//console.log(yAxisCategories);
-			var yscale = d3.scale.linear().domain([0, yAxisCategories.length]).range([0, 480]);
-			var yAxis = d3.svg.axis();
-			yAxis.orient('left').scale(yscale).tickSize(2).tickFormat(function(d, i) {
+			//
+			var yscale = d3.scale.ordinal().domain(yAxisCategories).rangeRoundBands([0, height], 0)	;
+			var yAxis = d3.svg.axis().orient('left').scale(yscale).tickSize(2);
+			
+	/*
+		.tickSize(2).tickFormat(function(d, i) {
 				return yAxisCategories[i];
-			}).tickValues(d3.range(17));
-			//var y_xis = canvas.append('g').attr('id', 'yaxis').call(yAxis);
+			}).tickValues(d3.range(yAxisCategories.length));
+*/
+			var y_xis = canvas.append('g').attr('id', 'yaxis').attr("transform", "translate("+yAxisWidth+"," + 0 + ")").call(yAxis);
 		};
-	var buildXAxis = function(sampleJsonData) {
+	var buildXAxisLabels = function(sampleJsonData, canvas) {
+			console.log("Build X Axis Labels");
 			var xAxisCategories = [];
 			//console.log(sampleJsonData);
 			//console.log(sampleJsonData);
@@ -194,6 +202,25 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 				xAxisCategories[xAxisCategories.length] = sampleJsonData[colNum]["category_location"];
 			}
 			//console.log(xAxisCategories);
+			
+			var xscale = d3.scale.ordinal().domain(xAxisCategories).rangeRoundBands([0, width], 0)	;
+			var xAxis = d3.svg.axis().orient('bottom').scale(xscale).tickSize(2);
+			
+	/*
+		.tickSize(2).tickFormat(function(d, i) {
+				return yAxisCategories[i];
+			}).tickValues(d3.range(yAxisCategories.length));
+*/
+			var x_xis = canvas.append('g')
+							  .attr('id', 'xaxis')
+							  .attr("transform", "translate("+0+"," + 38 + ")")
+							  .call(xAxis)
+							  .selectAll("text")
+							  	.attr("transform", "rotate(90)")
+							  	.style("text-anchor", "start")
+							  	.attr("dy", ".20em")
+							  	.attr("dx", ".35em");
+
 		};
 /*
 	===========================================
@@ -233,6 +260,7 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 				return d.col + "";
 			});
 			addHoverClickAttributes(selectedElements);
+			return selectedElements;
 		}
 	var addLawModeGrid = function(update, selectedHeatChart, min, max) {
 			//var tooltip = d3.select("body").append("div").style("position", "absolute").style("z-index", "10").style("visibility", "hidden").text("a simple tooltip");

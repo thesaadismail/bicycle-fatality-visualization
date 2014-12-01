@@ -9,7 +9,7 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 		selectedCells_Main = createDefaultSelectedCells(8, 8);
 		selectedCells_XAxis = createDefaultSelectedCells(1, 8);
 		selectedCells_YAxis = createDefaultSelectedCells(8, 1);
-		console.log("OMT: " + selectedCells_Main);
+		//console.log("OMT: " + selectedCells_Main);
 		dataMatrix_Main = new HeatchartMatrix(mainElementName, mainJsonData, 300, 300, HeatchartMatrix.Axis.AxisType_None, this.cellSelectedCallback);
 		dataMatrix_Main.initDataMatrix();
 		dataMatrix_XAxis = new HeatchartMatrix(xAxisElementName, xAxisJsonData, 300, 37.5, HeatchartMatrix.Axis.AxisType_X, this.cellSelectedCallback);
