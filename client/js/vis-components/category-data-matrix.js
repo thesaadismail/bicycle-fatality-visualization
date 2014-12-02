@@ -29,8 +29,10 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 		} else if (axisType == HeatchartMatrix.Axis.AxisType_X) {
 			//cell selection for x axis heatchart matrix
 			toggleCellSelection(dataMatrix_XAxis, selectedCells_XAxis, cellElement, data);
+		
 			//if the cell is selected, then select the whole column
-			if (selectedCells_XAxis[data.row][data.col] == true) {
+		/*
+	if (selectedCells_XAxis[data.row][data.col] == true) {
 				for (row = 0; row < selectedCells_Main.length; row++) {
 					dataMatrix_Main.selectCellInMatrix(row, data.col);
 				}
@@ -39,11 +41,13 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 					dataMatrix_Main.unselectCellInMatrix(row, data.col);
 				}
 			}
+*/
 		} else if (axisType == HeatchartMatrix.Axis.AxisType_Y) {
 			//cell selection for y axis heatchart matrix
 			toggleCellSelection(dataMatrix_YAxis, selectedCells_YAxis, cellElement, data);
 			//if the cell is selected, then select the whole row
-			if (selectedCells_YAxis[data.row][data.col] == true) {
+	/*
+		if (selectedCells_YAxis[data.row][data.col] == true) {
 				for (col = 0; col < selectedCells_Main[0].length; col++) {
 					dataMatrix_Main.selectCellInMatrix(data.row, col);
 				}
@@ -53,6 +57,7 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 					dataMatrix_Main.unselectCellInMatrix(data.row, col);
 				}
 			}
+*/
 		}
 	}
 	var toggleCellSelection = function(dataMatrix, selectedCells, cell, data) {
