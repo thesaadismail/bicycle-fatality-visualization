@@ -9,7 +9,60 @@ function init() {
 	initTimeSlider(sampleOverviewTimesliderData);
 	initTimeOfDay();
 	initControl();
+	d3.json("php/data2.php", function(error, data) {
+		processJSON(data);
+		
+    });
 }
+
+function processJSON(data) {
+
+	//setup parent json object
+	var parentJSONObject = {};
+	parentJSONObject["data_group_id"] = 2;
+	
+	//create an array for storing weather category data
+	parentJSONObject["category_data"] = [];
+	weatherCategoriesArray = parentJSONObject["category_data"];
+	console.log(data);
+	data.forEach(function(d) {
+	
+		filteredWeatherCategories = weatherCategoriesArray.filter(function (weatherCategoryObj) {
+			return weatherCategoryObj["category_weather"] == d.Weather;
+			});
+		
+		var selectedWeatherCategory;
+		var locationsForAWeatherCategory;
+		
+		if(filteredWeatherCategories.length > 0)
+		{
+			//right now we can just select the first category that was filtered
+			selectedWeatherCategory = filteredWeatherCategories[0];
+			locationsForAWeatherCategory = selectedWeatherCategory["category_data"];
+		}
+		else
+		{
+			selectedWeatherCategory = { };
+			selectedWeatherCategory["category_weather"] = d.Weather;
+			
+			//create an array to store the locations for each weather category
+			selectedWeatherCategory["category_data"] = [];
+			locationsForAWeatherCategory = selectedWeatherCategory["category_data"];
+			
+			//we might need to push this after we have set all the attributes
+			weatherCategoriesArray.push(selectedWeatherCategory);		
+		}
+		
+		var jsonObjForLocationInCategory = {};
+		jsonObjForLocationInCategory["category_location"] = d.Location;
+		jsonObjForLocationInCategory["num_of_fatalities"] = d.Number_Of_Cases;
+		
+		locationsForAWeatherCategory.push(jsonObjForLocationInCategory);
+	});
+	
+	//console.log(parentJSONObject);
+}
+
 
 function updateClicked() {
 	//generateRandomDataForCategoryDataMatrix(dataMatrix.getDataset(), 8, 8, 1500, 300);
