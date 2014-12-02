@@ -18,8 +18,8 @@
 	SELECT atm_cond.id Weather_ID, atm_cond.type Weather, nm_location.id Location_ID, nm_location.type Location
 	FROM atm_cond, nm_location
 	)Temp
-	LEFT OUTER JOIN data_all ON Temp.Weather_ID = data_all.atmcond
-	AND Temp.Location_ID = data_all.nmlocat
+	LEFT OUTER JOIN current_data ON Temp.Weather_ID = current_data.atmcond
+	AND Temp.Location_ID = current_data.nmlocat
 	GROUP BY Weather, Location
 	ORDER BY Weather DESC 
 	";

@@ -10,7 +10,7 @@
 	
 	$myquery="ALTER VIEW current_data 
 AS SELECT statenum, casenum, atmcond, 'crash day', 'crash hr', 'crash min', 'crash mon', 'crash time', 'caseyear', lightcond, nmlocat FROM data_all
-where statenum<14";
+";
 	
 	$query = mysql_query($myquery);
 			

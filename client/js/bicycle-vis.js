@@ -21,6 +21,12 @@ function init() {
 	
 	initTimeSlider(sampleOverviewTimesliderData);
 	initTimeOfDay();
+	
+	d3.json("php/data2.php", function(error, data) {
+		processJSON(data);
+		
+    });
+	
 }
 
 function updateClicked() {
@@ -34,7 +40,62 @@ function updateClicked() {
 	dataMatrixYAxis.updateHeatchart();
 	
 	updateTimeSlider();
+	
+	
 }
+
+
+
+function processJSON(data) {
+
+	//setup parent json object
+	var parentJSONObject = {};
+	parentJSONObject["data_group_id"] = 2;
+	
+	//create an array for storing weather category data
+	parentJSONObject["category_data"] = [];
+	weatherCategoriesArray = parentJSONObject["category_data"];
+	console.log(data);
+	data.forEach(function(d) {
+	
+		filteredWeatherCategories = weatherCategoriesArray.filter(function (weatherCategoryObj) {
+			return weatherCategoryObj["category_weather"] == d.Weather;
+			});
+		
+		var selectedWeatherCategory;
+		var locationsForAWeatherCategory;
+		
+		if(filteredWeatherCategories.length > 0)
+		{
+			//right now we can just select the first category that was filtered
+			selectedWeatherCategory = filteredWeatherCategories[0];
+			locationsForAWeatherCategory = selectedWeatherCategory["category_data"];
+		}
+		else
+		{
+			selectedWeatherCategory = { };
+			selectedWeatherCategory["category_weather"] = d.Weather;
+			
+			//create an array to store the locations for each weather category
+			selectedWeatherCategory["category_data"] = [];
+			locationsForAWeatherCategory = selectedWeatherCategory["category_data"];
+			
+			//we might need to push this after we have set all the attributes
+			weatherCategoriesArray.push(selectedWeatherCategory);		
+		}
+		
+		var jsonObjForLocationInCategory = {};
+		jsonObjForLocationInCategory["category_location"] = d.Location;
+		jsonObjForLocationInCategory["num_of_fatalities"] = d.Number_Of_Cases;
+		
+		locationsForAWeatherCategory.push(jsonObjForLocationInCategory);
+	});
+	
+	//console.log(parentJSONObject);
+}
+
+
+
 
 var sampleOverviewTimesliderData = {
 			"data_group_id": 1,
@@ -43,34 +104,34 @@ var sampleOverviewTimesliderData = {
 				"num_of_fatalities": 45
 			}, {
 				"month_id": 1,
-				"num_of_fatalities": 45
+				"num_of_fatalities": 25
 			}, {
 				"month_id": 2,
-				"num_of_fatalities": 45
+				"num_of_fatalities": 54
 			}, {
 				"month_id": 3,
-				"num_of_fatalities": 45
+				"num_of_fatalities": 16
 			}, {
 				"month_id": 4,
-				"num_of_fatalities": 45
+				"num_of_fatalities": 3
 			}, {
 				"month_id": 5,
-				"num_of_fatalities": 45
+				"num_of_fatalities": 55
 			}, {
 				"month_id": 6,
-				"num_of_fatalities": 43
+				"num_of_fatalities": 79
 			}, {
 				"month_id": 7,
-				"num_of_fatalities": 42
+				"num_of_fatalities": 40
 			}, {
 				"month_id": 8,
-				"num_of_fatalities": 45
+				"num_of_fatalities": 2
 			}, {
 				"month_id": 9,
-				"num_of_fatalities": 45
+				"num_of_fatalities": 41
 			}, {
 				"month_id": 10,
-				"num_of_fatalities": 45
+				"num_of_fatalities": 15
 			}, {
 				"month_id": 11,
 				"num_of_fatalities": 40
@@ -171,8 +232,53 @@ var sampleOverviewTimesliderData = {
 	var sampleJsonDataForCDM = {
 		"data_group_id": 2,
 		"category_data": [{
+			"category_weather": "snow",
+			"category_data": [
+			{
+				"category_location": "sidewalk",
+				"num_of_fatalities": 60
+				,"num_of_fatalities_law_allowed": 45,
+				"num_of_fatalities_law_prohibited": 45
+			}, {
+				"category_location": "crosswalk",
+				"num_of_fatalities": 50
+				,"num_of_fatalities_law_allowed": 45,
+				"num_of_fatalities_law_prohibited": 45
+			}, {
+				"category_location": "road",
+				"num_of_fatalities": 75
+				,"num_of_fatalities_law_allowed": 45,
+				"num_of_fatalities_law_prohibited": 45
+			}, {
+				"category_location": "building",
+				"num_of_fatalities": 83
+				,"num_of_fatalities_law_allowed": 45,
+				"num_of_fatalities_law_prohibited": 45
+			}, {
+				"category_location": "intersection",
+				"num_of_fatalities": 43
+				,"num_of_fatalities_law_allowed": 45,
+				"num_of_fatalities_law_prohibited": 45
+			}, {
+				"category_location": "middle lane",
+				"num_of_fatalities": 23
+				,"num_of_fatalities_law_allowed": 45,
+				"num_of_fatalities_law_prohibited": 45
+			}, {
+				"category_location": "right lane",
+				"num_of_fatalities": 41
+				,"num_of_fatalities_law_allowed": 45,
+				"num_of_fatalities_law_prohibited": 45
+			}, {
+				"category_location": "bicycle lane",
+				"num_of_fatalities": 68
+				,"num_of_fatalities_law_allowed": 45,
+				"num_of_fatalities_law_prohibited": 45
+			}]
+		}, {
 			"category_weather": "rainy",
-			"category_data": [{
+			"category_data": [
+			{
 				"category_location": "sidewalk",
 				"num_of_fatalities": 60
 				,"num_of_fatalities_law_allowed": 45,
