@@ -1,32 +1,16 @@
-var dataMatrix;
-var dataMatrixXAxis;
-var dataMatrixYAxis;
-var overviewTimeSlider;
+var categoryDataMatrix;
 
-function init() {
-	randomData = generateRandomDataForCategoryDataMatrix(null, 8, 8, 1500, 300);
-	dataMatrix = new CategoryDataMatrix("#data-matrix-container", sampleJsonDataForCDM, 300, 300, CategoryDataMatrix.Axis.AxisType_None);
-	//dataMatrix.updateDataset(randomData);
-	dataMatrix.initDataMatrix();
-	
-	randomDataForYAxis = generateRandomDataForCategoryDataMatrix(null, 8, 1, 1500, 300);
-	dataMatrixYAxis = new CategoryDataMatrix("#data-matrix-yaxis-container", sampleJsonDataForCDM_YAxis, 37.5, 300, CategoryDataMatrix.Axis.AxisType_Y);
-	//dataMatrix.updateDataset(randomDataForYAxis);
-	dataMatrixYAxis.initDataMatrix();
-	
-	randomDataForXAxis = generateRandomDataForCategoryDataMatrix(null, 1, 8, 1500, 300);
-	dataMatrixXAxis = new CategoryDataMatrix("#data-matrix-xaxis-container", sampleJsonDataForCDM_XAxis, 300, 37.5, CategoryDataMatrix.Axis.AxisType_X);
-	//dataMatrix.updateDataset(randomDataForXAxis);
-	dataMatrixXAxis.initDataMatrix();
+function init() {	
+	categoryDataMatrix = new CategoryDataMatrix("#data-matrix-container", sampleJsonDataForCDM, "#data-matrix-xaxis-container", sampleJsonDataForCDM_XAxis, "#data-matrix-yaxis-container", sampleJsonDataForCDM_YAxis);
 	
 	initTimeSlider(sampleOverviewTimesliderData);
 	initTimeOfDay();
+	initFilter();
 	
 	d3.json("php/data2.php", function(error, data) {
 		processJSON(data);
 		
     });
-	
 }
 
 function updateClicked() {
@@ -40,11 +24,7 @@ function updateClicked() {
 	dataMatrixYAxis.updateHeatchart();
 	
 	updateTimeSlider();
-	
-	
 }
-
-
 
 function processJSON(data) {
 
@@ -94,8 +74,250 @@ function processJSON(data) {
 	//console.log(parentJSONObject);
 }
 
+function initFilter() {
+	
+}
 
 
+
+var stateList = [
+    {
+        "name": "Alabama",
+        "abbreviation": "AL"
+    },
+    {
+        "name": "Alaska",
+        "abbreviation": "AK"
+    },
+    {
+        "name": "American Samoa",
+        "abbreviation": "AS"
+    },
+    {
+        "name": "Arizona",
+        "abbreviation": "AZ"
+    },
+    {
+        "name": "Arkansas",
+        "abbreviation": "AR"
+    },
+    {
+        "name": "California",
+        "abbreviation": "CA"
+    },
+    {
+        "name": "Colorado",
+        "abbreviation": "CO"
+    },
+    {
+        "name": "Connecticut",
+        "abbreviation": "CT"
+    },
+    {
+        "name": "Delaware",
+        "abbreviation": "DE"
+    },
+    {
+        "name": "District Of Columbia",
+        "abbreviation": "DC"
+    },
+    {
+        "name": "Federated States Of Micronesia",
+        "abbreviation": "FM"
+    },
+    {
+        "name": "Florida",
+        "abbreviation": "FL"
+    },
+    {
+        "name": "Georgia",
+        "abbreviation": "GA"
+    },
+    {
+        "name": "Guam",
+        "abbreviation": "GU"
+    },
+    {
+        "name": "Hawaii",
+        "abbreviation": "HI"
+    },
+    {
+        "name": "Idaho",
+        "abbreviation": "ID"
+    },
+    {
+        "name": "Illinois",
+        "abbreviation": "IL"
+    },
+    {
+        "name": "Indiana",
+        "abbreviation": "IN"
+    },
+    {
+        "name": "Iowa",
+        "abbreviation": "IA"
+    },
+    {
+        "name": "Kansas",
+        "abbreviation": "KS"
+    },
+    {
+        "name": "Kentucky",
+        "abbreviation": "KY"
+    },
+    {
+        "name": "Louisiana",
+        "abbreviation": "LA"
+    },
+    {
+        "name": "Maine",
+        "abbreviation": "ME"
+    },
+    {
+        "name": "Marshall Islands",
+        "abbreviation": "MH"
+    },
+    {
+        "name": "Maryland",
+        "abbreviation": "MD"
+    },
+    {
+        "name": "Massachusetts",
+        "abbreviation": "MA"
+    },
+    {
+        "name": "Michigan",
+        "abbreviation": "MI"
+    },
+    {
+        "name": "Minnesota",
+        "abbreviation": "MN"
+    },
+    {
+        "name": "Mississippi",
+        "abbreviation": "MS"
+    },
+    {
+        "name": "Missouri",
+        "abbreviation": "MO"
+    },
+    {
+        "name": "Montana",
+        "abbreviation": "MT"
+    },
+    {
+        "name": "Nebraska",
+        "abbreviation": "NE"
+    },
+    {
+        "name": "Nevada",
+        "abbreviation": "NV"
+    },
+    {
+        "name": "New Hampshire",
+        "abbreviation": "NH"
+    },
+    {
+        "name": "New Jersey",
+        "abbreviation": "NJ"
+    },
+    {
+        "name": "New Mexico",
+        "abbreviation": "NM"
+    },
+    {
+        "name": "New York",
+        "abbreviation": "NY"
+    },
+    {
+        "name": "North Carolina",
+        "abbreviation": "NC"
+    },
+    {
+        "name": "North Dakota",
+        "abbreviation": "ND"
+    },
+    {
+        "name": "Northern Mariana Islands",
+        "abbreviation": "MP"
+    },
+    {
+        "name": "Ohio",
+        "abbreviation": "OH"
+    },
+    {
+        "name": "Oklahoma",
+        "abbreviation": "OK"
+    },
+    {
+        "name": "Oregon",
+        "abbreviation": "OR"
+    },
+    {
+        "name": "Palau",
+        "abbreviation": "PW"
+    },
+    {
+        "name": "Pennsylvania",
+        "abbreviation": "PA"
+    },
+    {
+        "name": "Puerto Rico",
+        "abbreviation": "PR"
+    },
+    {
+        "name": "Rhode Island",
+        "abbreviation": "RI"
+    },
+    {
+        "name": "South Carolina",
+        "abbreviation": "SC"
+    },
+    {
+        "name": "South Dakota",
+        "abbreviation": "SD"
+    },
+    {
+        "name": "Tennessee",
+        "abbreviation": "TN"
+    },
+    {
+        "name": "Texas",
+        "abbreviation": "TX"
+    },
+    {
+        "name": "Utah",
+        "abbreviation": "UT"
+    },
+    {
+        "name": "Vermont",
+        "abbreviation": "VT"
+    },
+    {
+        "name": "Virgin Islands",
+        "abbreviation": "VI"
+    },
+    {
+        "name": "Virginia",
+        "abbreviation": "VA"
+    },
+    {
+        "name": "Washington",
+        "abbreviation": "WA"
+    },
+    {
+        "name": "West Virginia",
+        "abbreviation": "WV"
+    },
+    {
+        "name": "Wisconsin",
+        "abbreviation": "WI"
+    },
+    {
+        "name": "Wyoming",
+        "abbreviation": "WY"
+    }
+];
 
 var sampleOverviewTimesliderData = {
 			"data_group_id": 1,
@@ -104,34 +326,34 @@ var sampleOverviewTimesliderData = {
 				"num_of_fatalities": 45
 			}, {
 				"month_id": 1,
-				"num_of_fatalities": 25
+				"num_of_fatalities": 45
 			}, {
 				"month_id": 2,
-				"num_of_fatalities": 54
+				"num_of_fatalities": 45
 			}, {
 				"month_id": 3,
-				"num_of_fatalities": 16
+				"num_of_fatalities": 45
 			}, {
 				"month_id": 4,
-				"num_of_fatalities": 3
+				"num_of_fatalities": 45
 			}, {
 				"month_id": 5,
-				"num_of_fatalities": 55
+				"num_of_fatalities": 45
 			}, {
 				"month_id": 6,
-				"num_of_fatalities": 79
+				"num_of_fatalities": 43
 			}, {
 				"month_id": 7,
-				"num_of_fatalities": 40
+				"num_of_fatalities": 42
 			}, {
 				"month_id": 8,
-				"num_of_fatalities": 2
+				"num_of_fatalities": 45
 			}, {
 				"month_id": 9,
-				"num_of_fatalities": 41
+				"num_of_fatalities": 45
 			}, {
 				"month_id": 10,
-				"num_of_fatalities": 15
+				"num_of_fatalities": 45
 			}, {
 				"month_id": 11,
 				"num_of_fatalities": 40
@@ -232,53 +454,8 @@ var sampleOverviewTimesliderData = {
 	var sampleJsonDataForCDM = {
 		"data_group_id": 2,
 		"category_data": [{
-			"category_weather": "snow",
-			"category_data": [
-			{
-				"category_location": "sidewalk",
-				"num_of_fatalities": 60
-				,"num_of_fatalities_law_allowed": 45,
-				"num_of_fatalities_law_prohibited": 45
-			}, {
-				"category_location": "crosswalk",
-				"num_of_fatalities": 50
-				,"num_of_fatalities_law_allowed": 45,
-				"num_of_fatalities_law_prohibited": 45
-			}, {
-				"category_location": "road",
-				"num_of_fatalities": 75
-				,"num_of_fatalities_law_allowed": 45,
-				"num_of_fatalities_law_prohibited": 45
-			}, {
-				"category_location": "building",
-				"num_of_fatalities": 83
-				,"num_of_fatalities_law_allowed": 45,
-				"num_of_fatalities_law_prohibited": 45
-			}, {
-				"category_location": "intersection",
-				"num_of_fatalities": 43
-				,"num_of_fatalities_law_allowed": 45,
-				"num_of_fatalities_law_prohibited": 45
-			}, {
-				"category_location": "middle lane",
-				"num_of_fatalities": 23
-				,"num_of_fatalities_law_allowed": 45,
-				"num_of_fatalities_law_prohibited": 45
-			}, {
-				"category_location": "right lane",
-				"num_of_fatalities": 41
-				,"num_of_fatalities_law_allowed": 45,
-				"num_of_fatalities_law_prohibited": 45
-			}, {
-				"category_location": "bicycle lane",
-				"num_of_fatalities": 68
-				,"num_of_fatalities_law_allowed": 45,
-				"num_of_fatalities_law_prohibited": 45
-			}]
-		}, {
 			"category_weather": "rainy",
-			"category_data": [
-			{
+			"category_data": [{
 				"category_location": "sidewalk",
 				"num_of_fatalities": 60
 				,"num_of_fatalities_law_allowed": 45,

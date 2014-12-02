@@ -1,7 +1,12 @@
 /* 
 	General Page Styles 
 */
-
+body {
+  font: 12px sans-serif;
+}
+.canvas {
+  padding-left: 15px;
+}
 
 /* 
 	Timeslider Line Graph Styles 
@@ -30,13 +35,18 @@
 	Parent Div of Data Matrix Overview & Filter Styles 
 */
 #category-filter-overview {
-	margin-top: 30px;
+	margin-top: 20px;
+  margin-bottom: 10px;
 }
 
 /* applies to all immediate child elemtnts of category-filter-overivew */
 #category-filter-overview > div {
     float: left;
     margin-right: 10px;
+}
+
+#filter-container {
+    margin-left: 25px;
 }
 
 /* 
@@ -65,11 +75,12 @@ div#heatchartContainer {
 
 /* Filter Styles */
 #filter-container {
-    border: 1px solid;
-    height: 300px;
-    width: 200px;
+    /*border: 1px solid;*/
+    height: 340px;
+    width: 400px;
     padding-top: 10px;
     padding-left: 10px;
+    font-weight: bold;
 }
 
 
@@ -88,6 +99,7 @@ div#heatchartContainer {
 		-webkit-border-radius:10px;
 		-moz-border-radius:10px;
 		border-radius:10px;
+    font-family: sans-serif;
 			}
 			
 
