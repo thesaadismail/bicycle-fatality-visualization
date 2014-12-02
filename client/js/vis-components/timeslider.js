@@ -37,7 +37,7 @@ function initTimeSlider(overviewDataset){
   var OVarea = d3.svg.area()
     .interpolate("monotone")
     .x(function(d) { return OVx(d["month_id"]); })
-    .y0(height)
+    .y0(OVheight)
     .y1(function(d) { return OVy(d["num_of_fatalities"]); });
 
   var OVchart = d3.select('#timeslider').append('svg')
@@ -52,7 +52,7 @@ function initTimeSlider(overviewDataset){
       .attr("height", OVheight);
 
   var OVvis = OVchart.append('svg:g')
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    .attr("transform", "translate(" + OVmargin.left + "," + OVmargin.top + ")");
   
   // d3.csv('client/data/CoffeeData.csv', function(data) {
     // rawdata = d3.csv('client/data/CoffeeData.csv');
