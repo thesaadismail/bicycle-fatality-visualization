@@ -52,7 +52,7 @@ function initTimeSlider(overviewDataset){
       .attr("height", OVheight);
 
   var OVvis = OVchart.append('svg:g')
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    .attr("transform", "translate(" + OVmargin.left + "," + OVmargin.top + ")");
   
   // d3.csv('client/data/CoffeeData.csv', function(data) {
     // rawdata = d3.csv('client/data/CoffeeData.csv');
