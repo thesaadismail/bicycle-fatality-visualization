@@ -4,6 +4,7 @@ runtime: php
 api_version: 1
 
 handlers:
+
 - url: /
   script: index.html
   
@@ -16,5 +17,5 @@ handlers:
 - url: /server
   static_dir: server
   
-- url: /php
-  static_dir: php
+- url: /php/data2.php
+  script: /php/data2.php

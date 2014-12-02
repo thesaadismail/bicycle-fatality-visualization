@@ -9,10 +9,34 @@ function init() {
 	initTimeSlider(sampleOverviewTimesliderData);
 	initTimeOfDay();
 	initControl();
-	d3.json("php/data2.php", function(error, data) {
+	retrieveDataBasedOnFilters();
+}
+
+function retrieveDataBasedOnFilters()
+{    
+     $.ajax({
+      url: '/php/data2.php',
+      type: 'get',
+      success: function(data, status) {
+        if(data == "ok") {
+         console.log(data);
+        }
+         console.log(data);
+      },
+      error: function(xhr, desc, err) {
+        console.log("error: "+xhr);
+        console.log("Details: " + desc + "\nError:" + err);
+      }
+    }); // end ajax call
+    
+    
+/*
+	d3.json("/php/data2.php", function(error, data) {
+	console.log(data);
 		processJSON(data);
 		
     });
+*/
 }
 
 function processJSON(data) {
