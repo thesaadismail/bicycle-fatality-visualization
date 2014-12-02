@@ -7,13 +7,36 @@ function init() {
 	initTimeSlider(sampleOverviewTimesliderData);
 	categoryDataMatrix = new CategoryDataMatrix("#data-matrix-container", sampleJsonDataForCDM, "#data-matrix-xaxis-container", sampleJsonDataForCDM_XAxis, "#data-matrix-yaxis-container", sampleJsonDataForCDM_YAxis);
 	initControl();
-	multiLineG = new MultiLineGraph(sampleDataMultiLine, "#timeOfDay");
-	multiLineG.initTimeOfDay();
-	
-	d3.json("php/data2.php", function(error, data) {
+    multiLineG = new MultiLineGraph(sampleDataMultiLine, "#timeOfDay");
+    multiLineG.initTimeOfDay();
+	retrieveDataBasedOnFilters();
+}
+
+function retrieveDataBasedOnFilters()
+{    
+     $.ajax({
+      url: '/php/data2.php',
+      type: 'get',
+      success: function(data, status) {
+        if(data == "ok") {
+         console.log(data);
+        }
+         console.log(data);
+      },
+      error: function(xhr, desc, err) {
+        console.log("error: "+xhr);
+        console.log("Details: " + desc + "\nError:" + err);
+      }
+    }); // end ajax call
+    
+    
+/*
+	d3.json("/php/data2.php", function(error, data) {
+	console.log(data);
 		processJSON(data);
 		
     });
+*/
 }
 
 function processJSON(data) {
@@ -854,130 +877,128 @@ var sampleOverviewTimesliderData = {
 		}]
 		};
 		
-		
-sampleDataMultiLine	= 
-{
-	"weatherLocation": "rainy-street",
-	"law_mode": 0,
-	"us_average_data":
+	var	sampleDataMultiLine	= 
 	{
-			"category_state": "US Average",
-			"time_category_data":
-			[	
-				{
-					"key": "0",
-					"values": 30 
-				},
-				{
-					"key": "1",
-					"values": 100
-				},
-				{
-					"key": "2",
-					"values": 165
-				},
-				{
-					"key": "3",
-					"values": 120 
-				},
-				{
-					"key": "4",
-					"values": 150 
-				},
-				{
-					"key": "5",
-					"values": 100
-				},
-				{
-					"key": "6",
-					"values": 75 
-				},
-				{
-					"key": "7",
-					"values": 20 
-				}
-			]
-	},
-	"state_category_data":
-	[
+		"weatherLocation": "rainy-street",
+		"law_mode": 0,
+		"us_average_data":
 		{
-			"category_state": "GA",
-			"law_data": 'yes',
-			"time_category_data":
-			[	
-				{
-					"key": "0",
-					"values": 40 
-				},
-				{
-					"key": "1",
-					"values": 80
-				},
-				{
-					"key": "2",
-					"values": 120
-				},
-				{
-					"key": "3",
-					"values": 100 
-				},
-				{
-					"key": "4",
-					"values": 150 
-				},
-				{
-					"key": "5",
-					"values": 90
-				},
-				{
-					"key": "6",
-					"values": 50 
-				},
-				{
-					"key": "7",
-					"values": 20 
-				}
-			]
+				"category_state": "US Average",
+				"time_category_data":
+				[	
+					{
+						"key": "0",
+						"values": 30 
+					},
+					{
+						"key": "1",
+						"values": 100
+					},
+					{
+						"key": "2",
+						"values": 165
+					},
+					{
+						"key": "3",
+						"values": 120 
+					},
+					{
+						"key": "4",
+						"values": 150 
+					},
+					{
+						"key": "5",
+						"values": 100
+					},
+					{
+						"key": "6",
+						"values": 75 
+					},
+					{
+						"key": "7",
+						"values": 20 
+					}
+				]
 		},
-		{
-			"category_state": "NY",
-			"law_data": 'no',
-			"time_category_data":
-			[	
-				{
-					"key": "0",
-					"values": 20 
-				},
-				{
-					"key": "1",
-					"values": 60
-				},
-				{
-					"key": "2",
-					"values": 150
-				},
-				{
-					"key": "3",
-					"values": 115 
-				},
-				{
-					"key": "4",
-					"values": 200 
-				},
-				{
-					"key": "5",
-					"values": 120
-				},
-				{
-					"key": "6",
-					"values": 75 
-				},
-				{
-					"key": "7",
-					"values": 40 
-				}
-			]
-		}
-	]
-};
-		
+		"state_category_data":
+		[
+			{
+				"category_state": "GA",
+				"law_data": 'yes',
+				"time_category_data":
+				[	
+					{
+						"key": "0",
+						"values": 40 
+					},
+					{
+						"key": "1",
+						"values": 80
+					},
+					{
+						"key": "2",
+						"values": 120
+					},
+					{
+						"key": "3",
+						"values": 100 
+					},
+					{
+						"key": "4",
+						"values": 150 
+					},
+					{
+						"key": "5",
+						"values": 90
+					},
+					{
+						"key": "6",
+						"values": 50 
+					},
+					{
+						"key": "7",
+						"values": 20 
+					}
+				]
+			},
+			{
+				"category_state": "NY",
+				"law_data": 'no',
+				"time_category_data":
+				[	
+					{
+						"key": "0",
+						"values": 20 
+					},
+					{
+						"key": "1",
+						"values": 60
+					},
+					{
+						"key": "2",
+						"values": 150
+					},
+					{
+						"key": "3",
+						"values": 115 
+					},
+					{
+						"key": "4",
+						"values": 200 
+					},
+					{
+						"key": "5",
+						"values": 120
+					},
+					{
+						"key": "6",
+						"values": 75 
+					},
+					{
+						"key": "7",
+						"values": 40 
+					}
+				]
+			}
+		]
+	};

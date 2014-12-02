@@ -1,4 +1,9 @@
 <?php
+	include $_SERVER['DOCUMENT_ROOT'].'/php/ChromePhp.php';
+	ChromePhp::log('Hello console!');
+	//ChromePhp::warn('something went wrong!');
+	
+	
     $username = "root"; 
     $password = "";   
     $host = "localhost";
