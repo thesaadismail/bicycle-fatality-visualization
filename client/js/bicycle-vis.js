@@ -1,16 +1,14 @@
 var categoryDataMatrix;
+var lawmode = 0;
+var dowmode = [1, 1];
+var statemode = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
 
 function init() {	
 	categoryDataMatrix = new CategoryDataMatrix("#data-matrix-container", sampleJsonDataForCDM, "#data-matrix-xaxis-container", sampleJsonDataForCDM_XAxis, "#data-matrix-yaxis-container", sampleJsonDataForCDM_YAxis);
 	
 	initTimeSlider(sampleOverviewTimesliderData);
 	initTimeOfDay();
-	initFilter();
-	
-	d3.json("php/data2.php", function(error, data) {
-		processJSON(data);
-		
-    });
+	initControl();
 }
 
 function updateClicked() {
@@ -26,58 +24,60 @@ function updateClicked() {
 	updateTimeSlider();
 }
 
-function processJSON(data) {
+// Control //
+function initControl() {
+	// init control: check all except law mode
+	d3.selectAll('.filter_button_dow').property('checked', true);
+	d3.selectAll('.filter_button').property('checked', true);
+	d3.selectAll('.filter_button2').property('checked', true);
+	d3.select('#law_button').property('checked', false);
+	
+	// on change
+	d3.selectAll(".filter_button").on("change", function() {
+		if (this.id=='law_button') {
+			this.checked ? lawmode = 1 : lawmode = 0;
+		} else if (this.id=='DOW_all_button') {
+			d3.select('#DOW_wd_button').property('checked', d3.select('#DOW_all_button').property('checked'));
+			d3.select('#DOW_we_button').property('checked', d3.select('#DOW_all_button').property('checked'));
+			this.checked ? dowmode = [1, 1] : dowmode = [1, 1];
+		} else if (this.id=='state_all_button') {
+			for (i = 1; i < 51; i++) { 
+				d3.selectAll('#state_'+i+'_button').property('checked', d3.select('#state_all_button').property('checked'));
+				this.checked ? statemode[i-1] = 1 : statemode[i-1] = 0;
+			}
+		} else if (this.id=='DOW_wd_button') {
+			// if (d3.select('#DOW_all_button').property('checked') == true && this.checked == false) {
+			// 	d3.select('#DOW_all_button').property('checked', false);
+			// }
+			this.checked ? dowmode[0] = 1 : dowmode[0] = 0;
+		} else if (this.id=='DOW_we_button') {
+			this.checked ? dowmode[1] = 1 : dowmode[1] = 0;
+		} else if (this.id=='state_avg_button') {
+			this.checked ? statemode[50] = 1 : statemode[50] = 0;
+		} else {
+			if (d3.select('#state_all_button').property('checked') == true && this.checked == false) {
+				d3.select('#state_all_button').property('checked', false);
+			}
+			var idx = parseInt(this.id.split('_')[1])-1;
+			this.checked ? statemode[idx] = 1 : statemode[idx] = 0;
+		}
 
-	//setup parent json object
-	var parentJSONObject = {};
-	parentJSONObject["data_group_id"] = 2;
-	
-	//create an array for storing weather category data
-	parentJSONObject["category_data"] = [];
-	weatherCategoriesArray = parentJSONObject["category_data"];
-	console.log(data);
-	data.forEach(function(d) {
-	
-		filteredWeatherCategories = weatherCategoriesArray.filter(function (weatherCategoryObj) {
-			return weatherCategoryObj["category_weather"] == d.Weather;
-			});
-		
-		var selectedWeatherCategory;
-		var locationsForAWeatherCategory;
-		
-		if(filteredWeatherCategories.length > 0)
-		{
-			//right now we can just select the first category that was filtered
-			selectedWeatherCategory = filteredWeatherCategories[0];
-			locationsForAWeatherCategory = selectedWeatherCategory["category_data"];
-		}
-		else
-		{
-			selectedWeatherCategory = { };
-			selectedWeatherCategory["category_weather"] = d.Weather;
-			
-			//create an array to store the locations for each weather category
-			selectedWeatherCategory["category_data"] = [];
-			locationsForAWeatherCategory = selectedWeatherCategory["category_data"];
-			
-			//we might need to push this after we have set all the attributes
-			weatherCategoriesArray.push(selectedWeatherCategory);		
-		}
-		
-		var jsonObjForLocationInCategory = {};
-		jsonObjForLocationInCategory["category_location"] = d.Location;
-		jsonObjForLocationInCategory["num_of_fatalities"] = d.Number_Of_Cases;
-		
-		locationsForAWeatherCategory.push(jsonObjForLocationInCategory);
+		if (dowmode[0]+dowmode[1] == 0) {
+			console.log("Select day of week!!!!!!!!!!");
+		} 
+		if (eval(statemode.join('+')) == 0) {
+			console.log("Select states!!!!!!!!!!");
+		} 
+		console.log(dowmode);
+		console.log(lawmode);
+		console.log(statemode);
+
+		call_update();
 	});
-	
-	//console.log(parentJSONObject);
 }
-
-function initFilter() {
-	
+function call_update() {
+	console.log('update update update\n');
 }
-
 
 
 var stateList = [
