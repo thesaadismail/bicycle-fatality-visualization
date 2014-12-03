@@ -79,7 +79,6 @@ function updateCategoryDataMatrixData() {
 			categoryDataMatrix.updateXAxis_Location(processedJsonObjectForLocationAxis);
 			
 			
-			console.log("updateCategoryDataMatrixData");
 			processedJsonObjectForMain = processCDMMainJSON(mainData);
 			categoryDataMatrix.updateMain(processedJsonObjectForMain);
 			
@@ -288,16 +287,18 @@ if($("#myonoffswitch").is(":checked"))
     };
 }(jQuery));
 
-var categoriesSelectedCallback = function(isSelected, category1Name, category2Name)
+
+var categoriesSelectedCallback = function(isSelected, weatherCategoryName, locationCategoryName)
 {
+	//weatherCategoryName or locationCategoryName can be undefined if an axis cell is selected.
 	if(isSelected)
 	{
 		//if a category was selected, do something
-		console.log("Categories Selected: ["+category1Name+", "+category2Name+"]");
+		console.log("Categories Selected: ["+weatherCategoryName+", "+locationCategoryName+"]");
 	}
 	else
 	{
-		console.log("Categories DE-Selected: ["+category1Name+", "+category2Name+"]");
+		console.log("Categories DE-Selected: ["+weatherCategoryName+", "+locationCategoryName+"]");
 	}
 }
 

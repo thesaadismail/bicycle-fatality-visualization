@@ -122,7 +122,8 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 				sampleJsonData[colNum]["category_data"] = [{
 					"num_of_fatalities": l,
 					'row': 0,
-					'col': colNum
+					'col': colNum,
+					"category_location": sampleJsonData[colNum]["category_location"]
 					//'num_of_fatalities_law_allowed': Math.floor(Math.random() * 111),
 					//'num_of_fatalities_law_prohibited': Math.floor(Math.random() * 111)
 				}];

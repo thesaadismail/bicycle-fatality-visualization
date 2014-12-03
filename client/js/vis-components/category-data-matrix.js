@@ -51,15 +51,23 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 			toggleCellSelection(dataMatrix_Main, selectedCells_Main, cellElement, data);
 			if(selectedCells_Main[data.row][data.col]==true)
 			{
-				categoriesSelectedCallback(true, data["category_location"], data["category_weather"]);
+				categoriesSelectedCallback(true, data["category_weather"], data["category_location"]);
 			}
 			else
 			{
-				categoriesSelectedCallback(false, data["category_location"], data["category_weather"]);
+				categoriesSelectedCallback(false, data["category_weather"], data["category_location"]);
 			}
 		} else if (axisType == HeatchartMatrix.Axis.AxisType_X) {
 			//cell selection for x axis heatchart matrix
 			toggleCellSelection(dataMatrix_XAxis, selectedCells_XAxis, cellElement, data);
+			if(selectedCells_Main[data.row][data.col]==true)
+			{
+				categoriesSelectedCallback(true, data["category_weather"], data["category_location"]);
+			}
+			else
+			{
+				categoriesSelectedCallback(false, data["category_weather"], data["category_location"]);
+			}
 		
 			//if the cell is selected, then select the whole column
 		/*
@@ -76,6 +84,14 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 		} else if (axisType == HeatchartMatrix.Axis.AxisType_Y) {
 			//cell selection for y axis heatchart matrix
 			toggleCellSelection(dataMatrix_YAxis, selectedCells_YAxis, cellElement, data);
+			if(selectedCells_Main[data.row][data.col]==true)
+			{
+				categoriesSelectedCallback(true, data["category_weather"], data["category_location"]);
+			}
+			else
+			{
+				categoriesSelectedCallback(false, data["category_weather"], data["category_location"]);
+			}
 			//if the cell is selected, then select the whole row
 	/*
 		if (selectedCells_YAxis[data.row][data.col] == true) {
