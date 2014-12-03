@@ -32,9 +32,10 @@ function retrieveDataBasedOnFilters() {
 
 function updateCategoryDataMatrixData() {
 	d3.json('php/cdmMain.php', function(error, data) {
-		processedJsonObject = processJSON(data);
+		processedJsonObject = processCDMMainJSON(data);
 		categoryDataMatrix.updateMain(processedJsonObject);
 	});
+	
 	d3.json('php/cdmLocationAxis.php', function(error, data) {
 		processedJsonObject = processCDMLocationAxisJSON(data);
 		//categoryDataMatrix.updateXAxis_Location(processedJsonObject);
