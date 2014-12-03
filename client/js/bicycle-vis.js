@@ -38,8 +38,31 @@ function updateCategoryDataMatrixData() {
 	
 	d3.json('php/cdmLocationAxis.php', function(error, data) {
 		processedJsonObject = processCDMLocationAxisJSON(data);
-		//categoryDataMatrix.updateXAxis_Location(processedJsonObject);
+		categoryDataMatrix.updateXAxis_Location(processedJsonObject);
 	});
+	
+	d3.json('php/cdmWeatherAxis.php', function(error, data) {
+		processedJsonObject = processCDMWeatherAxisJSON(data);
+		categoryDataMatrix.updateYAxis_Weather(processedJsonObject);
+	});
+}
+
+function processCDMWeatherAxisJSON(data) {
+	//setup parent json object
+	var parentJSONObject = {};
+	parentJSONObject["data_group_id"] = 2;
+	//create an array for storing weather category data
+	parentJSONObject["category_data"] = [];
+	weatherCategoriesArray = parentJSONObject["category_data"];
+	
+	data.forEach(function(d) {
+		var weatherJsonObject = {};
+		weatherJsonObject["category_weather"] = d.Weather;
+		weatherJsonObject["num_of_fatalities"] = d.Num_of_Fatalities;
+		weatherCategoriesArray.push(weatherJsonObject);		
+	});
+	
+	return parentJSONObject;
 }
 
 function processCDMLocationAxisJSON(data) {
@@ -53,11 +76,11 @@ function processCDMLocationAxisJSON(data) {
 	data.forEach(function(d) {
 		var locationJsonObject = {};
 		locationJsonObject["category_location"] = d.Location;
-		locationJsonObject["num_of_fatalaties"] = d.Num_of_Fatalities;
+		locationJsonObject["num_of_fatalities"] = d.Num_of_Fatalities;
 		locationCategoriesArray.push(locationJsonObject);		
 	});
 	
-	console.log(parentJSONObject);
+	return parentJSONObject;
 }
 
 function processCDMMainJSON(data) {

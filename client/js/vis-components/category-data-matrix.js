@@ -15,7 +15,7 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 		//var jsonDataForMainMatrix = mainJsonData;
 		if(mainJsonData == null)
 		{
-			mainJsonData = createMainDummyData(10, 15);
+			mainJsonData = createMainDummyData(8, 15);
 		}
 		
 		if(xAxisJsonData == null)
@@ -25,12 +25,12 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 		
 		if(yAxisJsonData == null)
 		{
-			yAxisJsonData = createYAxisDummyData(10);
+			yAxisJsonData = createYAxisDummyData(8);
 		}
 		
-		dataMatrix_Main = new HeatchartMatrix(mainElementName, mainJsonData, 300, 300, HeatchartMatrix.Axis.AxisType_None, this.cellSelectedCallback);
+		dataMatrix_Main = new HeatchartMatrix(mainElementName, mainJsonData, 600, 300, HeatchartMatrix.Axis.AxisType_None, this.cellSelectedCallback);
 		dataMatrix_Main.initDataMatrix();
-		dataMatrix_XAxis = new HeatchartMatrix(xAxisElementName, xAxisJsonData, 300, 37.5, HeatchartMatrix.Axis.AxisType_X, this.cellSelectedCallback);
+		dataMatrix_XAxis = new HeatchartMatrix(xAxisElementName, xAxisJsonData, 600, 37.5, HeatchartMatrix.Axis.AxisType_X, this.cellSelectedCallback);
 		dataMatrix_XAxis.initDataMatrix();
 		dataMatrix_YAxis = new HeatchartMatrix(yAxisElementName, yAxisJsonData, 37.5, 300, HeatchartMatrix.Axis.AxisType_Y, this.cellSelectedCallback);
 		dataMatrix_YAxis.initDataMatrix();
@@ -106,6 +106,17 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 		dataMatrix_Main.updateDataset(newData);
 		dataMatrix_Main.updateHeatchart();
 		
+	}
+	
+	this.updateXAxis_Location = function(newData){
+		dataMatrix_XAxis.updateDataset(newData);
+		dataMatrix_XAxis.updateXAxisComponent();
+	}
+	
+	this.updateYAxis_Weather = function(newData){
+	
+		dataMatrix_YAxis.updateDataset(newData);
+		dataMatrix_YAxis.updateYAxisComponent();
 	}
 	
 	var createYAxisDummyData = function(numOfWeatherCategories){

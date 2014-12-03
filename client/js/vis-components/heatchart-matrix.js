@@ -72,12 +72,13 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 			addRegularGrid(false, selectedHeatChart, min, max);
 		};
 	var createYAxisComponent = function() {
-			var sampleJsonData = [sampleJsonDataForCDM["category_data"], ];
+			var sampleJsonData = [sampleJsonDataForCDM["category_data"]];
 			var min = 999;
 			var max = -999;
 			var l;
 			//console.log(sampleJsonData);
 			for (var rowNum = 0; rowNum < numRows; rowNum++) {
+				//console.log(sampleJsonData[0][rowNum]);
 				sampleJsonData[0][rowNum]['row'] = rowNum;
 				sampleJsonData[0][rowNum]['col'] = 0;
 				//generate sample data - remove this when we have real data
@@ -108,7 +109,7 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 			for (var colNum = 0; colNum < numCols; colNum++) {
 				//generate sample data - remove this when we have real data
 				l = sampleJsonData[colNum]["num_of_fatalities"];
-				//console.log(sampleJsonData);
+				//console.log(sampleJsonData[colNum]);
 				sampleJsonData[colNum]["category_data"] = [{
 					"num_of_fatalities": l,
 					'row': 0,
@@ -162,36 +163,18 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 			var heatchartCanvas = d3.select(elementName).select("svg");
 			var selectedHeatChart = heatchartCanvas.selectAll("g").data(sampleJsonData);
 			addRegularGrid(true, selectedHeatChart, min, max);
-
-
-	
-	
-/*
-		var sampleJsonData = sampleJsonDataForCDM["category_data"];
-		//console.log(sampleJsonData);
-		var min = 999;
-		var max = -999;
-		var l;
-		for (var rowNum = 0; rowNum < sampleJsonData.length; rowNum++) {
-			for (var colNum = 0; colNum < sampleJsonData[0]["category_data"].length; colNum++) {
-				sampleJsonData[rowNum]["category_data"][colNum]['row'] = rowNum;
-				sampleJsonData[rowNum]["category_data"][colNum]['col'] = colNum;
-				sampleJsonData[rowNum]["category_data"][colNum]['num_of_fatalities'] = Math.floor(Math.random() * 111);
-				l = sampleJsonData[rowNum]["category_data"][colNum]["num_of_fatalities"];
-				if (l > max) {
-					max = l;
-				}
-				if (l < min) {
-					min = l;
-				}
-			}
-		}
-		var tooltip = d3.select("#category-filter-overview").append("div").style("position", "absolute").style("z-index", "10").style("visibility", "hidden").text("a simple tooltip");
-		var heatchartCanvas = d3.select(elementName).select("svg");
-		var selectedHeatChart = heatchartCanvas.selectAll("g").data(sampleJsonData);
-		addRegularGrid(true, selectedHeatChart, min, max);
-		*/
 	};
+	
+		this.updateYAxisComponent = function() {
+			d3.select(elementName).html("");
+			createYAxisComponent();
+		};
+		
+		this.updateXAxisComponent = function() {
+			d3.select(elementName).html("");
+			createXAxisComponent();
+			
+		};
 
 /*
 	===========================================
