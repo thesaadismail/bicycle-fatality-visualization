@@ -3,7 +3,7 @@
 	ChromePhp::log('Hello console!');
 	ChromePhp::warn('something went wrong!'); */
 	    
-	include $_SERVER['DOCUMENT_ROOT'].'/php/dbinfo.php';
+	include 'dbinfo.php';
 
     $server = mysql_connect($host, $username, $password);
     $connection = mysql_select_db($database, $server);
