@@ -20,17 +20,14 @@ function retrieveDataBasedOnFilters()
       cache: false,
 	  data:  {result:JSON.stringify(buttonstatus)},
       success: function(data, status) {
-        if(data == "ok") {
-         console.log(data);
-        }
-         console.log(data);
+        updateCategoryDataMatrixData();
       },
       error: function(xhr, desc, err) {
         console.log("error: "+xhr);
         console.log("Details: " + desc + "\nError:" + err);
       }
     }); // end ajax call
-	updateCategoryDataMatrixData();
+	
 }
 
 function updateCategoryDataMatrixData()
