@@ -35,8 +35,10 @@ function updateCategoryDataMatrixData() {
 		processedJsonObject = processJSON(data);
 		categoryDataMatrix.updateMain(processedJsonObject);
 	});
+	
 	d3.json('php/cdmLocationAxis.php', function(error, data) {
-		console.log(data);
+		processedJsonObject = processJSONForAxis(data);
+		categoryDataMatrix.updateMain(processedJsonObject);
 	});
 }
 
@@ -74,6 +76,12 @@ function processJSON(data) {
 	});
 	return parentJSONObject;
 	//console.log(parentJSONObject);
+}
+
+function processJSONForAxis(data){
+	
+
+
 }
 
 function updateClicked() {
