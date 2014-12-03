@@ -33,10 +33,8 @@ function retrieveDataBasedOnFilters()
 function updateCategoryDataMatrixData()
 {
 	
-	d3.json('php/data2.php', function(error, data) {
-				console.log("updating category data matrix data");
+	d3.json('php/cdmMain.php', function(error, data) {
 				processedJsonObject = processJSON(data);
-				console.log(processedJsonObject);
 				categoryDataMatrix.updateMain(processedJsonObject);
 			});
 }
