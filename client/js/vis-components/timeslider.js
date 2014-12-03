@@ -53,18 +53,8 @@ function initTimeSlider(overviewDataset){
 
   var OVvis = OVchart.append('svg:g')
     .attr("transform", "translate(" + OVmargin.left + "," + OVmargin.top + ")");
-  
-  // d3.csv('client/data/CoffeeData.csv', function(data) {
-    // rawdata = d3.csv('client/data/CoffeeData.csv');
-    // var OVformat = d3.time.format("%m/%d/%Y");
-    // var OVmonthNameFormat = d3.time.format("%m");
-    // OVdata_agg = d3.nest()
-    //       .key(function(d) {return OVmonthNameFormat(OVformat.parse(d.date));})
-    //       .rollup(function(d) {return d3.sum(d, function(g) {return g.sales;});})
-    //       .entries(rawdata);
-    // });
-
     
+
     var OVdata_agg = overviewDataset["overview_data"];
     OVdata_agg.forEach(function(d) {
       d["month_id"] = new Date(2014, d["month_id"], 1);
@@ -115,16 +105,7 @@ function initTimeSlider(overviewDataset){
     console.log(OVmonthNameFormat(tmp[0])+"---"+OVmonthNameFormat(tmp[1]));
     // vis.select(".area").attr("d", area);
     // vis.select(".x.axis").call(xAxis);
+    retrieveDataBasedOnFilters()
   }
   
-}
-
-//Called when the update button is clicked
-function updateTimeSlider(){
-  d3.csv('client/data/CoffeeData.csv', update)
-}
-//date,sales,profit,region,state,category,type,caffeination
-
-//Callback for when data is loaded
-function update(rawdata){
 }

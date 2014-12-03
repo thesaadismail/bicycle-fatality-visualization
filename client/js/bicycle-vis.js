@@ -1,7 +1,7 @@
 var categoryDataMatrix;
-var lawmode = 0;
-var dowmode = [1, 1];
-var statemode = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
+// var lawmode = 0;
+// var dowmode = [1, 1];
+// var statemode = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
 
 function init() {	
 	initTimeSlider(sampleOverviewTimesliderData);
@@ -112,289 +112,155 @@ function initControl() {
 	// on change
 	d3.selectAll(".filter_button").on("change", function() {
 		if (this.id=='law_button') {
-			this.checked ? lawmode = 1 : lawmode = 0;
-		} else if (this.id=='DOW_all_button') {
-			d3.select('#DOW_wd_button').property('checked', d3.select('#DOW_all_button').property('checked'));
-			d3.select('#DOW_we_button').property('checked', d3.select('#DOW_all_button').property('checked'));
-			this.checked ? dowmode = [1, 1] : dowmode = [1, 1];
+			// this.checked ? lawmode = 1 : lawmode = 0;
+			this.checked ? buttonstatus["law"] = 1 : buttonstatus["law"] = 0;
 		} else if (this.id=='state_all_button') {
-			for (i = 1; i < 51; i++) { 
-				d3.selectAll('#state_'+i+'_button').property('checked', d3.select('#state_all_button').property('checked'));
-				this.checked ? statemode[i-1] = 1 : statemode[i-1] = 0;
+			for (i = 0; i < statelist.length; i++) { 
+				d3.selectAll('#state_'+statelist[i]+'_button').property('checked', d3.select('#state_all_button').property('checked'));
+				// this.checked ? statemode[i-1] = 1 : statemode[i-1] = 0;
+				this.checked ? buttonstatus[statelist[i]] = 1 : buttonstatus[statelist[i]] = 0;
 			}
 		} else if (this.id=='DOW_wd_button') {
-			// if (d3.select('#DOW_all_button').property('checked') == true && this.checked == false) {
-			// 	d3.select('#DOW_all_button').property('checked', false);
-			// }
-			this.checked ? dowmode[0] = 1 : dowmode[0] = 0;
+			// this.checked ? dowmode[0] = 1 : dowmode[0] = 0;
+			this.checked ? buttonstatus["weekdays"] = 1 : buttonstatus["weekdays"] = 0;
 		} else if (this.id=='DOW_we_button') {
-			this.checked ? dowmode[1] = 1 : dowmode[1] = 0;
+			// this.checked ? dowmode[1] = 1 : dowmode[1] = 0;
+			this.checked ? buttonstatus["weekends"] = 1 : buttonstatus["weekends"] = 0;
 		} else if (this.id=='state_avg_button') {
-			this.checked ? statemode[50] = 1 : statemode[50] = 0;
+			// this.checked ? statemode[50] = 1 : statemode[50] = 0;
+			this.checked ? buttonstatus["average"] = 1 : buttonstatus["average"] = 0;
 		} else {
 			if (d3.select('#state_all_button').property('checked') == true && this.checked == false) {
 				d3.select('#state_all_button').property('checked', false);
 			}
 			var idx = parseInt(this.id.split('_')[1])-1;
-			this.checked ? statemode[idx] = 1 : statemode[idx] = 0;
+			// this.checked ? statemode[idx] = 1 : statemode[idx] = 0;
+			this.checked ? buttonstatus[idx] = 1 : buttonstatus[idx] = 0;
 		}
 
-		if (dowmode[0]+dowmode[1] == 0) {
+		if (buttonstatus["weekdays"] == 0 && buttonstatus["weekends"] == 0) {
 			console.log("Select day of week!!!!!!!!!!");
 		} 
-		if (eval(statemode.join('+')) == 0) {
-			console.log("Select states!!!!!!!!!!");
-		} 
-		console.log(dowmode);
-		console.log(lawmode);
-		console.log(statemode);
-
-		call_update();
+		// if (eval(statemode.join('+')) == 0) {
+		// 	console.log("Select states!!!!!!!!!!");
+		// } 
+		console.log(buttonstatus);
+		
+		retrieveDataBasedOnFilters();
 	});
 }
-function call_update() {
-	console.log('update update update\n');
-}
 
-
-var stateList = [
-    {
-        "name": "Alabama",
-        "abbreviation": "AL"
-    },
-    {
-        "name": "Alaska",
-        "abbreviation": "AK"
-    },
-    {
-        "name": "American Samoa",
-        "abbreviation": "AS"
-    },
-    {
-        "name": "Arizona",
-        "abbreviation": "AZ"
-    },
-    {
-        "name": "Arkansas",
-        "abbreviation": "AR"
-    },
-    {
-        "name": "California",
-        "abbreviation": "CA"
-    },
-    {
-        "name": "Colorado",
-        "abbreviation": "CO"
-    },
-    {
-        "name": "Connecticut",
-        "abbreviation": "CT"
-    },
-    {
-        "name": "Delaware",
-        "abbreviation": "DE"
-    },
-    {
-        "name": "District Of Columbia",
-        "abbreviation": "DC"
-    },
-    {
-        "name": "Federated States Of Micronesia",
-        "abbreviation": "FM"
-    },
-    {
-        "name": "Florida",
-        "abbreviation": "FL"
-    },
-    {
-        "name": "Georgia",
-        "abbreviation": "GA"
-    },
-    {
-        "name": "Guam",
-        "abbreviation": "GU"
-    },
-    {
-        "name": "Hawaii",
-        "abbreviation": "HI"
-    },
-    {
-        "name": "Idaho",
-        "abbreviation": "ID"
-    },
-    {
-        "name": "Illinois",
-        "abbreviation": "IL"
-    },
-    {
-        "name": "Indiana",
-        "abbreviation": "IN"
-    },
-    {
-        "name": "Iowa",
-        "abbreviation": "IA"
-    },
-    {
-        "name": "Kansas",
-        "abbreviation": "KS"
-    },
-    {
-        "name": "Kentucky",
-        "abbreviation": "KY"
-    },
-    {
-        "name": "Louisiana",
-        "abbreviation": "LA"
-    },
-    {
-        "name": "Maine",
-        "abbreviation": "ME"
-    },
-    {
-        "name": "Marshall Islands",
-        "abbreviation": "MH"
-    },
-    {
-        "name": "Maryland",
-        "abbreviation": "MD"
-    },
-    {
-        "name": "Massachusetts",
-        "abbreviation": "MA"
-    },
-    {
-        "name": "Michigan",
-        "abbreviation": "MI"
-    },
-    {
-        "name": "Minnesota",
-        "abbreviation": "MN"
-    },
-    {
-        "name": "Mississippi",
-        "abbreviation": "MS"
-    },
-    {
-        "name": "Missouri",
-        "abbreviation": "MO"
-    },
-    {
-        "name": "Montana",
-        "abbreviation": "MT"
-    },
-    {
-        "name": "Nebraska",
-        "abbreviation": "NE"
-    },
-    {
-        "name": "Nevada",
-        "abbreviation": "NV"
-    },
-    {
-        "name": "New Hampshire",
-        "abbreviation": "NH"
-    },
-    {
-        "name": "New Jersey",
-        "abbreviation": "NJ"
-    },
-    {
-        "name": "New Mexico",
-        "abbreviation": "NM"
-    },
-    {
-        "name": "New York",
-        "abbreviation": "NY"
-    },
-    {
-        "name": "North Carolina",
-        "abbreviation": "NC"
-    },
-    {
-        "name": "North Dakota",
-        "abbreviation": "ND"
-    },
-    {
-        "name": "Northern Mariana Islands",
-        "abbreviation": "MP"
-    },
-    {
-        "name": "Ohio",
-        "abbreviation": "OH"
-    },
-    {
-        "name": "Oklahoma",
-        "abbreviation": "OK"
-    },
-    {
-        "name": "Oregon",
-        "abbreviation": "OR"
-    },
-    {
-        "name": "Palau",
-        "abbreviation": "PW"
-    },
-    {
-        "name": "Pennsylvania",
-        "abbreviation": "PA"
-    },
-    {
-        "name": "Puerto Rico",
-        "abbreviation": "PR"
-    },
-    {
-        "name": "Rhode Island",
-        "abbreviation": "RI"
-    },
-    {
-        "name": "South Carolina",
-        "abbreviation": "SC"
-    },
-    {
-        "name": "South Dakota",
-        "abbreviation": "SD"
-    },
-    {
-        "name": "Tennessee",
-        "abbreviation": "TN"
-    },
-    {
-        "name": "Texas",
-        "abbreviation": "TX"
-    },
-    {
-        "name": "Utah",
-        "abbreviation": "UT"
-    },
-    {
-        "name": "Vermont",
-        "abbreviation": "VT"
-    },
-    {
-        "name": "Virgin Islands",
-        "abbreviation": "VI"
-    },
-    {
-        "name": "Virginia",
-        "abbreviation": "VA"
-    },
-    {
-        "name": "Washington",
-        "abbreviation": "WA"
-    },
-    {
-        "name": "West Virginia",
-        "abbreviation": "WV"
-    },
-    {
-        "name": "Wisconsin",
-        "abbreviation": "WI"
-    },
-    {
-        "name": "Wyoming",
-        "abbreviation": "WY"
-    }
+var statelist = [
+	1,
+	2,
+	4,
+	5,
+	6,
+	8,
+	9,
+	10,
+	11,
+	12,
+	13,
+	15,
+	16,
+	17,
+	18,
+	19,
+	20,
+	21,
+	22,
+	23,
+	24,
+	25,
+	26,
+	27,
+	28,
+	29,
+	30,
+	31,
+	32,
+	33,
+	34,
+	35,
+	36,
+	37,
+	38,
+	39,
+	40,
+	41,
+	42,
+	44,
+	45,
+	46,
+	47,
+	48,
+	49,
+	50,
+	51,
+	53,
+	54,
+	55,
+	56
 ];
+
+var buttonstatus = {
+	"law":0,
+	"weekdays":1,
+	"weekends":1,
+	"average":1,
+	"1":1,
+	"2":1,
+	"4":1,
+	"5":1,
+	"6":1,
+	"8":1,
+	"9":1,
+	"10":1,
+	"11":1,
+	"12":1,
+	"13":1,
+	"15":1,
+	"16":1,
+	"17":1,
+	"18":1,
+	"19":1,
+	"20":1,
+	"21":1,
+	"22":1,
+	"23":1,
+	"24":1,
+	"25":1,
+	"26":1,
+	"27":1,
+	"28":1,
+	"29":1,
+	"30":1,
+	"31":1,
+	"32":1,
+	"33":1,
+	"34":1,
+	"35":1,
+	"36":1,
+	"37":1,
+	"38":1,
+	"39":1,
+	"40":1,
+	"41":1,
+	"42":1,
+	"44":1,
+	"45":1,
+	"46":1,
+	"47":1,
+	"48":1,
+	"49":1,
+	"50":1,
+	"51":1,
+	"53":1,
+	"54":1,
+	"55":1,
+	"56":1
+};
 
 var sampleOverviewTimesliderData = {
 			"data_group_id": 1,
