@@ -73,23 +73,60 @@ function processOverviewJSON(data){
 
 function updateCategoryDataMatrixData() {
 
-	console.log("updateCategoryDataMatrixData");
-	d3.json('php/cdmMain.php', function(error, data) {
-		processedJsonObject = processCDMMainJSON(data);
-		categoryDataMatrix.updateMain(processedJsonObject);
+	d3.json('php/cdmMain.php', function(mainError, mainData) {
+		d3.json('php/cdmLocationAxis.php', function(LocationAxisError, locationAxisData) {
+			processedJsonObjectForLocationAxis = processCDMLocationAxisJSON(locationAxisData);
+			categoryDataMatrix.updateXAxis_Location(processedJsonObjectForLocationAxis);
+			
+			
+			console.log("updateCategoryDataMatrixData");
+			processedJsonObjectForMain = processCDMMainJSON(mainData);
+			categoryDataMatrix.updateMain(processedJsonObjectForMain);
+			
+			processedJsonObjectForXAxis = processCDMWeatherAxisBasedOnMainJSON(processedJsonObjectForMain);
+			categoryDataMatrix.updateYAxis_Weather(processedJsonObjectForXAxis);
+		});
 	});
 	
-	d3.json('php/cdmLocationAxis.php', function(error, data) {
-		processedJsonObject = processCDMLocationAxisJSON(data);
-		categoryDataMatrix.updateXAxis_Location(processedJsonObject);
-	});
 	
+	
+/*
 	d3.json('php/cdmWeatherAxis.php', function(error, data) {
 		processedJsonObject = processCDMWeatherAxisJSON(data);
 		categoryDataMatrix.updateYAxis_Weather(processedJsonObject);
 	});
+*/
 }
 
+//this processes weather axis data based on the PROCESSED main json data
+function processCDMWeatherAxisBasedOnMainJSON(data) {
+	//setup parent json object
+	var parentJSONObject = {};
+	parentJSONObject["data_group_id"] = 2;
+	//create an array for storing weather category data
+	parentJSONObject["category_data"] = [];
+	weatherCategoriesArray = parentJSONObject["category_data"];
+	
+	mainJsonWeatherArray = data["category_data"];
+	for(i = 0; i<mainJsonWeatherArray.length; i++)
+	{
+		mainJsonLocationsArray = mainJsonWeatherArray[i]["category_data"];
+		//sum of fatalities across all locations
+		var sumOfFatalities = 0;
+		for(j = 0; j<mainJsonLocationsArray.length; j++)
+		{
+			sumOfFatalities+=parseInt(mainJsonLocationsArray[j]["num_of_fatalities"]);
+		}
+		
+		var weatherJsonObject = {};
+		weatherJsonObject["category_weather"] = mainJsonWeatherArray[i]["category_weather"];
+		weatherJsonObject["num_of_fatalities"] = sumOfFatalities;
+		weatherCategoriesArray.push(weatherJsonObject);		
+	}
+	return parentJSONObject;
+}
+
+//currently this is not being used, see this function: processCDMWeatherAxisBasedOnMainJSON
 function processCDMWeatherAxisJSON(data) {
 	//setup parent json object
 	var parentJSONObject = {};
@@ -210,6 +247,46 @@ function initControl() {
 	});
 }
 
+function lawModeToggled()
+{
+	if($("#law_button").is(":checked"))
+	{
+		$("#lawmode-switch-div").visible();
+		categoryDataMatrix.enableProhibitedLawMode();
+	}
+	else
+	{
+		$("#lawmode-switch-div").invisible();
+		categoryDataMatrix.disableLawMode();
+	}
+		retrieveDataBasedOnFilters();
+}
+
+function cdmLawOptionToggled()
+{
+if($("#myonoffswitch").is(":checked"))
+	{
+		categoryDataMatrix.enableProhibitedLawMode();
+	}
+	else
+	{
+		categoryDataMatrix.enableAllowedLawMode();
+	}
+		retrieveDataBasedOnFilters();
+}
+
+(function($) {
+    $.fn.invisible = function() {
+        return this.each(function() {
+            $(this).css("visibility", "hidden");
+        });
+    };
+    $.fn.visible = function() {
+        return this.each(function() {
+            $(this).css("visibility", "visible");
+        });
+    };
+}(jQuery));
 
 var categoriesSelectedCallback = function(isSelected, category1Name, category2Name)
 {

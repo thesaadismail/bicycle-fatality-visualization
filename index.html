@@ -43,7 +43,18 @@
                         <br>
                         <br> -->
                         <h5>Law Mode</h5>
-                        <input class="filter_button" id="law_button" type="checkbox"> On</input><br>
+                        <input class="filter_button" id="law_button" type="checkbox" onclick="lawModeToggled()"> On</input><br>
+						<br>
+		                <div id="lawmode-switch-div" style="visibility:hidden">
+		                For Category Matrix Only:
+			                <div class="onoffswitch">
+								<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked onclick="cdmLawOptionToggled()">
+								<label class="onoffswitch-label" for="myonoffswitch">
+									<span class="onoffswitch-inner"></span>
+									<span class="onoffswitch-switch"></span>
+								</label>
+							</div>
+						</div>
                     </div>
                 </div>
                 <br>

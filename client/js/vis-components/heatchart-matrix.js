@@ -33,11 +33,20 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 			numCols = 1;
 	}
 	//color attributes
-	var color = d3.interpolateRgb("#fff", "#f00"),
-		lawmodeAllowedColor = d3.interpolateRgb("#fff", "#00f"),
-		lawmodeProhibitedColor = d3.interpolateRgb("#fff", "#f00"),
+	var color = d3.interpolateRgb("#fff", "#000"),
 		cellStrokeColor = "#7e7e7e",
 		selectedCellStrokeColor = "#663300";
+		
+	this.updateColor = function(newColor)
+	{
+		color = newColor;
+	}
+		
+		
+	/*
+	lawmodeAllowedColor = d3.interpolateRgb("#fff", "#00f"),
+		lawmodeProhibitedColor = d3.interpolateRgb("#fff", "#f00"),
+*/
 	//selected cell matrix
 	var selectedCellsBoolMatrix;
 /*
@@ -56,8 +65,8 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 					sampleJsonData[rowNum]["category_data"][colNum]['row'] = rowNum;
 					sampleJsonData[rowNum]["category_data"][colNum]['col'] = colNum;
 					//generate sample data - remove this when we have real data
-					sampleJsonData[rowNum]["category_data"][colNum]['num_of_fatalities_law_allowed'] = Math.floor(Math.random() * 111);
-					sampleJsonData[rowNum]["category_data"][colNum]['num_of_fatalities_law_prohibited'] = Math.floor(Math.random() * 111);
+					//sampleJsonData[rowNum]["category_data"][colNum]['num_of_fatalities_law_allowed'] = Math.floor(Math.random() * 111);
+					//sampleJsonData[rowNum]["category_data"][colNum]['num_of_fatalities_law_prohibited'] = Math.floor(Math.random() * 111);
 					l = sampleJsonData[rowNum]["category_data"][colNum]["num_of_fatalities"];
 					if (l > max) {
 						max = l;
@@ -82,8 +91,8 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 				sampleJsonData[0][rowNum]['row'] = rowNum;
 				sampleJsonData[0][rowNum]['col'] = 0;
 				//generate sample data - remove this when we have real data
-				sampleJsonData[0][rowNum]['num_of_fatalities_law_allowed'] = Math.floor(Math.random() * 111);
-				sampleJsonData[0][rowNum]['num_of_fatalities_law_prohibited'] = Math.floor(Math.random() * 111);
+				//sampleJsonData[0][rowNum]['num_of_fatalities_law_allowed'] = Math.floor(Math.random() * 111);
+				//sampleJsonData[0][rowNum]['num_of_fatalities_law_prohibited'] = Math.floor(Math.random() * 111);
 				l = sampleJsonData[0][rowNum]["num_of_fatalities"];
 				if (l > max) {
 					max = l;
@@ -113,9 +122,9 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 				sampleJsonData[colNum]["category_data"] = [{
 					"num_of_fatalities": l,
 					'row': 0,
-					'col': colNum,
-					'num_of_fatalities_law_allowed': Math.floor(Math.random() * 111),
-					'num_of_fatalities_law_prohibited': Math.floor(Math.random() * 111)
+					'col': colNum
+					//'num_of_fatalities_law_allowed': Math.floor(Math.random() * 111),
+					//'num_of_fatalities_law_prohibited': Math.floor(Math.random() * 111)
 				}];
 				if (l > max) {
 					max = l;
@@ -149,8 +158,8 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 					sampleJsonData[rowNum]["category_data"][colNum]['row'] = rowNum;
 					sampleJsonData[rowNum]["category_data"][colNum]['col'] = colNum;
 					//generate sample data - remove this when we have real data
-					sampleJsonData[rowNum]["category_data"][colNum]['num_of_fatalities_law_allowed'] = Math.floor(Math.random() * 111);
-					sampleJsonData[rowNum]["category_data"][colNum]['num_of_fatalities_law_prohibited'] = Math.floor(Math.random() * 111);
+					//sampleJsonData[rowNum]["category_data"][colNum]['num_of_fatalities_law_allowed'] = Math.floor(Math.random() * 111);
+					//sampleJsonData[rowNum]["category_data"][colNum]['num_of_fatalities_law_prohibited'] = Math.floor(Math.random() * 111);
 					l = sampleJsonData[rowNum]["category_data"][colNum]["num_of_fatalities"];
 					if (l > max) {
 						max = l;
@@ -288,6 +297,7 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 			addHoverClickAttributes(selectedElements);
 			return selectedElements;
 		}
+/*
 	var addLawModeGrid = function(update, selectedHeatChart, min, max) {
 			//var tooltip = d3.select("body").append("div").style("position", "absolute").style("z-index", "10").style("visibility", "hidden").text("a simple tooltip");
 			//work on top triangles
@@ -375,6 +385,7 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 			});
 			addHoverClickAttributes(selectedBottomTriangles);
 		}
+*/
 /*
 	===========================================
 			D3 CELL INTERACTIONS
@@ -389,8 +400,8 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 				tooltip.append('p').text("Weather: " + d["category_weather"]);
 				tooltip.append('p').text("Location: " + d["category_location"]);
 				tooltip.append('p').text("Num of Fatalities: " + d["num_of_fatalities"]);
-				tooltip.append('p').text("Num of Fatalities (Allowed): " + d["num_of_fatalities_law_allowed"]);
-				tooltip.append('p').text("Num of Fatalities (Prohibited): " + d["num_of_fatalities_law_prohibited"]);
+				//tooltip.append('p').text("Num of Fatalities (Allowed): " + d["num_of_fatalities_law_allowed"]);
+				//tooltip.append('p').text("Num of Fatalities (Prohibited): " + d["num_of_fatalities_law_prohibited"]);
 				tooltip.append('p').text("Cell Information: [" + d.col + "," + d.row + "]");
 				tooltip.style("visibility", "visible");
 			}).on("mousemove", function(d) {

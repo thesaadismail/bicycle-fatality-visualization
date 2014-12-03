@@ -5,6 +5,9 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 	var selectedCells_Main;
 	var selectedCells_XAxis;
 	var selectedCells_YAxis;
+	var regularModeColor = d3.interpolateRgb("#fff", "#000"),
+		lawmodeAllowedColor = d3.interpolateRgb("#fff", "#00f"),
+		lawmodeProhibitedColor = d3.interpolateRgb("#fff", "#f00");
 	
 	this.initCategoryDataMatrix = function() {
 		selectedCells_Main = createDefaultSelectedCells(10, 15);
@@ -138,8 +141,8 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 		{
 			var weatherCategoryJsonObject = {};
 			weatherCategoryJsonObject["num_of_fatalities"] = 0;
-			weatherCategoryJsonObject["num_of_fatalities_law_allowed"] = 0;
-			weatherCategoryJsonObject["num_of_fatalities_law_prohibited"] = 0;
+			//weatherCategoryJsonObject["num_of_fatalities_law_allowed"] = 0;
+			//weatherCategoryJsonObject["num_of_fatalities_law_prohibited"] = 0;
 			weatherCategoryJsonObject["category_weather"] = "loading"+weatherCategoryCount;
 			weatherCategoriesArray.push(weatherCategoryJsonObject);	
 		}
@@ -158,8 +161,8 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 		{
 			var locationCategoryJsonObject = {};
 			locationCategoryJsonObject["num_of_fatalities"] = 0;
-			locationCategoryJsonObject["num_of_fatalities_law_allowed"] = 0;
-			locationCategoryJsonObject["num_of_fatalities_law_prohibited"] = 0;
+			//locationCategoryJsonObject["num_of_fatalities_law_allowed"] = 0;
+			//locationCategoryJsonObject["num_of_fatalities_law_prohibited"] = 0;
 			locationCategoryJsonObject["category_location"] = "loading"+locationCategoryCount;
 			locationCategoriesArray.push(locationCategoryJsonObject);	
 		}
@@ -188,8 +191,8 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 			{
 				var locationCategoryJsonObject = {};
 				locationCategoryJsonObject["num_of_fatalities"] = 0;
-				locationCategoryJsonObject["num_of_fatalities_law_allowed"] = 0;
-				locationCategoryJsonObject["num_of_fatalities_law_prohibited"] = 0;
+				//locationCategoryJsonObject["num_of_fatalities_law_allowed"] = 0;
+				//locationCategoryJsonObject["num_of_fatalities_law_prohibited"] = 0;
 				locationCategoryJsonObject["category_location"] = "loading";
 				locationCategoriesArray.push(locationCategoryJsonObject);
 			}
@@ -199,6 +202,28 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 		
 		//console.log(parentJSONObject);
 		return parentJSONObject;
+	}
+	
+	this.enableAllowedLawMode = function()
+	{
+		console.log("enableAllowedLawMode");
+		dataMatrix_Main.updateColor(lawmodeAllowedColor);
+		dataMatrix_XAxis.updateColor(lawmodeAllowedColor);
+		dataMatrix_YAxis.updateColor(lawmodeAllowedColor);
+	}
+	this.enableProhibitedLawMode = function()
+	{
+		console.log("enableProhibitedLawMode");
+		dataMatrix_Main.updateColor(lawmodeProhibitedColor);
+		dataMatrix_XAxis.updateColor(lawmodeProhibitedColor);
+		dataMatrix_YAxis.updateColor(lawmodeProhibitedColor);
+	}
+	this.disableLawMode = function()
+	{
+		console.log("disableLawMode");
+		dataMatrix_Main.updateColor(regularModeColor);
+		dataMatrix_XAxis.updateColor(regularModeColor);
+		dataMatrix_YAxis.updateColor(regularModeColor);
 	}
 	
 	this.initCategoryDataMatrix();
