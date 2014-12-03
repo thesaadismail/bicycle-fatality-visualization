@@ -4,12 +4,17 @@ var categoryDataMatrix;
 // var statemode = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
 
 function init() {
-	initTimeSlider(sampleOverviewTimesliderData);
+	initializeTimeSlider();
 	categoryDataMatrix = new CategoryDataMatrix("#data-matrix-container", null, "#data-matrix-xaxis-container", null, "#data-matrix-yaxis-container", null);
 	initControl();
 	multiLineG = new MultiLineGraph(sampleDataMultiLine, "#timeOfDay");
 	multiLineG.initTimeOfDay();
 	retrieveDataBasedOnFilters();
+}
+
+function updateClicked() {
+	//updateTimeSlider();
+	updateCategoryDataMatrixData();
 }
 
 function retrieveDataBasedOnFilters() {
@@ -21,7 +26,7 @@ function retrieveDataBasedOnFilters() {
 			result: JSON.stringify(buttonstatus)
 		},
 		success: function(data, status) {
-			updateCategoryDataMatrixData();
+			updateClicked();
 		},
 		error: function(xhr, desc, err) {
 			console.log("error: " + xhr);
@@ -29,6 +34,42 @@ function retrieveDataBasedOnFilters() {
 		}
 	}); // end ajax call
 }
+//**************************FOR TIME SLIDER************************************
+
+function initializeTimeSlider(){
+	d3.json('php/overviewData.php', function(error, data) {
+		processedJsonObject = processOverviewJSON(data);
+		console.log(processedJsonObject);
+		initTimeSlider(processedJsonObject);
+	});
+}
+
+/* function updateTimeSlider(){
+	d3.json('php/overviewData.php', function(error, data) {
+		processedJsonObject = processOverviewJSON(data);
+		console.log(processedJsonObject);
+		//initTimeSlider(processedJsonObject);
+	});
+} */
+
+function processOverviewJSON(data){
+	var timeJSONObject = {};
+	timeJSONObject["data_group_id"] = 1;
+	//"month_id": 7,"num_of_fatalities": 42
+	timeJSONObject["overview_data"] = [];
+	sampleOverviewTimesliderData = timeJSONObject["overview_data"];
+	
+	data.forEach(function(d) {
+		var tempJsonObject = {};
+		tempJsonObject["month_id"] = d.month_id-1;
+		tempJsonObject["num_of_fatalities"] = d.num_of_fatalities;
+		sampleOverviewTimesliderData.push(tempJsonObject);		
+	});
+	//console.log(timeJSONObject);
+	return timeJSONObject;
+	
+}
+//**************************FOR TIME SLIDER************************************
 
 function updateCategoryDataMatrixData() {
 	d3.json('php/cdmMain.php', function(error, data) {
@@ -39,7 +80,7 @@ function updateCategoryDataMatrixData() {
 	d3.json('php/cdmLocationAxis.php', function(error, data) {
 		processedJsonObject = processCDMLocationAxisJSON(data);
 		//categoryDataMatrix.updateXAxis_Location(processedJsonObject);
-	});
+	}); 
 }
 
 function processCDMLocationAxisJSON(data) {
@@ -96,9 +137,7 @@ function processCDMMainJSON(data) {
 	//console.log(parentJSONObject);
 }
 
-function updateClicked() {
-	updateTimeSlider();
-}
+
 // Control //
 
 function initControl() {
@@ -206,7 +245,7 @@ var buttonstatus = {
 	"55": 1,
 	"56": 1
 };
-var sampleOverviewTimesliderData = {
+/* var sampleOverviewTimesliderData = {
 	"data_group_id": 1,
 	"overview_data": [{
 		"month_id": 0,
@@ -245,7 +284,7 @@ var sampleOverviewTimesliderData = {
 		"month_id": 11,
 		"num_of_fatalities": 40
 	}]
-};
+};  */
 var sampleJsonDataForCDM_YAxis = {
 	"data_group_id": 2,
 	"category_data": [{
