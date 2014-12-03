@@ -1,8 +1,8 @@
 var OVchart;
 
-var OVmargin = {top: 12, right: 30, bottom: 20, left: 55},
+var OVmargin = {top: 22, right: 30, bottom: 20, left: 55},
     OVwidth = 770 - OVmargin.left - OVmargin.right,
-    OVheight = 70 - OVmargin.top - OVmargin.bottom;
+    OVheight = 80 - OVmargin.top - OVmargin.bottom;
 
 var OVparseDate = d3.time.format("%b-%Y").parse;
 
@@ -32,6 +32,7 @@ function initTimeSlider(overviewDataset){
 
   var OVbrush = d3.svg.brush()
     .x(OVx)
+	.extent([0, 1])
     .on("brush", OVbrushed);
 
   var OVarea = d3.svg.area()
@@ -79,7 +80,7 @@ function initTimeSlider(overviewDataset){
       .append("text")
         .attr("transform", "rotate(0)")
         .attr("x", -6)
-        .attr("y", -6)
+        .attr("y", -16)
         .attr("dy", ".71em")
         .style("text-anchor", "end")
         .text("Fatalities");
