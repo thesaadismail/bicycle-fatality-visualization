@@ -149,11 +149,8 @@ function initControl() {
 		console.log(lawmode);
 		console.log(statemode);
 
-		call_update();
+		retrieveDataBasedOnFilters();
 	});
-}
-function call_update() {
-	console.log('update update update\n');
 }
 
 
