@@ -1,4 +1,9 @@
 <?php
+	include $_SERVER['DOCUMENT_ROOT'].'/php/ChromePhp.php';
+	ChromePhp::log('Hello console!');
+	//ChromePhp::warn('something went wrong!');
+	
+	
     $username = "root"; 
     $password = "";   
     $host = "localhost";
@@ -8,9 +13,11 @@
     $connection = mysql_select_db($database, $server);
 	
 	
-	$myquery="CREATE VIEW current_data AS
-	SELECT statenum, casenum, atmcond,  accdate, accday, acchr, accmin, accmon, acctime , dayofweek, lightcond, nmlocat
-	FROM data_all";
+	$myquery="
+		SELECT accmon, count( * )
+		FROM current_data
+		GROUP BY accmon
+	";
 	
 	$query = mysql_query($myquery);
 			
@@ -18,15 +25,14 @@
 		echo mysql_error();
 		die;
 	}
-	mysql_query($query);
-	//$result = mysql_fetch_assoc($query);
-	//echo "query result".$result;
-	/*	
+	
+	$data = array();
+	
 	for ($x = 0; $x < mysql_num_rows($query); $x++) {
 		$data[] = mysql_fetch_assoc($query);
 	}
 	
-	echo json_encode($data); */
+	echo json_encode($data);
 		
 	
     mysql_close($server);

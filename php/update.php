@@ -20,13 +20,15 @@
 			else
 				$selectedStates = $selectedStates.", ".$x;
 	} 
-	//echo "V: ".$selectedStates.", ";
+	if($selectedStates=="first")
+		$selectedStates = 0;
 	
 	$myquery="ALTER VIEW current_data 
-				AS SELECT statenum, casenum, atmcond, 'crash day', 'crash hr', 'crash min', 'crash mon', 'crash time', 'caseyear', lightcond, nmlocat FROM data_all
+				AS SELECT statenum, casenum, atmcond,  accdate, accday, acchr, accmin, accmon, acctime , dayofweek, lightcond, nmlocat
+				FROM data_all
 				WHERE statenum IN (".$selectedStates.");";
-			//echo "br />".$myquery;
-	/* 
+	echo '<br />'.$myquery;
+	
 	$query = mysql_query($myquery);
 			
 	if ( ! $query ) {
@@ -35,7 +37,7 @@
 	}
 	
 	mysql_query($query);
-	echo "query result"; */
+	echo "query result"; 
 	
     mysql_close($server);
 ?>

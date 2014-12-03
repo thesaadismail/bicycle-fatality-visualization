@@ -5,10 +5,10 @@
 	
 	
     $username = "root"; 
-    $password = "";   
-    $host = "localhost";
-    $database="iv";
-    
+    $password = "root";   
+    $host = 'localhost';
+    $database='fatalities-db';
+
     $server = mysql_connect($host, $username, $password);
     $connection = mysql_select_db($database, $server);
 	
