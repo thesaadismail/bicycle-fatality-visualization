@@ -43,6 +43,27 @@
 	}
 	
 	echo json_encode($data);
+	//****************************************************************************************************************
+	$query1 =	"
+		SELECT accmon, count( * )
+		FROM current_data
+		GROUP BY accmon
+		";
+	$query1 = mysql_query($myquery);
+			
+	if ( ! $query1 ) {
+		echo mysql_error();
+		die;
+	}
+	
+	$data1 = array();
+	
+	for ($x = 0; $x < mysql_num_rows($query1); $x++) {
+		$data1[] = mysql_fetch_assoc($query1);
+	}
+	
+	echo json_encode($data1);
+	
 		
 	
     mysql_close($server);
