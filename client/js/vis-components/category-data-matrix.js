@@ -141,8 +141,8 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 		{
 			var weatherCategoryJsonObject = {};
 			weatherCategoryJsonObject["num_of_fatalities"] = 0;
-			weatherCategoryJsonObject["num_of_fatalities_law_allowed"] = 0;
-			weatherCategoryJsonObject["num_of_fatalities_law_prohibited"] = 0;
+			//weatherCategoryJsonObject["num_of_fatalities_law_allowed"] = 0;
+			//weatherCategoryJsonObject["num_of_fatalities_law_prohibited"] = 0;
 			weatherCategoryJsonObject["category_weather"] = "loading"+weatherCategoryCount;
 			weatherCategoriesArray.push(weatherCategoryJsonObject);	
 		}
@@ -161,8 +161,8 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 		{
 			var locationCategoryJsonObject = {};
 			locationCategoryJsonObject["num_of_fatalities"] = 0;
-			locationCategoryJsonObject["num_of_fatalities_law_allowed"] = 0;
-			locationCategoryJsonObject["num_of_fatalities_law_prohibited"] = 0;
+			//locationCategoryJsonObject["num_of_fatalities_law_allowed"] = 0;
+			//locationCategoryJsonObject["num_of_fatalities_law_prohibited"] = 0;
 			locationCategoryJsonObject["category_location"] = "loading"+locationCategoryCount;
 			locationCategoriesArray.push(locationCategoryJsonObject);	
 		}
@@ -191,8 +191,8 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 			{
 				var locationCategoryJsonObject = {};
 				locationCategoryJsonObject["num_of_fatalities"] = 0;
-				locationCategoryJsonObject["num_of_fatalities_law_allowed"] = 0;
-				locationCategoryJsonObject["num_of_fatalities_law_prohibited"] = 0;
+				//locationCategoryJsonObject["num_of_fatalities_law_allowed"] = 0;
+				//locationCategoryJsonObject["num_of_fatalities_law_prohibited"] = 0;
 				locationCategoryJsonObject["category_location"] = "loading";
 				locationCategoriesArray.push(locationCategoryJsonObject);
 			}
