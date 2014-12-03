@@ -5,17 +5,37 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 	var selectedCells_Main;
 	var selectedCells_XAxis;
 	var selectedCells_YAxis;
+	
 	this.initCategoryDataMatrix = function() {
 		selectedCells_Main = createDefaultSelectedCells(8, 8);
 		selectedCells_XAxis = createDefaultSelectedCells(1, 8);
 		selectedCells_YAxis = createDefaultSelectedCells(8, 1);
 		//console.log("OMT: " + selectedCells_Main);
+		
+		//var jsonDataForMainMatrix = mainJsonData;
+		if(mainJsonData == null)
+		{
+			mainJsonData = createMainDummyData(10, 15);
+		}
+		
+		if(xAxisJsonData == null)
+		{
+			xAxisJsonData = createXAxisDummyData(15);
+		}
+		
+		if(yAxisJsonData == null)
+		{
+			yAxisJsonData = createYAxisDummyData(10);
+		}
+		
 		dataMatrix_Main = new HeatchartMatrix(mainElementName, mainJsonData, 300, 300, HeatchartMatrix.Axis.AxisType_None, this.cellSelectedCallback);
 		dataMatrix_Main.initDataMatrix();
 		dataMatrix_XAxis = new HeatchartMatrix(xAxisElementName, xAxisJsonData, 300, 37.5, HeatchartMatrix.Axis.AxisType_X, this.cellSelectedCallback);
 		dataMatrix_XAxis.initDataMatrix();
 		dataMatrix_YAxis = new HeatchartMatrix(yAxisElementName, yAxisJsonData, 37.5, 300, HeatchartMatrix.Axis.AxisType_Y, this.cellSelectedCallback);
 		dataMatrix_YAxis.initDataMatrix();
+		
+		
 	}
 /*
 	===========================================
@@ -80,5 +100,88 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 			}
 			return selectedCells;
 		}
+		
+	this.updateMain = function(newData){
+		//console.log(newData);
+		dataMatrix_Main.updateDataset(newData);
+		dataMatrix_Main.updateHeatchart();
+		
+	}
+	
+	var createYAxisDummyData = function(numOfWeatherCategories){
+		var parentJSONObject = {};
+		parentJSONObject["data_group_id"] = 2;
+		//create an array for storing weather category data
+		parentJSONObject["category_data"] = [];
+		weatherCategoriesArray = parentJSONObject["category_data"];
+		
+		for(weatherCategoryCount = 0; weatherCategoryCount < numOfWeatherCategories; weatherCategoryCount++)
+		{
+			var weatherCategoryJsonObject = {};
+			weatherCategoryJsonObject["num_of_fatalities"] = 0;
+			weatherCategoryJsonObject["num_of_fatalities_law_allowed"] = 0;
+			weatherCategoryJsonObject["num_of_fatalities_law_prohibited"] = 0;
+			weatherCategoryJsonObject["category_weather"] = "loading"+weatherCategoryCount;
+			weatherCategoriesArray.push(weatherCategoryJsonObject);	
+		}
+		
+		return parentJSONObject;
+	}
+	
+	var createXAxisDummyData = function(numOfLocationCategories){
+		var parentJSONObject = {};
+		parentJSONObject["data_group_id"] = 2;
+		//create an array for storing weather category data
+		parentJSONObject["category_data"] = [];
+		locationCategoriesArray = parentJSONObject["category_data"];
+		
+		for(locationCategoryCount = 0; locationCategoryCount < numOfLocationCategories; locationCategoryCount++)
+		{
+			var locationCategoryJsonObject = {};
+			locationCategoryJsonObject["num_of_fatalities"] = 0;
+			locationCategoryJsonObject["num_of_fatalities_law_allowed"] = 0;
+			locationCategoryJsonObject["num_of_fatalities_law_prohibited"] = 0;
+			locationCategoryJsonObject["category_location"] = "loading"+locationCategoryCount;
+			locationCategoriesArray.push(locationCategoryJsonObject);	
+		}
+		
+		return parentJSONObject;
+	}
+	
+	
+	var createMainDummyData = function(numOfWeatherCategories, numOfLocationCategories){
+	
+		var parentJSONObject = {};
+		parentJSONObject["data_group_id"] = 2;
+		//create an array for storing weather category data
+		parentJSONObject["category_data"] = [];
+		weatherCategoriesArray = parentJSONObject["category_data"];
+	
+		for(weatherCategoryCount = 0; weatherCategoryCount < numOfWeatherCategories; weatherCategoryCount++)
+		{
+			var weatherCategoryJsonObject = {};
+			weatherCategoryJsonObject["category_weather"] = "loading";
+			
+			weatherCategoryJsonObject["category_data"] = [];			
+			locationCategoriesArray = weatherCategoryJsonObject["category_data"];
+			
+			for(locationCategoryCount = 0; locationCategoryCount < numOfLocationCategories; locationCategoryCount++)
+			{
+				var locationCategoryJsonObject = {};
+				locationCategoryJsonObject["num_of_fatalities"] = 0;
+				locationCategoryJsonObject["num_of_fatalities_law_allowed"] = 0;
+				locationCategoryJsonObject["num_of_fatalities_law_prohibited"] = 0;
+				locationCategoryJsonObject["category_location"] = "loading";
+				locationCategoriesArray.push(locationCategoryJsonObject);
+			}
+			
+			weatherCategoriesArray.push(weatherCategoryJsonObject);
+		}
+		
+		//console.log(parentJSONObject);
+		return parentJSONObject;
+	}
+	
 	this.initCategoryDataMatrix();
 }
+

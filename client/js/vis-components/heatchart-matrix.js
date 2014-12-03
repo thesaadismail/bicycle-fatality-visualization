@@ -137,6 +137,36 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 	===========================================
 	*/
 	this.updateHeatchart = function() {
+		//console.log(sampleJsonDataForCDM);
+		var sampleJsonData = sampleJsonDataForCDM["category_data"];
+			var min = 999;
+			var max = -999;
+			var l;
+			//console.log(sampleJsonData);
+			for (var rowNum = 0; rowNum < numRows; rowNum++) {
+				for (var colNum = 0; colNum < numCols; colNum++) {
+					sampleJsonData[rowNum]["category_data"][colNum]['row'] = rowNum;
+					sampleJsonData[rowNum]["category_data"][colNum]['col'] = colNum;
+					//generate sample data - remove this when we have real data
+					sampleJsonData[rowNum]["category_data"][colNum]['num_of_fatalities_law_allowed'] = Math.floor(Math.random() * 111);
+					sampleJsonData[rowNum]["category_data"][colNum]['num_of_fatalities_law_prohibited'] = Math.floor(Math.random() * 111);
+					l = sampleJsonData[rowNum]["category_data"][colNum]["num_of_fatalities"];
+					if (l > max) {
+						max = l;
+					}
+					if (l < min) {
+						min = l;
+					}
+				}
+			}
+			var heatchartCanvas = d3.select(elementName).select("svg");
+			var selectedHeatChart = heatchartCanvas.selectAll("g").data(sampleJsonData);
+			addRegularGrid(true, selectedHeatChart, min, max);
+
+
+	
+	
+/*
 		var sampleJsonData = sampleJsonDataForCDM["category_data"];
 		//console.log(sampleJsonData);
 		var min = 999;
@@ -156,18 +186,13 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 				}
 			}
 		}
-/*
-	var yAxis = d3.svg.axis();
-		yAxis.orient('left').scale(yscale).tickSize(2).tickFormat(function(d, i) {
-			return categories[i];
-		}).tickValues(d3.range(17));
-*/
 		var tooltip = d3.select("#category-filter-overview").append("div").style("position", "absolute").style("z-index", "10").style("visibility", "hidden").text("a simple tooltip");
 		var heatchartCanvas = d3.select(elementName).select("svg");
-		var yAxis = buildYAxis(sampleJsonData, heatchartCanvas);
 		var selectedHeatChart = heatchartCanvas.selectAll("g").data(sampleJsonData);
 		addRegularGrid(true, selectedHeatChart, min, max);
+		*/
 	};
+
 /*
 	===========================================
 	  Build Axes
@@ -231,8 +256,17 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 	var addRegularGrid = function(update, selectedHeatChart, min, max) {
 			var selectedRectangles;
 			if (update) {
+			
 				selectedRectangles = selectedHeatChart.selectAll("rect").data(function(d) {
-					return d;
+					if (axisType == HeatchartMatrix.Axis.AxisType_None) {
+						return d["category_data"];
+					} else if (axisType == HeatchartMatrix.Axis.AxisType_X) {
+						//console.log(d);
+						return d["category_data"];
+					} else if (axisType == HeatchartMatrix.Axis.AxisType_Y) {
+						//console.log(d);
+						return d;
+					}
 				});
 			} else {
 				selectedRectangles = selectedHeatChart.selectAll("rect").data(function(d) {
@@ -247,11 +281,17 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 					}
 				}).enter().append("rect");
 			}
+			
+		//console.log(selectedRectangles);
 			selectedElements = selectedRectangles.attr("x", function(d, i) {
 				return (d.col * (width / numCols)) + cellMargin;
 			}).attr("y", function(d, i) {
 				return (d.row * (height / numRows)) + cellMargin;
-			}).attr("width", (width / numCols) - (cellMargin * 2)).attr("height", (height / numRows) - (cellMargin * 2)).attr("fill", function(d, i) {
+			}).attr("width", (width / numCols) - (cellMargin * 2))
+			.attr("height", (height / numRows) - (cellMargin * 2))
+			.attr("fill", function(d, i) {
+			//console.log(d);
+			
 				return color((d["num_of_fatalities"] - min) / (max - min));
 			}).attr("stroke", cellStrokeColor).attr("cell", function(d) {
 				return "r" + d.row + "c" + d.col;
@@ -259,6 +299,8 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 				return d.row + "";
 			}).attr("col", function(d, i) { //for debugging purposes
 				return d.col + "";
+			}).attr("num_of_fatalities", function(d, i) { //for debugging purposes
+				return d["num_of_fatalities"] + "";
 			});
 			addHoverClickAttributes(selectedElements);
 			return selectedElements;
@@ -464,13 +506,13 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 	===========================================
 	*/
 	this.updateDataset = function(newCells) {
-		matrixDataset = newCells;
+		sampleJsonDataForCDM = newCells;
 	}
 	this.updateLawModeDatasets = function(newCellsAllowed, newCellsProhibited) {
-		matrixDataset = newCells;
+		sampleJsonDataForCDM = newCells;
 	}
 	this.getDataset = function() {
-		return matrixDataset;
+		return sampleJsonDataForCDM;
 	}
 /*
 	===========================================
