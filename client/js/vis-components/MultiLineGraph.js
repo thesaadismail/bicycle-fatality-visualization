@@ -52,7 +52,7 @@ function MultiLineGraph(sampleData, elementName){
 	
 	  var yAxis = d3.svg.axis()
 		.scale(yScale)
-		.ticks(4)
+		.ticks(10)
 		.orient("left");
 	
 	  var line = d3.svg.line()
@@ -87,7 +87,19 @@ function MultiLineGraph(sampleData, elementName){
 	
 		console.log('==== json objets made ====\n');
 			xScale.domain([0,7]);
-			yScale.domain([0,200]);
+			
+			allValues = [];
+			sampleData.us_average_data.time_category_data.forEach( function(d){
+				allValues = allValues.concat(d.values);
+			});
+			sampleData.state_category_data.forEach( function(d){
+				d.time_category_data.forEach( function(d){
+					allValues = allValues.concat(d.values);
+				});
+			});
+			yMin = Math.min.apply(Math, allValues);
+			yMax = Math.max.apply(Math,allValues);
+			yScale.domain([Math.round(0.8*yMin),yMax]);
 	
 	
 		vis.append("g")
