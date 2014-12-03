@@ -4,18 +4,16 @@
 	ChromePhp::log('Hello console!');
 	ChromePhp::warn('something went wrong!');
 */	
-	include 'dbinfo.php';
+	include $_SERVER['DOCUMENT_ROOT'].'/php/dbinfo.php';
     
     $server = mysql_connect($host, $username, $password);
     $connection = mysql_select_db($database, $server);
 	
 	
 	$myquery="
-		SELECT nm_location.type Location, count( data_all.casenum ) Num_of_Fatalities
-		FROM data_all, nm_location
-		WHERE nm_location.id = data_all.nmlocat
-		GROUP BY Location
-		ORDER BY Location ASC 
+		SELECT accmon, count( * )
+		FROM current_data
+		GROUP BY accmon
 	";
 	
 	$query = mysql_query($myquery);
