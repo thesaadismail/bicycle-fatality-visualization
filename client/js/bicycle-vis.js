@@ -15,8 +15,10 @@ function init() {
 function retrieveDataBasedOnFilters()
 {    
      $.ajax({
-      url: '/php/data2.php',
-      type: 'get',
+      type: 'post',
+	  url: 'php/update.php',
+      cache: false,
+	  data:  {result:JSON.stringify(buttonstatus)},
       success: function(data, status) {
         if(data == "ok") {
          console.log(data);
@@ -205,6 +207,8 @@ var statelist = [
 ];
 
 var buttonstatus = {
+	"start":1,
+	"end":1,
 	"law":0,
 	"weekdays":1,
 	"weekends":1,

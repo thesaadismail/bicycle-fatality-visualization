@@ -8,8 +8,8 @@
     $connection = mysql_select_db($database, $server);
 	
 	
-	$myquery="CREATE VIEW current_data1 AS
-	SELECT statenum, casenum, atmcond, 'crash day', 'crash hr', 'crash min', 'crash mon', 'crash time', 'caseyear', lightcond, nmlocat
+	$myquery="CREATE VIEW current_data AS
+	SELECT statenum, casenum, atmcond,  accdate, accday, acchr, accmin, accmon, acctime , dayofweek, lightcond, nmlocat
 	FROM data_all";
 	
 	$query = mysql_query($myquery);
@@ -18,9 +18,9 @@
 		echo mysql_error();
 		die;
 	}
-	
-	$result = mysql_fetch_assoc($query);
-	echo "query result".$result;
+	mysql_query($query);
+	//$result = mysql_fetch_assoc($query);
+	//echo "query result".$result;
 	/*	
 	for ($x = 0; $x < mysql_num_rows($query); $x++) {
 		$data[] = mysql_fetch_assoc($query);
