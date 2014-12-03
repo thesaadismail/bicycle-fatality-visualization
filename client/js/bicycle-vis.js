@@ -36,11 +36,30 @@ function updateCategoryDataMatrixData() {
 		categoryDataMatrix.updateMain(processedJsonObject);
 	});
 	d3.json('php/cdmLocationAxis.php', function(error, data) {
-		console.log(data);
+		processedJsonObject = processCDMLocationAxisJSON(data);
+		//categoryDataMatrix.updateXAxis_Location(processedJsonObject);
 	});
 }
 
-function processJSON(data) {
+function processCDMLocationAxisJSON(data) {
+	//setup parent json object
+	var parentJSONObject = {};
+	parentJSONObject["data_group_id"] = 2;
+	//create an array for storing weather category data
+	parentJSONObject["category_data"] = [];
+	locationCategoriesArray = parentJSONObject["category_data"];
+	
+	data.forEach(function(d) {
+		var locationJsonObject = {};
+		locationJsonObject["category_location"] = d.Location;
+		locationJsonObject["num_of_fatalaties"] = d.Num_of_Fatalities;
+		locationCategoriesArray.push(locationJsonObject);		
+	});
+	
+	console.log(parentJSONObject);
+}
+
+function processCDMMainJSON(data) {
 	//setup parent json object
 	var parentJSONObject = {};
 	parentJSONObject["data_group_id"] = 2;
