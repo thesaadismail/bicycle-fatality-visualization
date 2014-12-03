@@ -14,11 +14,9 @@
 	
 	
 	$myquery="
-		SELECT nm_location.type Location, count( current_data.casenum ) Number_of_Fatalities
-		FROM current_data, nm_location
-		WHERE nm_location.id = current_data.nmlocat
-		GROUP BY nm_location.type
-		ORDER BY Location ASC 
+		SELECT accmon, count( * )
+		FROM current_data
+		GROUP BY accmon
 	";
 	
 	$query = mysql_query($myquery);
