@@ -56,7 +56,7 @@ function initTimeSlider(overviewDataset){
     
 
     var OVdata_agg = overviewDataset["overview_data"];
-	console.log(OVdata_agg);
+	//console.log(OVdata_agg);
     OVdata_agg.forEach(function(d) {
       d["month_id"] = new Date(2014, d["month_id"], 1);
     });

@@ -5,7 +5,7 @@ var categoryDataMatrix;
 
 function init() {
 	initializeTimeSlider();
-	categoryDataMatrix = new CategoryDataMatrix("#data-matrix-container", null, "#data-matrix-xaxis-container", null, "#data-matrix-yaxis-container", null);
+	categoryDataMatrix = new CategoryDataMatrix("#data-matrix-container", null, "#data-matrix-xaxis-container", null, "#data-matrix-yaxis-container", null, categoriesSelectedCallback);
 	initControl();
 	multiLineG = new MultiLineGraph(sampleDataMultiLine, "#timeOfDay");
 	multiLineG.initTimeOfDay();
@@ -39,7 +39,7 @@ function retrieveDataBasedOnFilters() {
 function initializeTimeSlider(){
 	d3.json('php/overviewData.php', function(error, data) {
 		processedJsonObject = processOverviewJSON(data);
-		console.log(processedJsonObject);
+		//console.log(processedJsonObject);
 		initTimeSlider(processedJsonObject);
 	});
 }
@@ -72,6 +72,8 @@ function processOverviewJSON(data){
 //**************************FOR TIME SLIDER************************************
 
 function updateCategoryDataMatrixData() {
+
+	console.log("updateCategoryDataMatrixData");
 	d3.json('php/cdmMain.php', function(error, data) {
 		processedJsonObject = processCDMMainJSON(data);
 		categoryDataMatrix.updateMain(processedJsonObject);
@@ -102,7 +104,7 @@ function processCDMWeatherAxisJSON(data) {
 		weatherJsonObject["num_of_fatalities"] = d.Num_of_Fatalities;
 		weatherCategoriesArray.push(weatherJsonObject);		
 	});
-	
+	//console.log(parentJSONObject);
 	return parentJSONObject;
 }
 
@@ -131,7 +133,6 @@ function processCDMMainJSON(data) {
 	//create an array for storing weather category data
 	parentJSONObject["category_data"] = [];
 	weatherCategoriesArray = parentJSONObject["category_data"];
-	//console.log(data);
 	data.forEach(function(d) {
 		filteredWeatherCategories = weatherCategoriesArray.filter(function(weatherCategoryObj) {
 			return weatherCategoryObj["category_weather"] == d.Weather;
@@ -153,11 +154,12 @@ function processCDMMainJSON(data) {
 		}
 		var jsonObjForLocationInCategory = {};
 		jsonObjForLocationInCategory["category_location"] = d.Location;
+		jsonObjForLocationInCategory["category_weather"] = d.Weather;
 		jsonObjForLocationInCategory["num_of_fatalities"] = d.Number_Of_Cases;
 		locationsForAWeatherCategory.push(jsonObjForLocationInCategory);
 	});
-	return parentJSONObject;
 	//console.log(parentJSONObject);
+	return parentJSONObject;
 }
 
 
@@ -207,6 +209,23 @@ function initControl() {
 		retrieveDataBasedOnFilters();
 	});
 }
+
+
+var categoriesSelectedCallback = function(isSelected, category1Name, category2Name)
+{
+	if(isSelected)
+	{
+		//if a category was selected, do something
+		console.log("Categories Selected: ["+category1Name+", "+category2Name+"]");
+	}
+	else
+	{
+		console.log("Categories DE-Selected: ["+category1Name+", "+category2Name+"]");
+	}
+}
+
+
+
 var statelist = [
 1, 2, 4, 5, 6, 8, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 44, 45, 46, 47, 48, 49, 50, 51, 53, 54, 55, 56];
 var buttonstatus = {

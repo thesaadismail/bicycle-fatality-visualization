@@ -76,7 +76,7 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 			var min = 999;
 			var max = -999;
 			var l;
-			//console.log(sampleJsonData);
+			//console.log(sampleJsonDataForCDM);
 			for (var rowNum = 0; rowNum < numRows; rowNum++) {
 				//console.log(sampleJsonData[0][rowNum]);
 				sampleJsonData[0][rowNum]['row'] = rowNum;
@@ -386,6 +386,8 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 				onCellOver(this, d);
 				allPs = tooltip.selectAll('p');
 				allPs.remove();
+				tooltip.append('p').text("Weather: " + d["category_weather"]);
+				tooltip.append('p').text("Location: " + d["category_location"]);
 				tooltip.append('p').text("Num of Fatalities: " + d["num_of_fatalities"]);
 				tooltip.append('p').text("Num of Fatalities (Allowed): " + d["num_of_fatalities_law_allowed"]);
 				tooltip.append('p').text("Num of Fatalities (Prohibited): " + d["num_of_fatalities_law_prohibited"]);

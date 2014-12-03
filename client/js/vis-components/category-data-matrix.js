@@ -1,4 +1,4 @@
-function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAxisJsonData, yAxisElementName, yAxisJsonData) {
+function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAxisJsonData, yAxisElementName, yAxisJsonData, categoriesSelectedCallback) {
 	var dataMatrix_Main;
 	var dataMatrix_XAxis;
 	var dataMatrix_YAxis;
@@ -7,15 +7,15 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 	var selectedCells_YAxis;
 	
 	this.initCategoryDataMatrix = function() {
-		selectedCells_Main = createDefaultSelectedCells(8, 8);
-		selectedCells_XAxis = createDefaultSelectedCells(1, 8);
-		selectedCells_YAxis = createDefaultSelectedCells(8, 1);
+		selectedCells_Main = createDefaultSelectedCells(10, 15);
+		selectedCells_XAxis = createDefaultSelectedCells(1, 15);
+		selectedCells_YAxis = createDefaultSelectedCells(10, 1);
 		//console.log("OMT: " + selectedCells_Main);
 		
 		//var jsonDataForMainMatrix = mainJsonData;
 		if(mainJsonData == null)
 		{
-			mainJsonData = createMainDummyData(8, 15);
+			mainJsonData = createMainDummyData(10, 15);
 		}
 		
 		if(xAxisJsonData == null)
@@ -25,7 +25,7 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 		
 		if(yAxisJsonData == null)
 		{
-			yAxisJsonData = createYAxisDummyData(8);
+			yAxisJsonData = createYAxisDummyData(10);
 		}
 		
 		dataMatrix_Main = new HeatchartMatrix(mainElementName, mainJsonData, 600, 300, HeatchartMatrix.Axis.AxisType_None, this.cellSelectedCallback);
@@ -46,6 +46,14 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 		if (axisType == HeatchartMatrix.Axis.AxisType_None) {
 			//cell selection for main heatchart matrix
 			toggleCellSelection(dataMatrix_Main, selectedCells_Main, cellElement, data);
+			if(selectedCells_Main[data.row][data.col]==true)
+			{
+				categoriesSelectedCallback(true, data["category_location"], data["category_weather"]);
+			}
+			else
+			{
+				categoriesSelectedCallback(false, data["category_location"], data["category_weather"]);
+			}
 		} else if (axisType == HeatchartMatrix.Axis.AxisType_X) {
 			//cell selection for x axis heatchart matrix
 			toggleCellSelection(dataMatrix_XAxis, selectedCells_XAxis, cellElement, data);
@@ -114,7 +122,7 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 	}
 	
 	this.updateYAxis_Weather = function(newData){
-	
+		console.log(newData);
 		dataMatrix_YAxis.updateDataset(newData);
 		dataMatrix_YAxis.updateYAxisComponent();
 	}
