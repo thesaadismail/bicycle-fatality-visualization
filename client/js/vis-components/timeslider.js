@@ -98,13 +98,12 @@ function initTimeSlider(overviewDataset){
     OVvis.append("g")
         .append("rect")
 
-
   function OVbrushed() {
     OVbrush.empty() ? tmp = OVx.domain() : tmp = OVbrush.extent();
     var OVmonthNameFormat = d3.time.format("%m");
-    console.log(OVmonthNameFormat(tmp[0])+"---"+OVmonthNameFormat(tmp[1]));
-    // vis.select(".area").attr("d", area);
-    // vis.select(".x.axis").call(xAxis);
+    buttonstatus["start"] = +OVmonthNameFormat(tmp[0]);
+    buttonstatus["end"] = +OVmonthNameFormat(tmp[1]);
+    // console.log(buttonstatus);
     retrieveDataBasedOnFilters()
   }
   
