@@ -1,13 +1,12 @@
 <?php
-	include $_SERVER['DOCUMENT_ROOT'].'/php/ChromePhp.php';
+	/* include $_SERVER['DOCUMENT_ROOT'].'/php/ChromePhp.php';
 	ChromePhp::log('Hello console!');
-	//ChromePhp::warn('something went wrong!');
-	
-	
+	ChromePhp::warn('something went wrong!'); */
+		
     $username = "root"; 
-    $password = "root";   
-    $host = 'localhost';
-    $database='fatalities-db';
+    $password = "";   
+    $host = "localhost";
+    $database="iv";
 
     $server = mysql_connect($host, $username, $password);
     $connection = mysql_select_db($database, $server);
