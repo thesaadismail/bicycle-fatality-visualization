@@ -34,8 +34,9 @@ function updateCategoryDataMatrixData()
 {
 	
 	d3.json('php/data2.php', function(error, data) {
-				console.log(data);
+				console.log("updating category data matrix data");
 				processedJsonObject = processJSON(data);
+				console.log(processedJsonObject);
 				categoryDataMatrix.updateMain(processedJsonObject);
 			});
 }

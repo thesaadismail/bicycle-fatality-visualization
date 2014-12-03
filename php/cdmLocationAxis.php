@@ -1,13 +1,10 @@
+
 <?php
-	include $_SERVER['DOCUMENT_ROOT'].'/php/ChromePhp.php';
+	/* include $_SERVER['DOCUMENT_ROOT'].'/php/ChromePhp.php';
 	ChromePhp::log('Hello console!');
-	//ChromePhp::warn('something went wrong!');
-	
-	
-    $username = "root"; 
-    $password = "";   
-    $host = "localhost";
-    $database="iv";
+	ChromePhp::warn('something went wrong!');
+*/	
+	include $_SERVER['DOCUMENT_ROOT'].'/php/dbinfo.php';
     
     $server = mysql_connect($host, $username, $password);
     $connection = mysql_select_db($database, $server);
