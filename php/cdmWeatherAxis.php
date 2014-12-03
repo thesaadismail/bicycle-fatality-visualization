@@ -10,7 +10,7 @@
     $connection = mysql_select_db($database, $server);
 	
 	
-	$myquery="SELECT atm_cond.type Weather, count( data_all.casenum ) Num_of_Fatalities FROM data_all, atm_cond WHERE atm_cond.id = data_all.atmcond GROUP BY Weather ORDER BY Weather ASC";
+	$myquery="SELECT atm_cond.type Weather, count( current_data.casenum ) Num_of_Fatalities FROM current_data, atm_cond WHERE atm_cond.id = current_data.atmcond GROUP BY Weather ORDER BY Weather ASC";
 	
 	$query = mysql_query($myquery);
 			

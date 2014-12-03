@@ -11,9 +11,9 @@
 	
 	
 	$myquery="
-		SELECT nm_location.type Location, count( data_all.casenum ) Num_of_Fatalities
-		FROM data_all, nm_location
-		WHERE nm_location.id = data_all.nmlocat
+		SELECT nm_location.type Location, count( current_data.casenum ) Num_of_Fatalities
+		FROM current_data, nm_location
+		WHERE nm_location.id = current_data.nmlocat
 		GROUP BY Location
 		ORDER BY Location ASC 
 	";
