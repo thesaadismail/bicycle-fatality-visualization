@@ -33,11 +33,20 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 			numCols = 1;
 	}
 	//color attributes
-	var color = d3.interpolateRgb("#fff", "#f00"),
-		lawmodeAllowedColor = d3.interpolateRgb("#fff", "#00f"),
-		lawmodeProhibitedColor = d3.interpolateRgb("#fff", "#f00"),
+	var color = d3.interpolateRgb("#fff", "#000"),
 		cellStrokeColor = "#7e7e7e",
 		selectedCellStrokeColor = "#663300";
+		
+	this.updateColor = function(newColor)
+	{
+		color = newColor;
+	}
+		
+		
+	/*
+	lawmodeAllowedColor = d3.interpolateRgb("#fff", "#00f"),
+		lawmodeProhibitedColor = d3.interpolateRgb("#fff", "#f00"),
+*/
 	//selected cell matrix
 	var selectedCellsBoolMatrix;
 /*

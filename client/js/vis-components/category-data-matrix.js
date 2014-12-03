@@ -5,6 +5,9 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 	var selectedCells_Main;
 	var selectedCells_XAxis;
 	var selectedCells_YAxis;
+	var regularModeColor = d3.interpolateRgb("#fff", "#fff"),
+		lawmodeAllowedColor = d3.interpolateRgb("#fff", "#00f"),
+		lawmodeProhibitedColor = d3.interpolateRgb("#fff", "#f00");
 	
 	this.initCategoryDataMatrix = function() {
 		selectedCells_Main = createDefaultSelectedCells(10, 15);
@@ -199,6 +202,28 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 		
 		//console.log(parentJSONObject);
 		return parentJSONObject;
+	}
+	
+	this.enableAllowedLawMode = function()
+	{
+		console.log("enableAllowedLawMode");
+		dataMatrix_Main.updateColor(lawmodeAllowedColor);
+		dataMatrix_XAxis.updateColor(lawmodeAllowedColor);
+		dataMatrix_YAxis.updateColor(lawmodeAllowedColor);
+	}
+	this.enableProhibitedLawMode = function()
+	{
+		console.log("enableProhibitedLawMode");
+		dataMatrix_Main.updateColor(lawmodeProhibitedColor);
+		dataMatrix_XAxis.updateColor(lawmodeProhibitedColor);
+		dataMatrix_YAxis.updateColor(lawmodeProhibitedColor);
+	}
+	this.disableLawMode = function()
+	{
+		console.log("disableLawMode");
+		dataMatrix_Main.updateColor(regularModeColor);
+		dataMatrix_XAxis.updateColor(regularModeColor);
+		dataMatrix_YAxis.updateColor(regularModeColor);
 	}
 	
 	this.initCategoryDataMatrix();

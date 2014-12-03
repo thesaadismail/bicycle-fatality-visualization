@@ -73,8 +73,8 @@ function processOverviewJSON(data){
 
 function updateCategoryDataMatrixData() {
 
-	console.log("updateCategoryDataMatrixData");
 	d3.json('php/cdmMain.php', function(error, data) {
+		console.log("updateCategoryDataMatrixData");
 		processedJsonObject = processCDMMainJSON(data);
 		categoryDataMatrix.updateMain(processedJsonObject);
 	});
@@ -210,6 +210,46 @@ function initControl() {
 	});
 }
 
+function lawModeToggled()
+{
+	if($("#law_button").is(":checked"))
+	{
+		$("#lawmode-switch-div").visible();
+		categoryDataMatrix.enableProhibitedLawMode();
+	}
+	else
+	{
+		$("#lawmode-switch-div").invisible();
+		categoryDataMatrix.disableLawMode();
+	}
+		retrieveDataBasedOnFilters();
+}
+
+function cdmLawOptionToggled()
+{
+if($("#myonoffswitch").is(":checked"))
+	{
+		categoryDataMatrix.enableProhibitedLawMode();
+	}
+	else
+	{
+		categoryDataMatrix.enableAllowedLawMode();
+	}
+		retrieveDataBasedOnFilters();
+}
+
+(function($) {
+    $.fn.invisible = function() {
+        return this.each(function() {
+            $(this).css("visibility", "hidden");
+        });
+    };
+    $.fn.visible = function() {
+        return this.each(function() {
+            $(this).css("visibility", "visible");
+        });
+    };
+}(jQuery));
 
 var categoriesSelectedCallback = function(isSelected, category1Name, category2Name)
 {
