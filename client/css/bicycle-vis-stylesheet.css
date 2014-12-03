@@ -22,7 +22,8 @@ body {
       font-size: 11px;
     }
     .brush .extent {
-      stroke: #fff;
+      stroke: gray;
+	  stroke-width: 2.5;
       fill-opacity: .125;
       shape-rendering: crispEdges;
     }
