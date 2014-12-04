@@ -103,7 +103,7 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 			}
 			var heatchartCanvas = d3.select(elementName).append("svg").attr("width", width+yAxisWidth).attr("height", height);
 			//console.log(samplejson);
-			buildYAxisLabels(sampleJsonData, heatchartCanvas);
+			buildYAxisLabels(false, sampleJsonData, heatchartCanvas);
 			var selectedHeatChart = heatchartCanvas.append("svg").selectAll("g").data(sampleJsonData).enter().append("g");
 			var selectedComponents = addRegularGrid(false, selectedHeatChart, min, max);
 			//this is to shift the x axis over so there is room for the axes labels
@@ -137,7 +137,7 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 			var heatchartCanvas = d3.select(elementName).append("svg").attr("width", width).attr("height", height+xAxisHeight);
 			//console.log(samplejson);
 			//buildXAxis(sampleJsonData, heatchartCanvas);
-			buildXAxisLabels(sampleJsonData, heatchartCanvas);
+			buildXAxisLabels(false,sampleJsonData, heatchartCanvas);
 			var selectedHeatChart = heatchartCanvas.append("svg").selectAll("g").data(sampleJsonData).enter().append("g");
 			var selectedComponents = addRegularGrid(false, selectedHeatChart, min, max);
 			//selectedComponents.attr("transform", "translate("+0+"," + xAxisHeight + ")");
@@ -176,14 +176,68 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 	};
 	
 		this.updateYAxisComponent = function() {
-			d3.select(elementName).html("");
-			createYAxisComponent();
+			var sampleJsonData = [sampleJsonDataForCDM["category_data"]];
+			var min = 999;
+			var max = -999;
+			var l;
+			//console.log(sampleJsonDataForCDM);
+			for (var rowNum = 0; rowNum < numRows; rowNum++) {
+				//console.log(sampleJsonData[0][rowNum]);
+				sampleJsonData[0][rowNum]['row'] = rowNum;
+				sampleJsonData[0][rowNum]['col'] = 0;
+				//generate sample data - remove this when we have real data
+				//sampleJsonData[0][rowNum]['num_of_fatalities_law_allowed'] = Math.floor(Math.random() * 111);
+				//sampleJsonData[0][rowNum]['num_of_fatalities_law_prohibited'] = Math.floor(Math.random() * 111);
+				l = sampleJsonData[0][rowNum]["num_of_fatalities"];
+				if (l > max) {
+					max = l;
+				}
+				if (l < min) {
+					min = l;
+				}
+			}
+			var heatchartCanvas = d3.select(elementName).select("svg");
+			//console.log(heatchartCanvas);
+			buildYAxisLabels(true, sampleJsonData, heatchartCanvas);
+			var selectedHeatChart = heatchartCanvas.select("svg").selectAll("g").data(sampleJsonData);
+			var selectedComponents = addRegularGrid(true, selectedHeatChart, min, max);
+			//this is to shift the x axis over so there is room for the axes labels
+			selectedComponents.attr("transform", "translate("+yAxisWidth+"," + 0 + ")");
+
 		};
 		
 		this.updateXAxisComponent = function() {
-			d3.select(elementName).html("");
-			createXAxisComponent();
-			
+			var sampleJsonData = sampleJsonDataForCDM["category_data"];
+			var min = 999;
+			var max = -999;
+			var l;
+			//console.log(sampleJsonData);
+			for (var colNum = 0; colNum < numCols; colNum++) {
+				//generate sample data - remove this when we have real data
+				l = sampleJsonData[colNum]["num_of_fatalities"];
+				//console.log(sampleJsonData[colNum]);
+				sampleJsonData[colNum]["category_data"] = [{
+					"num_of_fatalities": l,
+					'row': 0,
+					'col': colNum,
+					"category_location": sampleJsonData[colNum]["category_location"]
+					//'num_of_fatalities_law_allowed': Math.floor(Math.random() * 111),
+					//'num_of_fatalities_law_prohibited': Math.floor(Math.random() * 111)
+				}];
+				if (l > max) {
+					max = l;
+				}
+				if (l < min) {
+					min = l;
+				}
+			}
+			var heatchartCanvas = d3.select(elementName).select("svg");
+			//console.log(samplejson);
+			//buildXAxis(sampleJsonData, heatchartCanvas);
+			buildXAxisLabels(true, sampleJsonData, heatchartCanvas);
+			var selectedHeatChart = heatchartCanvas.select("svg").selectAll("g").data(sampleJsonData);
+			var selectedComponents = addRegularGrid(true, selectedHeatChart, min, max);
+			//selectedComponents.attr("transform", "translate("+0+"," + xAxisHeight + ")");
 		};
 
 /*
@@ -191,7 +245,7 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 	  Build Axes
 	===========================================
 	*/
-	var buildYAxisLabels = function(sampleJsonData, canvas) {
+	var buildYAxisLabels = function(isUpdate, sampleJsonData, canvas) {
 			console.log("Build Y Axis Labels");
 			var yAxisCategories = [];
 			//console.log(sampleJsonData);
@@ -209,10 +263,16 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 		.tickSize(2).tickFormat(function(d, i) {
 				return yAxisCategories[i];
 			}).tickValues(d3.range(yAxisCategories.length));
-*/
-			var y_xis = canvas.append('g').attr('id', 'yaxis').attr("transform", "translate("+yAxisWidth+"," + 0 + ")").call(yAxis);
+*/			if(isUpdate)
+			{
+				var y_xis = canvas.select('g').attr('id', 'yaxis').attr("transform", "translate("+yAxisWidth+"," + 0 + ")").call(yAxis);
+			}
+			else
+			{
+				var y_xis = canvas.append('g').attr('id', 'yaxis').attr("transform", "translate("+yAxisWidth+"," + 0 + ")").call(yAxis);
+			}
 		};
-	var buildXAxisLabels = function(sampleJsonData, canvas) {
+	var buildXAxisLabels = function(isUpdate, sampleJsonData, canvas) {
 			console.log("Build X Axis Labels");
 			var xAxisCategories = [];
 			//console.log(sampleJsonData);
@@ -230,6 +290,21 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 				return yAxisCategories[i];
 			}).tickValues(d3.range(yAxisCategories.length));
 */
+
+		if(isUpdate)
+		{
+			var x_xis = canvas.select('g')
+							  .attr('id', 'xaxis')
+							  .attr("transform", "translate("+0+"," + 38 + ")")
+							  .call(xAxis)
+							  .selectAll("text")
+							  	.attr("transform", "rotate(90)")
+							  	.style("text-anchor", "start")
+							  	.attr("dy", ".20em")
+							  	.attr("dx", ".35em");
+		}
+		else
+		{
 			var x_xis = canvas.append('g')
 							  .attr('id', 'xaxis')
 							  .attr("transform", "translate("+0+"," + 38 + ")")
@@ -239,6 +314,8 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 							  	.style("text-anchor", "start")
 							  	.attr("dy", ".20em")
 							  	.attr("dx", ".35em");
+		}
+			
 
 		};
 /*
