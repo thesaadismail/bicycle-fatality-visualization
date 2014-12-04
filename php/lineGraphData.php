@@ -11,7 +11,7 @@
 	
 	
 	$myquery="
-		SELECT state.state category_state, for_line_graph.acchr hour , count( for_line_graph.casenum ) fatalities, state.allowed law
+		SELECT state.state category_state, state.id id, for_line_graph.acchr hour , count( for_line_graph.casenum ) fatalities, state.allowed law
 		FROM for_line_graph, state
 		WHERE for_line_graph.statenum = state.id
 		GROUP BY for_line_graph.statenum, for_line_graph.acchr
