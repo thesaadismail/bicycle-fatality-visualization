@@ -7,7 +7,9 @@ function init() {
 	initializeTimeSlider();
 	categoryDataMatrix = new CategoryDataMatrix("#data-matrix-container", null, "#data-matrix-xaxis-container", null, "#data-matrix-yaxis-container", null, categoriesSelectedCallback);
 	initControl();
-	multiLineG = new MultiLineGraph(sampleDataMultiLine, "#timeOfDay");
+	timeBucketGroupings(testDataMultiLine);
+	multiLineG = new MultiLineGraph(testDataMultiLine, "#timeOfDay");
+	//multiLineG = new MultiLineGraph(sampleDataMultiLine, "#timeOfDay");
 	multiLineG.initTimeOfDay();
 	retrieveDataBasedOnFilters();
 }
@@ -887,92 +889,462 @@ var sampleJsonDataForCDM = {
 		}]
 	}]
 };
-var sampleDataMultiLine = {
+	
+var	sampleDataMultiLine	= 
+{
 	"weatherLocation": "rainy-street",
 	"law_mode": 0,
-	"us_average_data": {
-		"category_state": "US Average",
-		"time_category_data": [{
-			"key": "0",
-			"values": 30
-		}, {
-			"key": "1",
-			"values": 100
-		}, {
-			"key": "2",
-			"values": 165
-		}, {
-			"key": "3",
-			"values": 120
-		}, {
-			"key": "4",
-			"values": 150
-		}, {
-			"key": "5",
-			"values": 100
-		}, {
-			"key": "6",
-			"values": 75
-		}, {
-			"key": "7",
-			"values": 20
-		}]
+	"missing_state_values": "CA, FL, NY",
+	"us_average_data":
+	{
+			"category_state": "US Average",
+			"time_category_data":
+			[	
+				{
+					"key": "0",
+					"values": 30 
+				},
+				{
+					"key": "1",
+					"values": 100
+				},
+				{
+					"key": "2",
+					"values": 165
+				},
+				{
+					"key": "3",
+					"values": 120 
+				},
+				{
+					"key": "4",
+					"values": 150 
+				},
+				{
+					"key": "5",
+					"values": 100
+				},
+				{
+					"key": "6",
+					"values": 75 
+				},
+				{
+					"key": "7",
+					"values": 20 
+				}
+			]
 	},
-	"state_category_data": [{
-		"category_state": "GA",
-		"law_data": 'yes',
-		"time_category_data": [{
-			"key": "0",
-			"values": 40
-		}, {
-			"key": "1",
-			"values": 80
-		}, {
-			"key": "2",
-			"values": 120
-		}, {
-			"key": "3",
-			"values": 100
-		}, {
-			"key": "4",
-			"values": 150
-		}, {
-			"key": "5",
-			"values": 90
-		}, {
-			"key": "6",
-			"values": 50
-		}, {
-			"key": "7",
-			"values": 20
-		}]
-	}, {
-		"category_state": "NY",
-		"law_data": 'no',
-		"time_category_data": [{
-			"key": "0",
-			"values": 20
-		}, {
-			"key": "1",
-			"values": 60
-		}, {
-			"key": "2",
-			"values": 150
-		}, {
-			"key": "3",
-			"values": 115
-		}, {
-			"key": "4",
-			"values": 200
-		}, {
-			"key": "5",
-			"values": 120
-		}, {
-			"key": "6",
-			"values": 75
-		}, {
-			"key": "7",
-			"values": 40
-		}]
-	}]
+	"state_category_data":
+	[
+		{
+			"category_state": "GA",
+			"law_data": 'yes',
+			"time_category_data":
+			[	
+				{
+					"key": "0",
+					"values": 40 
+				},
+				{
+					"key": "1",
+					"values": 80
+				},
+				{
+					"key": "2",
+					"values": 120
+				},
+				{
+					"key": "3",
+					"values": 100 
+				},
+				{
+					"key": "4",
+					"values": 150 
+				},
+				{
+					"key": "5",
+					"values": 90
+				},
+				{
+					"key": "6",
+					"values": 50 
+				},
+				{
+					"key": "7",
+					"values": 20 
+				}
+			]
+		},
+		{
+			"category_state": "NY",
+			"law_data": 'no',
+			"time_category_data":
+			[	
+				{
+					"key": "0",
+					"values": 20 
+				},
+				{
+					"key": "1",
+					"values": 60
+				},
+				{
+					"key": "2",
+					"values": 150
+				},
+				{
+					"key": "3",
+					"values": 115 
+				},
+				{
+					"key": "4",
+					"values": 200 
+				},
+				{
+					"key": "5",
+					"values": 120
+				},
+				{
+					"key": "6",
+					"values": 75 
+				},
+				{
+					"key": "7",
+					"values": 40 
+				}
+			]
+		}
+	]
 };
+
+
+
+
+
+var	testDataMultiLine	= 
+{
+	"weatherLocation": "rainy-street",
+	"law_mode": 0,
+	"missing_state_values": "CA, FL, NY",
+	"us_average_data":
+	{
+			"category_state": "US Average",
+			"time_category_data":
+			[	
+				{
+					"key": "0",
+					"values": 6 
+				},
+				{
+					"key": "1",
+					"values": 15
+				},
+				{
+					"key": "2",
+					"values": 12
+				},
+				{
+					"key": "3",
+					"values": 25 
+				},
+				{
+					"key": "4",
+					"values": 30 
+				},
+				{
+					"key": "5",
+					"values": 25
+				},
+				{
+					"key": "6",
+					"values": 40 
+				},
+				{
+					"key": "7",
+					"values": 45 
+				},
+{
+					"key": "8",
+					"values": 60 
+				},
+				{
+					"key": "9",
+					"values": 85
+				},
+				{
+					"key": "10",
+					"values": 105
+				},
+				{
+					"key": "11",
+					"values": 95 
+				},
+				{
+					"key": "12",
+					"values": 135 
+				},
+				{
+					"key": "13",
+					"values": 140
+				},
+				{
+					"key": "14",
+					"values": 155
+				},
+				{
+					"key": "15",
+					"values": 150 
+				},
+				{
+					"key": "16",
+					"values": 190 
+				},
+				{
+					"key": "17",
+					"values": 185
+				},
+				{
+					"key": "18",
+					"values": 170 
+				},
+				{
+					"key": "19",
+					"values": 160 
+				},
+{
+					"key": "20",
+					"values": 145
+				},
+				{
+					"key": "21",
+					"values": 105
+				},
+				{
+					"key": "22",
+					"values": 115
+				},
+				{
+					"key": "23",
+					"values": 60 
+				}					
+
+			]
+	},
+	"state_category_data":
+	[
+		{
+			"category_state": "GA",
+			"law_data": 'yes',
+			"time_category_data":
+			[	
+				{
+					"key": "0",
+					"values": 30 
+				},
+				{
+					"key": "1",
+					"values": 10
+				},
+				{
+					"key": "2",
+					"values": 15
+				},
+				{
+					"key": "3",
+					"values": 30 
+				},
+				{
+					"key": "4",
+					"values": 35 
+				},
+				{
+					"key": "5",
+					"values": 20
+				},
+				{
+					"key": "6",
+					"values": 35 
+				},
+				{
+					"key": "7",
+					"values": 50 
+				},
+{
+					"key": "8",
+					"values": 75 
+				},
+				{
+					"key": "9",
+					"values": 110
+				},
+				{
+					"key": "10",
+					"values": 95
+				},
+				{
+					"key": "11",
+					"values": 105 
+				},
+				{
+					"key": "12",
+					"values": 115 
+				},
+				{
+					"key": "13",
+					"values": 120
+				},
+				{
+					"key": "14",
+					"values": 145
+				},
+				{
+					"key": "15",
+					"values": 160 
+				},
+				{
+					"key": "16",
+					"values": 190 
+				},
+				{
+					"key": "17",
+					"values": 190
+				},
+				{
+					"key": "18",
+					"values": 185 
+				},
+				{
+					"key": "19",
+					"values": 175 
+				},
+{
+					"key": "20",
+					"values": 150
+				},
+				{
+					"key": "21",
+					"values": 112
+				},
+				{
+					"key": "22",
+					"values": 85
+				},
+				{
+					"key": "23",
+					"values": 50 
+				}					
+			]
+		},
+		{
+			"category_state": "NY",
+			"law_data": 'no',
+			"time_category_data":
+			[	
+				{
+					"key": "0",
+					"values": 20 
+				},
+				{
+					"key": "1",
+					"values": 60
+				},
+				{
+					"key": "2",
+					"values": 150
+				},
+				{
+					"key": "3",
+					"values": 115 
+				},
+				{
+					"key": "4",
+					"values": 200 
+				},
+				{
+					"key": "5",
+					"values": 120
+				},
+				{
+					"key": "6",
+					"values": 75 
+				},
+				{
+					"key": "7",
+					"values": 40 
+				}
+			]
+		}
+	]
+};
+
+
+
+function timeBucketGroupings(multiLineGraphData){
+	// will group the fatalities into 3 hour timeblock.
+	timeGroupings = [0,0,0,0,0,0,0,0];
+	multiLineGraphData.us_average_data.time_category_data.forEach( function(d,i){
+		if( 0 <= parseInt(d.key)  &&  parseInt(d.key) < 3){
+			timeGroupings[0] = parseInt(timeGroupings[0]) + parseInt(d.values)
+		}
+		else if(3 <= parseInt(d.key)  &&  parseInt(d.key) < 6){
+			timeGroupings[1] = parseInt(timeGroupings[1]) + parseInt(d.values)
+		}
+		else if(6 <= parseInt(d.key)  &&  parseInt(d.key) < 9){
+			timeGroupings[2] = parseInt(timeGroupings[2]) + parseInt(d.values)
+		}
+		else if(9 <= parseInt(d.key)  &&  parseInt(d.key) < 12){
+			timeGroupings[3] = parseInt(timeGroupings[3]) + parseInt(d.values)
+		}
+		else if(12 <= parseInt(d.key)  &&  parseInt(d.key) < 15){
+			timeGroupings[4] = parseInt(timeGroupings[4]) + parseInt(d.values)
+		}
+		else if(15 <= parseInt(d.key)  &&  parseInt(d.key) < 18){
+			timeGroupings[5] = parseInt(timeGroupings[5]) + parseInt(d.values)
+		}
+		else if(18 <= parseInt(d.key)  &&  parseInt(d.key) < 21){
+			timeGroupings[6] = parseInt(timeGroupings[6]) + parseInt(d.values)
+		}
+		else if(21 <= parseInt(d.key)  &&  parseInt(d.key) < 24){
+			timeGroupings[7] = parseInt(timeGroupings[7]) + parseInt(d.values)
+		}
+	});
+	multiLineGraphData.us_average_data.time_category_data = [];
+	timeGroupings.forEach(function(d,i){
+		multiLineGraphData.us_average_data.time_category_data[i] = {'key': i, 'values': parseInt(timeGroupings[i])/5};
+	});
+	multiLineGraphData.state_category_data.forEach( function(d1,i1){
+		timeGroupings = [0,0,0,0,0,0,0,0];
+		d1.time_category_data.forEach( function(d2,i2){
+			if( 0 <= parseInt(d2.key)  &&  parseInt(d2.key) < 3){
+				timeGroupings[0] = parseInt(timeGroupings[0]) + parseInt(d2.values)
+			}
+			else if(3 <= parseInt(d2.key)  &&  parseInt(d2.key) < 6){
+				timeGroupings[1] = parseInt(timeGroupings[1]) + parseInt(d2.values)
+			}
+			else if(6 <= parseInt(d2.key)  &&  parseInt(d2.key) < 9){
+				timeGroupings[2] = parseInt(timeGroupings[2]) + parseInt(d2.values)
+			}
+			else if(9 <= parseInt(d2.key)  &&  parseInt(d2.key) < 12){
+				timeGroupings[3] = parseInt(timeGroupings[3]) + parseInt(d2.values)
+			}
+			else if(12 <= parseInt(d2.key)  &&  parseInt(d2.key) < 15){
+				timeGroupings[4] = parseInt(timeGroupings[4]) + parseInt(d2.values)
+			}
+			else if(15 <= parseInt(d2.key)  &&  parseInt(d2.key) < 18){
+				timeGroupings[5] = parseInt(timeGroupings[5]) + parseInt(d2.values)
+			}
+			else if(18 <= parseInt(d2.key)  &&  parseInt(d2.key) < 21){
+				timeGroupings[6] = parseInt(timeGroupings[6]) + parseInt(d2.values)
+			}
+			else if(21 <= parseInt(d2.key)  &&  parseInt(d2.key) < 24){
+				timeGroupings[7] = parseInt(timeGroupings[7]) + parseInt(d2.values)
+			}
+		});
+		
+		d1.time_category_data = [];
+		timeGroupings.forEach(function(d2,i2){
+			d1.time_category_data[i2] = {'key': i2, 'values': parseInt(timeGroupings[i2])/5};
+		});
+	});
+	
+}
