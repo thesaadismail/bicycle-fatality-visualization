@@ -576,9 +576,9 @@ var categoriesSelectedCallback = function(isSelected, weatherCategoryName, locat
 	}
 }
 
-var isLawModeSelected()
+var isLawModeSelected = function()
 {
- return $("#law_button").is(":checked");
+ 	return $("#law_button").is(":checked");
 }
 
 
