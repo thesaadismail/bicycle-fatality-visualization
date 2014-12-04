@@ -38,7 +38,7 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 		dataMatrix_YAxis = new HeatchartMatrix(yAxisElementName, yAxisJsonData, 37.5, 350, HeatchartMatrix.Axis.AxisType_Y, this.cellSelectedCallback);
 		dataMatrix_YAxis.initDataMatrix();
 		
-		var svg = d3.select("#data-matrix-colormap").append("svg").attr("width", 65).attr("height", 300);
+		var svg = d3.select("#data-matrix-colormap").append("svg").attr("id","svgsvg").attr("width", 65).attr("height", 300);
 		gradient = svg
 			.append("svg:defs")
 		    .append("svg:linearGradient")
@@ -78,8 +78,8 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 		    .attr('stroke-width', 1);
 
 		svg.append('text').attr('x', 40).attr('y', 242).text(0);
-		var mintext = svg.append('text').attr('x', 40).attr('y', 201).text("min");
-		var maxtext = svg.append('text').attr('x', 40).attr('y', 15).text("max");
+		mintext = svg.append('text').attr('x', 40).attr('y', 201).text("min");
+		maxtext = svg.append('text').attr('x', 40).attr('y', 15).text("max");
 	}
 /*
 	===========================================
@@ -267,6 +267,29 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 		dataMatrix_Main.updateColor(lawmodeAllowedColor);
 		dataMatrix_XAxis.updateColor(lawmodeAllowedColor);
 		dataMatrix_YAxis.updateColor(lawmodeAllowedColor);
+		var newclr = "#1f77b4";
+		d3.selectAll("defs").remove();
+		var gradient = d3.select("#svgsvg")
+					.append("svg:defs")
+				    .append("svg:linearGradient")
+				    .attr("id", "gradient")
+				    .attr("x1", "0%")
+				    .attr("y1", "0%")
+				    .attr("x2", "0%")
+				    .attr("y2", "100%")
+				    .attr("spreadMethod", "pad");
+
+				// Define the gradient colors
+				gradient.append("svg:stop")
+				    .attr("offset", "0%")
+				    .attr("stop-color", newclr)
+				    .attr("stop-opacity", 1);
+
+				gradient.append("svg:stop")
+				    .attr("offset", "100%")
+				    .attr("stop-color", "#ffffff")
+				    .attr("stop-opacity", 1);
+		rect.attr("fill",'url(#gradient)');
 	}
 	this.enableProhibitedLawMode = function()
 	{
@@ -274,6 +297,29 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 		dataMatrix_Main.updateColor(lawmodeProhibitedColor);
 		dataMatrix_XAxis.updateColor(lawmodeProhibitedColor);
 		dataMatrix_YAxis.updateColor(lawmodeProhibitedColor);
+		var newclr = "#d62728";
+		d3.selectAll("defs").remove();
+		var gradient = d3.select("#svgsvg")
+					.append("svg:defs")
+				    .append("svg:linearGradient")
+				    .attr("id", "gradient")
+				    .attr("x1", "0%")
+				    .attr("y1", "0%")
+				    .attr("x2", "0%")
+				    .attr("y2", "100%")
+				    .attr("spreadMethod", "pad");
+
+				// Define the gradient colors
+				gradient.append("svg:stop")
+				    .attr("offset", "0%")
+				    .attr("stop-color", newclr)
+				    .attr("stop-opacity", 1);
+
+				gradient.append("svg:stop")
+				    .attr("offset", "100%")
+				    .attr("stop-color", "#ffffff")
+				    .attr("stop-opacity", 1);
+		rect.attr("fill",'url(#gradient)');
 	}
 	this.disableLawMode = function()
 	{
@@ -281,6 +327,29 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 		dataMatrix_Main.updateColor(regularModeColor);
 		dataMatrix_XAxis.updateColor(regularModeColor);
 		dataMatrix_YAxis.updateColor(regularModeColor);
+		var newclr = "#ff7f0e";
+		d3.selectAll("defs").remove();
+		var gradient = d3.select("#svgsvg")
+					.append("svg:defs")
+				    .append("svg:linearGradient")
+				    .attr("id", "gradient")
+				    .attr("x1", "0%")
+				    .attr("y1", "0%")
+				    .attr("x2", "0%")
+				    .attr("y2", "100%")
+				    .attr("spreadMethod", "pad");
+
+				// Define the gradient colors
+				gradient.append("svg:stop")
+				    .attr("offset", "0%")
+				    .attr("stop-color", newclr)
+				    .attr("stop-opacity", 1);
+
+				gradient.append("svg:stop")
+				    .attr("offset", "100%")
+				    .attr("stop-color", "#ffffff")
+				    .attr("stop-opacity", 1);
+		rect.attr("fill",'url(#gradient)');
 	}
 	
 	this.initCategoryDataMatrix();
