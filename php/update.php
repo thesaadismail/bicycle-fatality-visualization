@@ -17,13 +17,20 @@
 	$weekdays = $data['weekdays'];
 	$weekends = $data['weekends'];
 	$lawmode = $data['law'];
+	$lawallowed = $data['allowed'];
 	
 	$days = " AND dayofweek BETWEEN 1 and 7";
 	if($weekdays == 1 && $weekends == 0) $days = " AND dayofweek in (2,3,4,5,6)";
 	if($weekdays == 0 && $weekends == 1) $days = " AND dayofweek in (1,7)"; 
 	
 	$law = "";
-	if($lawmode == 1) $law = " AND state.allowed=1";
+	ChromePhp::log('law law law!');
+	ChromePhp::log($data);
+	if($lawmode == 1 && $lawallowed == 1) 
+		$law = " AND s.allowed=1";
+	else if($lawmode == 1 && $lawallowed == 0)
+		$law = " AND s.allowed=0";
+		
 	
 	for ($x = 1; $x <= 56; $x++) {		//count($data)
 		if($data[$x]!=null && $data[$x]==1)
@@ -36,9 +43,9 @@
 		$selectedStates = 0;
 	
 	$myquery="ALTER VIEW current_data 
-				AS SELECT statenum, casenum, atmcond,  accdate, accday, acchr, accmin, accmon, acctime , dayofweek, lightcond, nmlocat
-				FROM data_all
-				WHERE statenum IN (".$selectedStates.") AND accmon BETWEEN ".$startmonth." AND ".$endmonth.$days.$law;
+				AS SELECT d.statenum, d.casenum, d.atmcond,  d.accdate, d.accday, d.acchr, d.accmin, d.accmon, d.acctime , d.dayofweek, d.lightcond, d.nmlocat
+				FROM data_all d
+				WHERE d.statenum IN (".$selectedStates.") AND d.accmon BETWEEN ".$startmonth." AND ".$endmonth.$days.$law;
 	ChromePhp::log($myquery);
 	
 	$query = mysql_query($myquery);
