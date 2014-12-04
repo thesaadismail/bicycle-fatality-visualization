@@ -538,12 +538,12 @@ var determineMaxMinForYAxis = function(sampleJsonData, max, min)
 				selectedCellsBoolMatrix[data.row][data.col] = false;
 			}
 		}
-	this.selectCellWithCellData = function(cell, data) {
+	this.selectCellWithCellData = function(cell) {
 		d3.select(cell).attr("stroke", selectedCellStrokeColor).attr("stroke-width", 3);
 		cell.parentNode.parentNode.appendChild(cell.parentNode);
 		cell.parentNode.appendChild(cell);
 	};
-	this.unselectCellWithCellData = function(cell, data) {
+	this.unselectCellWithCellData = function(cell) {
 		d3.select(cell).attr("stroke", cellStrokeColor).attr("stroke-width", 1);
 	};
 	this.selectCellInMatrix = function(row, col) {
@@ -551,17 +551,37 @@ var determineMaxMinForYAxis = function(sampleJsonData, max, min)
 			return d.row == row && d.col == col;
 		});
 		var cell = getSingleElementFromFilteredMatrix(filteredMatrix);
-		var data = sampleJsonDataForCDM["category_data"][row]["category_data"][col];
-		this.selectCellWithCellData(cell, data);
+		//var data = sampleJsonDataForCDM["category_data"][row]["category_data"][col];
+		this.selectCellWithCellData(cell);
 	}
 	this.unselectCellInMatrix = function(row, col) {
 		var filteredMatrix = d3.select(elementName).select("svg").selectAll('g').selectAll("rect").filter(function(d) {
 			return d.row == row && d.col == col;
 		});
 		var cell = getSingleElementFromFilteredMatrix(filteredMatrix);
-		var data = sampleJsonDataForCDM["category_data"][row]["category_data"][col];
-		this.unselectCellWithCellData(cell, data);
+		//console.log(sampleJsonDataForCDM);
+		
+		this.unselectCellWithCellData(cell);
 	}
+/*
+	this.unselectAllCellsInMatrix = function() {
+		for(row = 0; row<numRows; row++)
+		{
+			for(col = 0; col<numCols; col++)
+			{
+				this.unselectCellWithCellData(row, col)
+				var filteredMatrix = d3.select(elementName).select("svg").selectAll('g').selectAll("rect").filter(function(d) {
+					return d.row == row && d.col == col;
+				});
+				var cell = getSingleElementFromFilteredMatrix(filteredMatrix);
+				
+				//console.log(sampleJsonDataForCDM);
+				var data = sampleJsonDataForCDM["category_data"][row]["category_data"][col];
+				this.unselectCellWithCellData(cell, data);
+			}
+		}
+	}
+*/
 	var getSingleElementFromFilteredMatrix = function(filteredMatrix) {
 			for (i = 0; i < filteredMatrix.length; i++) {
 				if (filteredMatrix[i].length > 0) {

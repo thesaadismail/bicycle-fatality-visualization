@@ -161,7 +161,7 @@ function MultiLineGraph(sampleData, elementName){
 				.attr("stroke-width", 1)
 				.attr("stroke-opacity", 0)
 				.attr("stroke", "rgb(64, 64, 64)")
-				.attr("fill", "rgb(255, 0, 0)")
+				.attr("fill", "#d62728")
 				.attr("fill-opacity", 0)
 		});
 		
@@ -203,7 +203,7 @@ function MultiLineGraph(sampleData, elementName){
 				.attr("d", line(sampleData.us_average_data.time_category_data))
 				.attr("stroke-width", 2)
 				.attr("stroke-opacity", 0.5)
-				.attr("stroke", "rgb(0, 255, 0)")
+				.attr("stroke", "#2ca02c")
 				.attr("fill", "none")
 				.on('mouseover', function(d){
 					mousedLine = this.getAttribute('idKey');
@@ -232,7 +232,7 @@ function MultiLineGraph(sampleData, elementName){
 								.attr("d", line(d.time_category_data))
 								.attr("stroke-width", 2)
 								.attr("stroke-opacity", 0.5)
-								.attr("stroke", "rgb(0, 0, 255)")
+								.attr("stroke", "#1f77b4")
 								.attr("fill", "none")
 								.on('mouseover', function(d){
 									mousedLine = this.getAttribute('idKey');
@@ -310,8 +310,9 @@ function MultiLineGraph(sampleData, elementName){
 	
 	
 	
-		test1 = linesSVG.selectAll("path.line");
-		test2 = pointsSVG.selectAll("circle");
+		this.test1 = linesSVG.selectAll("path.line");
+		this.test2 = pointsSVG.selectAll("circle");
+		this.test3 = tooltipsSVG.selectAll('g');
 				
 		vis.append("g")
 			.append("rect")
@@ -345,7 +346,7 @@ function MultiLineGraph(sampleData, elementName){
 						d3.select(this).attr("stroke-width", 4);
 						pointsSVG.selectAll("circle").each(function(d,i){	
 							d3.select(this).attr("cx", xScale(parseInt(sampleData.us_average_data.time_category_data[i].key)))
-							d3.select(this).attr("cy", yScale(parseInt(sampleData.us_average_data.time_category_data[i].values)))							
+							d3.select(this).attr("cy", yScale(sampleData.us_average_data.time_category_data[i].values))							
 							d3.select(this).attr("r", 6)
 							d3.select(this).attr("idKey", parseInt(sampleData.us_average_data.time_category_data[i].key))
 							d3.select(this).attr("stroke-width", 1)
@@ -355,7 +356,7 @@ function MultiLineGraph(sampleData, elementName){
 							//d3.select(this).attr("fill-opacity", 0.5)	
 						}); 
 						tooltipsSVG.selectAll('g').each(function(d,i) {			
-							d3.select(this).attr("transform", "translate(" + xScale(parseInt(sampleData.us_average_data.time_category_data[i].key)) + "," + yScale(parseInt(sampleData.us_average_data.time_category_data[i].values) + 15) + ")");
+							d3.select(this).attr("transform", "translate(" + xScale(parseInt(sampleData.us_average_data.time_category_data[i].key)) + "," + yScale(sampleData.us_average_data.time_category_data[i].values - 35) + ")");
 							t = d3.select(this).select("text");
 							ts = t.selectAll("tspan");
 							ts[0][0].textContent = sampleData.us_average_data.category_state;
@@ -372,7 +373,7 @@ function MultiLineGraph(sampleData, elementName){
 						//-------move the points to the one for the selected line-----
 							pointsSVG.selectAll("circle").each(function(d,i){	
 								d3.select(this).attr("cx", xScale(parseInt(sampleData.state_category_data[lineIDX-1].time_category_data[i].key)))			//lineIDX-1 because svg idexing it 1 indexed and d3 javascript is 0 indexed
-								d3.select(this).attr("cy", yScale(parseInt(sampleData.state_category_data[lineIDX-1].time_category_data[i].values)))							
+								d3.select(this).attr("cy", yScale(sampleData.state_category_data[lineIDX-1].time_category_data[i].values))							
 								d3.select(this).attr("r", 6)
 								d3.select(this).attr("idKey", parseInt(sampleData.state_category_data[lineIDX-1].time_category_data[i].key))
 								d3.select(this).attr("stroke-width", 1)
@@ -382,7 +383,7 @@ function MultiLineGraph(sampleData, elementName){
 								//d3.select(this).attr("fill-opacity", 0.5)	
 							}); 
 						tooltipsSVG.selectAll('g').each(function(d,i1) {		
-							d3.select(this).attr("transform", "translate(" + xScale(parseInt(sampleData.state_category_data[lineIDX-1].time_category_data[i1].key)) + "," + yScale(parseInt(sampleData.state_category_data[lineIDX-1].time_category_data[i1].values) + 15) + ")");
+							d3.select(this).attr("transform", "translate(" + xScale(parseInt(sampleData.state_category_data[lineIDX-1].time_category_data[i1].key)) + "," + yScale(sampleData.state_category_data[lineIDX-1].time_category_data[i1].values) + 35 + ")");
 							t = d3.select(this).select("text");
 							ts = t.selectAll("tspan");
 							ts[0][0].textContent = sampleData.state_category_data[lineIDX-1].category_state;
@@ -434,6 +435,8 @@ function MultiLineGraph(sampleData, elementName){
 	
 		});
 		
-	test2 = pointsSVG.selectAll("circle");
+		this.test1 = linesSVG.selectAll("path.line");
+		this.test2 = pointsSVG.selectAll("circle");
+		this.test3 = tooltipsSVG.selectAll('g');
 	}
 }
