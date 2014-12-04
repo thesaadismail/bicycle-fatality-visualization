@@ -644,7 +644,7 @@ var categoriesSelectedCallback = function(isSelected, weatherCategoryName, locat
 		
 		selectedLineGraphIDArray.push(
 			{	
-				"divname":multiLineTimeOfDay,
+				"divname":divName,
 				"weatherCategoryName":weatherCategoryName,
 				"locationCategoryName":locationCategoryName
 			});
