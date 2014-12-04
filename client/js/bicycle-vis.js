@@ -322,7 +322,10 @@ function processMultiLineJSONData(statesData, usAverageData, weatherCategoryName
 	//console.log(usAverageData);
 	//setup parent json object
 	var parentJSONObject = {};
-	parentJSONObject["weatherLocation"] = weatherCategoryName+" and "+locationCategoryName;
+	var andstring = " and ";
+	if(weatherCategoryName=="" || locationCategoryName=="")
+		andstring="";
+	parentJSONObject["weatherLocation"] = weatherCategoryName+andstring+locationCategoryName;
 	
 	if(isLawModeSelected())
 	{
