@@ -48,7 +48,7 @@
 				WHERE statenum IN (".$selectedStates.") AND accmon BETWEEN ".$startmonth." AND ".$endmonth;
 		}
 	
-	ChromePhp::log($myquery);
+	//ChromePhp::log($myquery);
 	
 	$query = mysql_query($myquery);
 			

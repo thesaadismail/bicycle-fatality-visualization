@@ -1,8 +1,7 @@
 <?php
 	include 'dbinfo.php';
     include 'ChromePhp.php';
-	
-    $server = mysql_connect($host, $username, $password);
+	$server = mysql_connect($host, $username, $password);
     $connection = mysql_select_db($database, $server);
 	
 	$data = $_POST["result"];
@@ -66,7 +65,7 @@
 	}
 	
 	mysql_query($query);
-	echo "query result"; 
 	
     mysql_close($server);
+	
 ?>

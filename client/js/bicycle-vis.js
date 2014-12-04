@@ -114,9 +114,13 @@ function retrieveDataBasedOnFilters() {
 				result: JSON.stringify(buttonstatus)
 			},
 			success: function(data, status) {
+					
 				updateCategoryDataMatrixData();
+					
 				replaceAllTimeSliders();
+					
 				hideLoadingIcon();
+					
 			},
 			error: function(xhr, desc, err) {
 				console.log("error: " + xhr);
@@ -570,7 +574,7 @@ function lawModeToggled()
 		$("#lawmode-switch-div").invisible();
 		categoryDataMatrix.disableLawMode();
 	}
-		retrieveDataBasedOnFilters();
+	//	retrieveDataBasedOnFilters();
 }
 
 function cdmLawOptionToggled()

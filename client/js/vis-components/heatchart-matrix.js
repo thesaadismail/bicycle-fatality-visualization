@@ -102,7 +102,7 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 	===========================================
 	*/
 	this.updateHeatchart = function() {
-			console.log("************ Update Main Component ************");
+			//console.log("************ Update Main Component ************");
 		//console.log(sampleJsonDataForCDM);
 		var sampleJsonData = sampleJsonDataForCDM["category_data"];
 		
@@ -118,7 +118,7 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 	};
 	
 		this.updateYAxisComponent = function() {
-			console.log("************ Update Y Axis Component ************");
+			//console.log("************ Update Y Axis Component ************");
 			var sampleJsonData = [sampleJsonDataForCDM["category_data"]];
 			
 			var maxMinDict = determineMaxMinForYAxis(sampleJsonData);
@@ -137,7 +137,7 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 		};
 		
 		this.updateXAxisComponent = function() {
-			console.log("************ Update X Axis Component ************");
+			//console.log("************ Update X Axis Component ************");
 			var sampleJsonData = sampleJsonDataForCDM["category_data"];
 			
 			var maxMinDict = determineMaxMinForXAxis(sampleJsonData, max, min);
@@ -267,7 +267,7 @@ var determineMaxMinForYAxis = function(sampleJsonData, max, min)
 	*/
 	var buildYAxisLabels = function(isUpdate, sampleJsonData, canvas) {
 	
-			console.log("************ Build Y Axis Labels ************");
+			//console.log("************ Build Y Axis Labels ************");
 			var yAxisCategories = [];
 			//console.log(sampleJsonData);
 			sampleJsonData = sampleJsonData[0];
@@ -294,7 +294,7 @@ var determineMaxMinForYAxis = function(sampleJsonData, max, min)
 			}
 		};
 	var buildXAxisLabels = function(isUpdate, sampleJsonData, canvas) {
-			console.log("************ Build X Axis Labels ************");
+			//console.log("************ Build X Axis Labels ************");
 			var xAxisCategories = [];
 			//console.log(sampleJsonData);
 			//console.log(sampleJsonData);
@@ -345,7 +345,7 @@ var determineMaxMinForYAxis = function(sampleJsonData, max, min)
 	===========================================
 	*/
 	var addRegularGrid = function(update, selectedHeatChart, min, max) {
-			console.log("************ Adding or Updating Grid ************");
+			//console.log("************ Adding or Updating Grid ************");
 			var selectedRectangles;
 			if (update) {
 			
@@ -592,13 +592,13 @@ var determineMaxMinForYAxis = function(sampleJsonData, max, min)
 		};
 	this.initDataMatrix = function() {
 		if (axisType == HeatchartMatrix.Axis.AxisType_None) {
-			console.log("Create Main Heatchart");
+			//console.log("Create Main Heatchart");
 			createHeatchart();
 		} else if (axisType == HeatchartMatrix.Axis.AxisType_X) {
-			console.log("Create X Axis");
+			//console.log("Create X Axis");
 			createXAxisComponent();
 		} else if (axisType == HeatchartMatrix.Axis.AxisType_Y) {
-			console.log("Create Y Axis");
+			//console.log("Create Y Axis");
 			createYAxisComponent();
 		}
 	};

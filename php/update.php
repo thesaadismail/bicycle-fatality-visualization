@@ -35,7 +35,7 @@
 				AS SELECT statenum, casenum, atmcond,  accdate, accday, acchr, accmin, accmon, acctime , dayofweek, lightcond, nmlocat
 				FROM data_all
 				WHERE statenum IN (".$selectedStates.") AND accmon BETWEEN ".$startmonth." AND ".$endmonth.$days;
-	ChromePhp::log($myquery);
+	//ChromePhp::log($myquery);
 	
 	$query = mysql_query($myquery);
 			
