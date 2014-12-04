@@ -95,7 +95,7 @@ function retrieveUSAverageDataOnCDMSelection(stateData, weather, location, divNa
 			result: JSON.stringify(cat_clicked)
 		},
 		success: function(usAverageData, status) {
-			//console.log(usAverageData);
+			//console.log(stateData);
 			processedMultiLineData = processMultiLineJSONData(stateData, usAverageData, weather, location);
 				console.log(usAverageData);
 				multiLineG = new MultiLineGraph(processedMultiLineData, "#"+divName);
@@ -110,11 +110,22 @@ function retrieveUSAverageDataOnCDMSelection(stateData, weather, location, divNa
 	}); // end ajax call
 }
 
+var removeAllLineGraphs = function()
+{
+	
+		$("#multiLineTimeOfDay").empty();
+		selectedLineGraphIDArray = [];
+		
+	categoryDataMatrix.deselectAllElements();
+}
+
 function retrieveDataBasedOnFilters() {
 
 	$("#multiLineTimeOfDay").empty();
+	removeAllLineGraphs();
 	
 	displayLoadingIcon();	
+	console.log(buttonstatus);
 	
 	$.ajax({
 		type: 'post',
@@ -125,7 +136,10 @@ function retrieveDataBasedOnFilters() {
 		},
 		success: function(data, status) {
 			updateCategoryDataMatrixData();
-			replaceAllTimeSliders();
+			if (eval(statemode.join('+')) != 0) {
+		replaceAllTimeSliders();
+		} 
+			
 			hideLoadingIcon();
 		},
 		error: function(xhr, desc, err) {

@@ -22,7 +22,7 @@
 	if($weekdays == 0 && $weekends == 1) $days = " AND dayofweek in (1,7)"; 
 	
 	$weatherclause = "";
-	if($atm != '' && $atm != null) $weatherclause = "tmcond = (select atm_cond.id from atm_cond where atm_cond.type='".$atm."') AND ";
+	if($atm != '' && $atm != null) $weatherclause = "atmcond = (select atm_cond.id from atm_cond where atm_cond.type='".$atm."') AND ";
 	else $weatherclause = "";
 	
 	$locationclause = "";
