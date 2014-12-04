@@ -14,6 +14,9 @@
 	$selectedStates = "first";
 	$atm = $data['weather'];
 	$location = $data['location'];
+	$startmonth = $data['start'];
+	$endmonth = $data['end'];
+	
 	for ($x = 1; $x <= 56; $x++) {		//count($data)
 		if($data[$x]!=null && $data[$x]==1)
 			if($selectedStates=="first")
@@ -24,13 +27,21 @@
 	if($selectedStates=="first")
 		$selectedStates = 0;
 	
-	$myquery="	ALTER VIEW for_line_graph 
+	$myquery="	ALTER VIEW for_line_graph  
+				AS SELECT statenum, casenum, atmcond,  accdate, accday, acchr, accmin, accmon, acctime , dayofweek, lightcond, nmlocat
+				FROM data_all
+				WHERE atmcond = (select atm_cond.id from atm_cond where atm_cond.type='".$atm."') 
+				AND nmlocat = (select nm_location.id from nm_location where nm_location.type='".$location."')
+				AND statenum IN (".$selectedStates.") AND accmon BETWEEN ".$startmonth." AND ".$endmonth;
+			
+	/* $myquery="	ALTER VIEW for_line_graph 
 				AS SELECT statenum, casenum, atmcond,  accdate, accday, acchr, accmin, accmon, acctime , dayofweek, lightcond, nmlocat
 				FROM current_data
 				WHERE atmcond = (select atm_cond.id from atm_cond where atm_cond.type='".$atm."') 
 				AND nmlocat = (select nm_location.id from nm_location where nm_location.type='".$location."');
-			 ";
-	//ChromePhp::log($myquery);
+			 "; */
+	ChromePhp::log("QUERY for cdmCellClickUpdate =>");
+	ChromePhp::log($myquery);
 	
 	$query = mysql_query($myquery);
 			
