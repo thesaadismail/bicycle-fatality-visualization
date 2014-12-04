@@ -30,7 +30,7 @@
 				WHERE atmcond = (select atm_cond.id from atm_cond where atm_cond.type='".$atm."') 
 				AND nmlocat = (select nm_location.id from nm_location where nm_location.type='".$location."');
 			 ";
-	ChromePhp::log($myquery);
+	//ChromePhp::log($myquery);
 	
 	$query = mysql_query($myquery);
 			

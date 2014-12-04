@@ -28,7 +28,11 @@ function onCDMCellClick(weather, location){
 			result: JSON.stringify(cat_clicked)
 		},
 		success: function(data, status) {
-			//updateClicked();
+			d3.json('php/lineGraphData.php', function(error, data) {
+				//processedJsonObject = processOverviewJSON(data);
+				console.log(data);
+				//initTimeSlider(processedJsonObject);
+			});
 		},
 		error: function(xhr, desc, err) {
 			console.log("error: " + xhr);
