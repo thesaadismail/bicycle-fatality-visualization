@@ -17,6 +17,26 @@ function updateClicked() {
 	updateCategoryDataMatrixData();
 }
 
+function onCDMCellClick(weather, location){
+	
+	var cat_clicked = {"weather":weather, "location":location};
+	$.ajax({
+		type: 'post',
+		url: 'php/cdmCellClickUpdate.php',
+		cache: false,
+		data: {
+			result: JSON.stringify(cat_clicked)
+		},
+		success: function(data, status) {
+			//updateClicked();
+		},
+		error: function(xhr, desc, err) {
+			console.log("error: " + xhr);
+			console.log("Details: " + desc + "\nError:" + err);
+		}
+	}); // end ajax call
+}
+
 function retrieveDataBasedOnFilters() {
 	$.ajax({
 		type: 'post',
@@ -291,9 +311,21 @@ if($("#myonoffswitch").is(":checked"))
 var categoriesSelectedCallback = function(isSelected, weatherCategoryName, locationCategoryName)
 {
 	//weatherCategoryName or locationCategoryName can be undefined if an axis cell is selected.
+	if(weatherCategoryName === undefined)
+	{
+		weatherCategoryName = "";
+	}
+	
+	if(locationCategoryName === undefined)
+	{
+		locationCategoryName = "";
+	}
+	
+	
+	
 	if(isSelected)
 	{
-		//if a category was selected, do something
+		onCDMCellClick(weatherCategoryName, locationCategoryName);
 		console.log("Categories Selected: ["+weatherCategoryName+", "+locationCategoryName+"]");
 	}
 	else
