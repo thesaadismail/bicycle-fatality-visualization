@@ -5,9 +5,9 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 	var selectedCells_Main;
 	var selectedCells_XAxis;
 	var selectedCells_YAxis;
-	var regularModeColor = d3.interpolateRgb("#fff", "#000"),
-		lawmodeAllowedColor = d3.interpolateRgb("#fff", "#00f"),
-		lawmodeProhibitedColor = d3.interpolateRgb("#fff", "#f00");
+	var regularModeColor = d3.interpolateRgb("#ffffff", "#ff7f0e"),
+		lawmodeAllowedColor = d3.interpolateRgb("#ffffff", "#1f77b4"),
+		lawmodeProhibitedColor = d3.interpolateRgb("#ffffff", "#d62728");
 	
 	this.initCategoryDataMatrix = function() {
 		selectedCells_Main = createDefaultSelectedCells(10, 15);
@@ -31,11 +31,11 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 			yAxisJsonData = createYAxisDummyData(10);
 		}
 		
-		dataMatrix_Main = new HeatchartMatrix(mainElementName, mainJsonData, 600, 300, HeatchartMatrix.Axis.AxisType_None, this.cellSelectedCallback);
+		dataMatrix_Main = new HeatchartMatrix(mainElementName, mainJsonData, 600, 350, HeatchartMatrix.Axis.AxisType_None, this.cellSelectedCallback);
 		dataMatrix_Main.initDataMatrix();
 		dataMatrix_XAxis = new HeatchartMatrix(xAxisElementName, xAxisJsonData, 600, 37.5, HeatchartMatrix.Axis.AxisType_X, this.cellSelectedCallback);
 		dataMatrix_XAxis.initDataMatrix();
-		dataMatrix_YAxis = new HeatchartMatrix(yAxisElementName, yAxisJsonData, 37.5, 300, HeatchartMatrix.Axis.AxisType_Y, this.cellSelectedCallback);
+		dataMatrix_YAxis = new HeatchartMatrix(yAxisElementName, yAxisJsonData, 37.5, 350, HeatchartMatrix.Axis.AxisType_Y, this.cellSelectedCallback);
 		dataMatrix_YAxis.initDataMatrix();
 		
 		

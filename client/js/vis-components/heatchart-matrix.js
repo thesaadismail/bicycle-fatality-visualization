@@ -21,6 +21,7 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 	var xAxisHeight = 100;
 	//cell attributes
 	var cellMargin = 2.5;
+	var tooltip = d3.select("#category-filter-overview").append("div").style("position", "absolute").style("z-index", "10").style("visibility", "hidden").style("background-color", "rgba(255, 255, 255, 0.7)").style('border', '2px solid').style("border-radius", "5px").style("padding", "5px");
 	if (axisType == HeatchartMatrix.Axis.AxisType_None) {
 		var numRows = cells["category_data"].length,
 			numCols = cells["category_data"][0]["category_data"].length;
@@ -33,7 +34,7 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 			numCols = 1;
 	}
 	//color attributes
-	var color = d3.interpolateRgb("#fff", "#000"),
+	var color = d3.interpolateRgb("#ffffff", "#ff7f0e"),
 		cellStrokeColor = "#7e7e7e",
 		selectedCellStrokeColor = "#663300";
 		
@@ -56,54 +57,25 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 	*/
 	var createHeatchart = function() {
 			var sampleJsonData = sampleJsonDataForCDM["category_data"];
-			var min = 999;
-			var max = -999;
-			var l;
-			//console.log(sampleJsonData);
-			for (var rowNum = 0; rowNum < numRows; rowNum++) {
-				for (var colNum = 0; colNum < numCols; colNum++) {
-					sampleJsonData[rowNum]["category_data"][colNum]['row'] = rowNum;
-					sampleJsonData[rowNum]["category_data"][colNum]['col'] = colNum;
-					//generate sample data - remove this when we have real data
-					//sampleJsonData[rowNum]["category_data"][colNum]['num_of_fatalities_law_allowed'] = Math.floor(Math.random() * 111);
-					//sampleJsonData[rowNum]["category_data"][colNum]['num_of_fatalities_law_prohibited'] = Math.floor(Math.random() * 111);
-					l = sampleJsonData[rowNum]["category_data"][colNum]["num_of_fatalities"];
-					if (l > max) {
-						max = l;
-					}
-					if (l < min) {
-						min = l;
-					}
-				}
-			}
+			
+			var maxMinDict = determineMaxMinForMain(sampleJsonData, max, min);
+			var max = maxMinDict.max;
+			var min = maxMinDict.min;
+			
 			var heatchartCanvas = d3.select(elementName).append("svg").attr("width", width).attr("height", height);
 			var selectedHeatChart = heatchartCanvas.selectAll("g").data(sampleJsonData).enter().append("g");
 			addRegularGrid(false, selectedHeatChart, min, max);
 		};
 	var createYAxisComponent = function() {
 			var sampleJsonData = [sampleJsonDataForCDM["category_data"]];
-			var min = 999;
-			var max = -999;
-			var l;
-			//console.log(sampleJsonDataForCDM);
-			for (var rowNum = 0; rowNum < numRows; rowNum++) {
-				//console.log(sampleJsonData[0][rowNum]);
-				sampleJsonData[0][rowNum]['row'] = rowNum;
-				sampleJsonData[0][rowNum]['col'] = 0;
-				//generate sample data - remove this when we have real data
-				//sampleJsonData[0][rowNum]['num_of_fatalities_law_allowed'] = Math.floor(Math.random() * 111);
-				//sampleJsonData[0][rowNum]['num_of_fatalities_law_prohibited'] = Math.floor(Math.random() * 111);
-				l = sampleJsonData[0][rowNum]["num_of_fatalities"];
-				if (l > max) {
-					max = l;
-				}
-				if (l < min) {
-					min = l;
-				}
-			}
+			
+			var maxMinDict = determineMaxMinForYAxis(sampleJsonData, max, min);
+			var max = maxMinDict.max;
+			var min = maxMinDict.min;
+
 			var heatchartCanvas = d3.select(elementName).append("svg").attr("width", width+yAxisWidth).attr("height", height);
 			//console.log(samplejson);
-			buildYAxisLabels(sampleJsonData, heatchartCanvas);
+			buildYAxisLabels(false, sampleJsonData, heatchartCanvas);
 			var selectedHeatChart = heatchartCanvas.append("svg").selectAll("g").data(sampleJsonData).enter().append("g");
 			var selectedComponents = addRegularGrid(false, selectedHeatChart, min, max);
 			//this is to shift the x axis over so there is room for the axes labels
@@ -111,33 +83,15 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 		};
 	var createXAxisComponent = function() {
 			var sampleJsonData = sampleJsonDataForCDM["category_data"];
-			var min = 999;
-			var max = -999;
-			var l;
-			//console.log(sampleJsonData);
-			for (var colNum = 0; colNum < numCols; colNum++) {
-				//generate sample data - remove this when we have real data
-				l = sampleJsonData[colNum]["num_of_fatalities"];
-				//console.log(sampleJsonData[colNum]);
-				sampleJsonData[colNum]["category_data"] = [{
-					"num_of_fatalities": l,
-					'row': 0,
-					'col': colNum,
-					"category_location": sampleJsonData[colNum]["category_location"]
-					//'num_of_fatalities_law_allowed': Math.floor(Math.random() * 111),
-					//'num_of_fatalities_law_prohibited': Math.floor(Math.random() * 111)
-				}];
-				if (l > max) {
-					max = l;
-				}
-				if (l < min) {
-					min = l;
-				}
-			}
+			
+			var maxMinDict = determineMaxMinForXAxis(sampleJsonData, max, min);
+			var max = maxMinDict.max;
+			var min = maxMinDict.min;
+			
 			var heatchartCanvas = d3.select(elementName).append("svg").attr("width", width).attr("height", height+xAxisHeight);
 			//console.log(samplejson);
 			//buildXAxis(sampleJsonData, heatchartCanvas);
-			buildXAxisLabels(sampleJsonData, heatchartCanvas);
+			buildXAxisLabels(false,sampleJsonData, heatchartCanvas);
 			var selectedHeatChart = heatchartCanvas.append("svg").selectAll("g").data(sampleJsonData).enter().append("g");
 			var selectedComponents = addRegularGrid(false, selectedHeatChart, min, max);
 			//selectedComponents.attr("transform", "translate("+0+"," + xAxisHeight + ")");
@@ -148,12 +102,66 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 	===========================================
 	*/
 	this.updateHeatchart = function() {
+			console.log("************ Update Main Component ************");
 		//console.log(sampleJsonDataForCDM);
 		var sampleJsonData = sampleJsonDataForCDM["category_data"];
-			var min = 999;
-			var max = -999;
+		
+			var maxMinDict = determineMaxMinForMain(sampleJsonData, max, min);
+			var max = maxMinDict.max;
+			var min = maxMinDict.min;
+			
+			var heatchartCanvas = d3.select(elementName).select("svg");
+			var selectedHeatChart = heatchartCanvas.selectAll("g").data(sampleJsonData);
+			addRegularGrid(true, selectedHeatChart, min, max);
+	};
+	
+		this.updateYAxisComponent = function() {
+			console.log("************ Update Y Axis Component ************");
+			var sampleJsonData = [sampleJsonDataForCDM["category_data"]];
+			
+			var maxMinDict = determineMaxMinForYAxis(sampleJsonData);
+			var max = maxMinDict.max;
+			var min = maxMinDict.min;
+
+
+						var heatchartCanvas = d3.select(elementName).select("svg");
+			//console.log(heatchartCanvas);
+			buildYAxisLabels(true, sampleJsonData, heatchartCanvas);
+			var selectedHeatChart = heatchartCanvas.select("svg").selectAll("g").data(sampleJsonData);
+			var selectedComponents = addRegularGrid(true, selectedHeatChart, min, max);
+			//this is to shift the x axis over so there is room for the axes labels
+			selectedComponents.attr("transform", "translate("+yAxisWidth+"," + 0 + ")");
+
+		};
+		
+		this.updateXAxisComponent = function() {
+			console.log("************ Update X Axis Component ************");
+			var sampleJsonData = sampleJsonDataForCDM["category_data"];
+			
+			var maxMinDict = determineMaxMinForXAxis(sampleJsonData, max, min);
+			var max = maxMinDict.max;
+			var min = maxMinDict.min;
+			
+			var heatchartCanvas = d3.select(elementName).select("svg");
+			//console.log(samplejson);
+			//buildXAxis(sampleJsonData, heatchartCanvas);
+			buildXAxisLabels(true, sampleJsonData, heatchartCanvas);
+			var selectedHeatChart = heatchartCanvas.select("svg").selectAll("g").data(sampleJsonData);
+			var selectedComponents = addRegularGrid(true, selectedHeatChart, min, max);
+			//selectedComponents.attr("transform", "translate("+0+"," + xAxisHeight + ")");
+		};
+/*
+	===========================================
+	  Determine Max and Min
+	===========================================
+	*/
+var determineMaxMinForMain = function(sampleJsonData, max, min)
+{
+			var min = undefined;
+			var max = undefined;
 			var l;
 			//console.log(sampleJsonData);
+			
 			for (var rowNum = 0; rowNum < numRows; rowNum++) {
 				for (var colNum = 0; colNum < numCols; colNum++) {
 					sampleJsonData[rowNum]["category_data"][colNum]['row'] = rowNum;
@@ -161,7 +169,14 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 					//generate sample data - remove this when we have real data
 					//sampleJsonData[rowNum]["category_data"][colNum]['num_of_fatalities_law_allowed'] = Math.floor(Math.random() * 111);
 					//sampleJsonData[rowNum]["category_data"][colNum]['num_of_fatalities_law_prohibited'] = Math.floor(Math.random() * 111);
-					l = sampleJsonData[rowNum]["category_data"][colNum]["num_of_fatalities"];
+					l = parseInt(sampleJsonData[rowNum]["category_data"][colNum]["num_of_fatalities"]);
+					
+					if(max === undefined || min === undefined)
+				{
+					max = l;
+					min = l;
+				}
+				
 					if (l > max) {
 						max = l;
 					}
@@ -170,29 +185,87 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 					}
 				}
 			}
-			var heatchartCanvas = d3.select(elementName).select("svg");
-			var selectedHeatChart = heatchartCanvas.selectAll("g").data(sampleJsonData);
-			addRegularGrid(true, selectedHeatChart, min, max);
-	};
-	
-		this.updateYAxisComponent = function() {
-			d3.select(elementName).html("");
-			createYAxisComponent();
-		};
-		
-		this.updateXAxisComponent = function() {
-			d3.select(elementName).html("");
-			createXAxisComponent();
-			
-		};
+						
+			return {'max':max, 'min':min}
+}
 
+var determineMaxMinForXAxis = function(sampleJsonData, max, min)
+{
+			var min = undefined;
+			var max = undefined;
+			var l;
+			//console.log(sampleJsonData);
+			for (var colNum = 0; colNum < numCols; colNum++) {
+				//generate sample data - remove this when we have real data
+				l = parseInt(sampleJsonData[colNum]["num_of_fatalities"]);
+				//console.log(sampleJsonData[colNum]);
+				sampleJsonData[colNum]["category_data"] = [{
+					"num_of_fatalities": l,
+					'row': 0,
+					'col': colNum,
+					"category_location": sampleJsonData[colNum]["category_location"]
+					//'num_of_fatalities_law_allowed': Math.floor(Math.random() * 111),
+					//'num_of_fatalities_law_prohibited': Math.floor(Math.random() * 111)
+				}];
+				
+				if(max === undefined || min === undefined)
+				{
+					max = l;
+					min = l;
+				}
+				
+				if (l > max) {
+					max = l;
+				}
+				if (l < min) {
+					min = l;
+				}
+			}
+			
+			return {'max':max, 'min':min}
+}
+
+var determineMaxMinForYAxis = function(sampleJsonData, max, min)
+{
+		var min = undefined;
+			var max = undefined;
+			var l;
+			//console.log(sampleJsonDataForCDM);
+			for (var rowNum = 0; rowNum < numRows; rowNum++) {
+				//console.log(sampleJsonData[0][rowNum]);
+				sampleJsonData[0][rowNum]['row'] = rowNum;
+				sampleJsonData[0][rowNum]['col'] = 0;
+				//generate sample data - remove this when we have real data
+				//sampleJsonData[0][rowNum]['num_of_fatalities_law_allowed'] = Math.floor(Math.random() * 111);
+				//sampleJsonData[0][rowNum]['num_of_fatalities_law_prohibited'] = Math.floor(Math.random() * 111);
+				l = parseInt(sampleJsonData[0][rowNum]["num_of_fatalities"]);
+				
+				if(max === undefined || min === undefined)
+				{
+					max = l;
+					min = l;
+				}
+
+
+				if (l > max) {
+					max = l;
+				}
+				if (l < min) {
+					min = l;
+				}
+			}
+
+			
+			return {'max':max, 'min':min}
+}
 /*
 	===========================================
 	  Build Axes
 	===========================================
 	*/
-	var buildYAxisLabels = function(sampleJsonData, canvas) {
-			console.log("Build Y Axis Labels");
+	var buildYAxisLabels = function(isUpdate, sampleJsonData, canvas) {
+	
+			console.log("************ Build Y Axis Labels ************");
 			var yAxisCategories = [];
 			//console.log(sampleJsonData);
 			sampleJsonData = sampleJsonData[0];
@@ -209,11 +282,17 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 		.tickSize(2).tickFormat(function(d, i) {
 				return yAxisCategories[i];
 			}).tickValues(d3.range(yAxisCategories.length));
-*/
-			var y_xis = canvas.append('g').attr('id', 'yaxis').attr("transform", "translate("+yAxisWidth+"," + 0 + ")").call(yAxis);
+*/			if(isUpdate)
+			{
+				var y_xis = canvas.select('g').attr('id', 'yaxis').attr("transform", "translate("+yAxisWidth+"," + 0 + ")").call(yAxis);
+			}
+			else
+			{
+				var y_xis = canvas.append('g').attr('id', 'yaxis').attr("transform", "translate("+yAxisWidth+"," + 0 + ")").call(yAxis);
+			}
 		};
-	var buildXAxisLabels = function(sampleJsonData, canvas) {
-			console.log("Build X Axis Labels");
+	var buildXAxisLabels = function(isUpdate, sampleJsonData, canvas) {
+			console.log("************ Build X Axis Labels ************");
 			var xAxisCategories = [];
 			//console.log(sampleJsonData);
 			//console.log(sampleJsonData);
@@ -230,6 +309,21 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 				return yAxisCategories[i];
 			}).tickValues(d3.range(yAxisCategories.length));
 */
+
+		if(isUpdate)
+		{
+			var x_xis = canvas.select('g')
+							  .attr('id', 'xaxis')
+							  .attr("transform", "translate("+0+"," + 38 + ")")
+							  .call(xAxis)
+							  .selectAll("text")
+							  	.attr("transform", "rotate(90)")
+							  	.style("text-anchor", "start")
+							  	.attr("dy", ".20em")
+							  	.attr("dx", ".35em");
+		}
+		else
+		{
 			var x_xis = canvas.append('g')
 							  .attr('id', 'xaxis')
 							  .attr("transform", "translate("+0+"," + 38 + ")")
@@ -239,6 +333,8 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 							  	.style("text-anchor", "start")
 							  	.attr("dy", ".20em")
 							  	.attr("dx", ".35em");
+		}
+			
 
 		};
 /*
@@ -247,6 +343,7 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 	===========================================
 	*/
 	var addRegularGrid = function(update, selectedHeatChart, min, max) {
+			console.log("************ Adding or Updating Grid ************");
 			var selectedRectangles;
 			if (update) {
 			
@@ -283,9 +380,15 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 			}).attr("width", (width / numCols) - (cellMargin * 2))
 			.attr("height", (height / numRows) - (cellMargin * 2))
 			.attr("fill", function(d, i) {
-			//console.log(d);
-			
+				//console.log("Updating Fill Color: "+color((d["num_of_fatalities"] - min) / (max - min))+" min: "+min+" max: "+max+" num_of_fatalities: "+d["num_of_fatalities"]);
+				if(d["num_of_fatalities"] == 0)
+				{
+					return "#dbdbdb"
+				}
+				else
+				{
 				return color((d["num_of_fatalities"] - min) / (max - min));
+				}
 			}).attr("stroke", cellStrokeColor).attr("cell", function(d) {
 				return "r" + d.row + "c" + d.col;
 			}).attr("row", function(d, i) { //for debugging purposes
@@ -393,7 +496,7 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 	===========================================
 	*/
 	var addHoverClickAttributes = function(selectedElements) {
-			var tooltip = d3.select("#category-filter-overview").append("div").style("position", "absolute").style("z-index", "10").style("visibility", "hidden").style("background-color", "rgba(255, 255, 255, 0.7)").style('border', '2px solid').style("border-radius", "5px").style("padding", "5px");
+			
 			selectedElements.on("mouseover", function(d) {
 				onCellOver(this, d);
 				allPs = tooltip.selectAll('p');
