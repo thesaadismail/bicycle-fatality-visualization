@@ -19,7 +19,7 @@
 	
 	
 	$myquery="
-			SELECT acchr HOUR , count( casenum ) fatalities
+			SELECT acchr HOUR , count( casenum )/51 fatalities
 			FROM data_all
 			WHERE accmon BETWEEN ".$start." AND ".$end."
 			AND atmcond =(select id from atm_cond where type = '".$atm."')

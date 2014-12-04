@@ -1,9 +1,6 @@
 
 <?php
 	include 'ChromePhp.php';
-	
-	ChromePhp::warn('something went wrong!');
-	
 	include 'dbinfo.php';
     
     $server = mysql_connect($host, $username, $password);

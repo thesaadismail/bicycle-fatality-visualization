@@ -1,7 +1,6 @@
 <?php
 	include 'dbinfo.php';
     include 'ChromePhp.php';
-	ChromePhp::log('Hello console!');
 	//ChromePhp::warn('something went wrong!');
 	
     $server = mysql_connect($host, $username, $password);
@@ -26,6 +25,7 @@
 	} 
 	if($selectedStates=="first")
 		$selectedStates = 0;
+	ChromePhp::log('update_law after forloop');
 	
 	if($lawmode == 1){
 		$myquery="ALTER VIEW current_data 
@@ -52,7 +52,8 @@
 	}
 	
 	mysql_query($query);
-	echo "query result"; 
+	ChromePhp::log('end of update_law php file');
 	
     mysql_close($server);
+	ChromePhp::log('end of update_law php file...server closed');
 ?>
