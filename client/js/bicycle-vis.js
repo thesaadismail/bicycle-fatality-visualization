@@ -8,6 +8,7 @@ var multiLineG;
 // var dowmode = [1, 1];
 // var statemode = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
 
+
 function init() {
 	initializeTimeSlider();
 	categoryDataMatrix = new CategoryDataMatrix("#data-matrix-container", null, "#data-matrix-xaxis-container", null, "#data-matrix-yaxis-container", null, categoriesSelectedCallback);
@@ -34,9 +35,16 @@ function hideLoadingIcon()
 	}
 }
 
-function updateClicked() {
-	//updateTimeSlider();
-	updateCategoryDataMatrixData();
+function replaceAllTimeSliders() {	
+	for(i = 0; i<selectedLineGraphIDArray.length; i++)
+	{
+		var divName = generateMultiLineGraphDivName(selectedLineGraphIDArray[i]["weatherCategoryName"], selectedLineGraphIDArray[i]["locationCategoryName"]);
+		jQuery('<div/>', {
+			id: divName,
+		}).appendTo('#multiLineTimeOfDay');
+		
+		retrieveDataOnCDMSelection(selectedLineGraphIDArray[i]["weatherCategoryName"], selectedLineGraphIDArray[i]["locationCategoryName"], divName);
+	}	
 }
 
 function retrieveDataOnCDMSelection(weather, location, divName){
@@ -92,6 +100,8 @@ function retrieveUSAverageDataOnCDMSelection(stateData, weather, location, divNa
 
 function retrieveDataBasedOnFilters() {
 
+	$("#multiLineTimeOfDay").empty();
+	
 	displayLoadingIcon();
 	
 	if(isLawModeSelected())
@@ -104,7 +114,8 @@ function retrieveDataBasedOnFilters() {
 				result: JSON.stringify(buttonstatus)
 			},
 			success: function(data, status) {
-				updateClicked();
+				updateCategoryDataMatrixData();
+				replaceAllTimeSliders();
 				hideLoadingIcon();
 			},
 			error: function(xhr, desc, err) {
@@ -123,7 +134,8 @@ function retrieveDataBasedOnFilters() {
 				result: JSON.stringify(buttonstatus)
 			},
 			success: function(data, status) {
-				updateClicked();
+				updateCategoryDataMatrixData();
+				replaceAllTimeSliders();
 				hideLoadingIcon();
 			},
 			error: function(xhr, desc, err) {
@@ -248,11 +260,26 @@ function processCDMWeatherAxisJSON(data) {
 	return parentJSONObject;
 }
 
-function processCDMLocationAxisJSON(data) {
-//console.log(data);
-	if(data.length == 0)
+function processCDMLocationAxisJSON(dataFromServer) {
+	var data = [];
+	if(data.length != 15)
 	{
-		return sampleJsonDataForCDM_XAxis;
+		for(i = 0; i<xAxisCategoryNameArray.length; i++)
+		{
+			filteredData = dataFromServer.filter(function(dataObj) {
+				return dataObj["Location"] == xAxisCategoryNameArray[i];
+			});
+			
+			if(filteredData.length > 0)
+			{
+				data.push(filteredData[0]);
+			}
+			else
+			{
+				var dataJsonObj = {"Location":xAxisCategoryNameArray[i], "Num_of_Fatalities":0};
+				data.push(dataJsonObj);
+			}
+		}
 	}
 	//setup parent json object
 	var parentJSONObject = {};
@@ -597,7 +624,12 @@ var categoriesSelectedCallback = function(isSelected, weatherCategoryName, locat
 			id: divName,
 		}).appendTo('#multiLineTimeOfDay');
 		
-		selectedLineGraphIDArray.push(divName);
+		selectedLineGraphIDArray.push(
+			{	
+				"divname":multiLineTimeOfDay,
+				"weatherCategoryName":weatherCategoryName,
+				"locationCategoryName":locationCategoryName
+			});
 		
 		retrieveDataOnCDMSelection(weatherCategoryName, locationCategoryName, divName);
 		console.log("Categories Selected: ["+weatherCategoryName+", "+locationCategoryName+"]");
@@ -605,8 +637,17 @@ var categoriesSelectedCallback = function(isSelected, weatherCategoryName, locat
 	else
 	{
 		$("#"+divName).remove();
+		
+		filteredList = selectedLineGraphIDArray.filter(function (el) {
+						return el.divname == divName;
+						});
+		
+
+		selectedLineGraphIDArray.splice(selectedLineGraphIDArray.indexOf(filteredList[0]), 1);
+		
 		console.log("Categories DE-Selected: ["+weatherCategoryName+", "+locationCategoryName+"]");
 	}
+		console.log(selectedLineGraphIDArray);
 }
 
 var generateMultiLineGraphDivName = function(weatherCategoryName, locationCategoryName)
@@ -685,6 +726,59 @@ var buttonstatus = {
 	"54": 1,
 	"55": 1,
 	"56": 1
+};
+var lawstatus = {
+	"1":0,
+	"2":1,
+	"4":1,
+	"5":1,
+	"6":0,
+	"8":1,
+	"9":0,
+	"10":0,
+	"11":0,
+	"12":0,
+	"13":0,
+	"15":0,
+	"16":1,
+	"17":1,
+	"18":1,
+	"19":1,
+	"20":1,
+	"21":1,
+	"22":0,
+	"23":0,
+	"24":0,
+	"25":0,
+	"26":1,
+	"27":1,
+	"28":1,
+	"29":1,
+	"30":1,
+	"31":1,
+	"32":1,
+	"33":0,
+	"34":0,
+	"35":0,
+	"36":0,
+	"37":0,
+	"38":1,
+	"39":1,
+	"40":1,
+	"41":0,
+	"42":0,
+	"44":0,
+	"45":1,
+	"46":1,
+	"47":0,
+	"48":1,
+	"49":1,
+	"50":1,
+	"51":1,
+	"53":1,
+	"54":0,
+	"55":1,
+	"56":1
 };
 /* var sampleOverviewTimesliderData = {
 	"data_group_id": 1,
@@ -780,6 +874,8 @@ var sampleJsonDataForCDM_YAxis = {
 		"num_of_fatalities_law_prohibited": 45
 	}]
 };
+
+var xAxisCategoryNameArray = ["Bicycle Lane","Driveway Access","Intersection-In Marked Crosswalk","Intersection-Not In Crosswalk","Intersection-Unknown Location","Intersection-Unmarked Crosswalk","Median or Crossing Island","Non-Intersec-On Roadway","Non-Intersec-On Roadway (Unknown)","Non-Intersection-In Marked Crosswalk","Non-Trafficway Area","Parking Lane or Zone","Shared-Use Path or Trail","Shoulder or Roadside","Sidewalk"];
 var sampleJsonDataForCDM_XAxis = {
 	"data_group_id": 2,
 	"category_data": [{
