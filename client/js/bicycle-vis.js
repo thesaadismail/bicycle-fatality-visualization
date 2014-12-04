@@ -68,6 +68,7 @@ function retrieveDataOnCDMSelection(weather, location, divName){
 		error: function(xhr, desc, err) {
 			console.log("error: " + xhr);
 			console.log("Details: " + desc + "\nError:" + err);
+			hideLoadingIcon();
 		}
 	}); // end ajax call
 }
@@ -94,6 +95,7 @@ function retrieveUSAverageDataOnCDMSelection(stateData, weather, location, divNa
 		error: function(xhr, desc, err) {
 			console.log("error: " + xhr);
 			console.log("Details: " + desc + "\nError:" + err);
+			hideLoadingIcon();
 		}
 	}); // end ajax call
 }
@@ -125,6 +127,7 @@ function retrieveDataBasedOnFilters() {
 			error: function(xhr, desc, err) {
 				console.log("error: " + xhr);
 				console.log("Details: " + desc + "\nError:" + err);
+			hideLoadingIcon();
 			}
 		}); // end ajax call		
 	}
@@ -145,6 +148,7 @@ function retrieveDataBasedOnFilters() {
 			error: function(xhr, desc, err) {
 				console.log("error: " + xhr);
 				console.log("Details: " + desc + "\nError:" + err);
+			hideLoadingIcon();
 			}
 		}); // end ajax call
 	}
