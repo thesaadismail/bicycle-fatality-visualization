@@ -98,6 +98,10 @@ div#heatchartContainer {
 	...may be missing one or two (in the above code)
 */
 
+#multiLineTimeOfDay > div {
+    margin-bottom: 10px;
+}
+
 	//---from http://bl.ocks.org/rveciana/5181105 ---
 	.tooltip{ background-color:rgba(68,136,187,0.5);;
 			  margin: 10px;
