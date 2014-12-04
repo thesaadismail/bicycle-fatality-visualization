@@ -12,9 +12,15 @@
 	$selectedStates = "first";
 	$atm = $data['weather'];
 	$location = $data['location'];
-	$startmonth = $data['start'];
-	$endmonth = $data['end'];
+	$startmonth = $data['buttonstatus']['start'];
+	$endmonth = $data['buttonstatus']['end'];
 	
+	$weekdays = $data['buttonstatus']['weekdays'];
+	$weekends = $data['buttonstatus']['weekends'];
+	
+	$days = " AND dayofweek BETWEEN 1 and 7";
+	if($weekdays == 1 && $weekends == 0) $days = " AND dayofweek in (2,3,4,5,6)";
+	if($weekdays == 0 && $weekends == 1) $days = " AND dayofweek in (1,7)"; 
 	
 	$weatherclause = "";
 	if($atm != '' && $atm != null) $weatherclause = "tmcond = (select atm_cond.id from atm_cond where atm_cond.type='".$atm."') AND ";
@@ -40,7 +46,7 @@
 	$myquery="	ALTER VIEW for_line_graph  
 				AS SELECT statenum, casenum, atmcond,  accdate, accday, acchr, accmin, accmon, acctime , dayofweek, lightcond, nmlocat
 				FROM data_all
-				WHERE ".$weatherclause . $locationclause . " statenum IN (".$selectedStates.") AND accmon BETWEEN ".$startmonth." AND ".$endmonth;
+				WHERE ".$weatherclause . $locationclause . " statenum IN (".$selectedStates.") AND accmon BETWEEN ".$startmonth." AND ".$endmonth.$days;
 	
 	/* $myquery1="	ALTER VIEW for_line_graph  
 				AS SELECT statenum, casenum, atmcond,  accdate, accday, acchr, accmin, accmon, acctime , dayofweek, lightcond, nmlocat
@@ -48,8 +54,8 @@
 				WHERE atmcond = (select atm_cond.id from atm_cond where atm_cond.type='".$atm."') 
 				AND nmlocat = (select nm_location.id from nm_location where nm_location.type='".$location."')
 				AND statenum IN (".$selectedStates.") AND accmon BETWEEN ".$startmonth." AND ".$endmonth;
-	
-	ChromePhp::log("QUERY for cdmCellClickUpdate =>"); */
+	*/
+	ChromePhp::log("QUERY for cdmCellClickUpdate =>"); 
 	ChromePhp::log($myquery);
 	
 	$query = mysql_query($myquery);

@@ -14,6 +14,12 @@
 	$selectedStates = "first";
 	$startmonth = $data['start'];
 	$endmonth = $data['end'];
+	$weekdays = $data['weekdays'];
+	$weekends = $data['weekends'];
+	
+	$days = " AND dayofweek BETWEEN 1 and 7";
+	if($weekdays == 1 && $weekends == 0) $days = " AND dayofweek in (2,3,4,5,6)";
+	if($weekdays == 0 && $weekends == 1) $days = " AND dayofweek in (1,7)"; 
 	
 	for ($x = 1; $x <= 56; $x++) {		//count($data)
 		if($data[$x]!=null && $data[$x]==1)
@@ -28,7 +34,7 @@
 	$myquery="ALTER VIEW current_data 
 				AS SELECT statenum, casenum, atmcond,  accdate, accday, acchr, accmin, accmon, acctime , dayofweek, lightcond, nmlocat
 				FROM data_all
-				WHERE statenum IN (".$selectedStates.") AND accmon BETWEEN ".$startmonth." AND ".$endmonth;
+				WHERE statenum IN (".$selectedStates.") AND accmon BETWEEN ".$startmonth." AND ".$endmonth.$days;
 	ChromePhp::log($myquery);
 	
 	$query = mysql_query($myquery);
