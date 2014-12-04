@@ -34,9 +34,16 @@ function hideLoadingIcon()
 	}
 }
 
-function updateClicked() {
-	//updateTimeSlider();
-	updateCategoryDataMatrixData();
+function replaceAllTimeSliders() {	
+	for(i = 0; i<selectedLineGraphIDArray.length; i++)
+	{
+		var divName = generateMultiLineGraphDivName(selectedLineGraphIDArray[i]["weatherCategoryName"], selectedLineGraphIDArray[i]["locationCategoryName"]);
+		jQuery('<div/>', {
+			id: divName,
+		}).appendTo('#multiLineTimeOfDay');
+		
+		retrieveDataOnCDMSelection(selectedLineGraphIDArray[i]["weatherCategoryName"], selectedLineGraphIDArray[i]["locationCategoryName"], divName);
+	}	
 }
 
 function retrieveDataOnCDMSelection(weather, location, divName){
@@ -92,6 +99,8 @@ function retrieveUSAverageDataOnCDMSelection(stateData, weather, location, divNa
 
 function retrieveDataBasedOnFilters() {
 
+	$("#multiLineTimeOfDay").empty();
+	
 	displayLoadingIcon();
 	
 	if(isLawModeSelected())
@@ -104,7 +113,8 @@ function retrieveDataBasedOnFilters() {
 				result: JSON.stringify(buttonstatus)
 			},
 			success: function(data, status) {
-				updateClicked();
+				updateCategoryDataMatrixData();
+				replaceAllTimeSliders();
 				hideLoadingIcon();
 			},
 			error: function(xhr, desc, err) {
@@ -123,7 +133,8 @@ function retrieveDataBasedOnFilters() {
 				result: JSON.stringify(buttonstatus)
 			},
 			success: function(data, status) {
-				updateClicked();
+				updateCategoryDataMatrixData();
+				replaceAllTimeSliders();
 				hideLoadingIcon();
 			},
 			error: function(xhr, desc, err) {
@@ -597,7 +608,12 @@ var categoriesSelectedCallback = function(isSelected, weatherCategoryName, locat
 			id: divName,
 		}).appendTo('#multiLineTimeOfDay');
 		
-		selectedLineGraphIDArray.push(divName);
+		selectedLineGraphIDArray.push(
+			{	
+				"divname":multiLineTimeOfDay,
+				"weatherCategoryName":weatherCategoryName,
+				"locationCategoryName":locationCategoryName
+			});
 		
 		retrieveDataOnCDMSelection(weatherCategoryName, locationCategoryName, divName);
 		console.log("Categories Selected: ["+weatherCategoryName+", "+locationCategoryName+"]");
@@ -605,8 +621,17 @@ var categoriesSelectedCallback = function(isSelected, weatherCategoryName, locat
 	else
 	{
 		$("#"+divName).remove();
+		
+		filteredList = selectedLineGraphIDArray.filter(function (el) {
+						return el.divname == divName;
+						});
+		
+
+		selectedLineGraphIDArray.splice(selectedLineGraphIDArray.indexOf(filteredList[0]), 1);
+		
 		console.log("Categories DE-Selected: ["+weatherCategoryName+", "+locationCategoryName+"]");
 	}
+		console.log(selectedLineGraphIDArray);
 }
 
 var generateMultiLineGraphDivName = function(weatherCategoryName, locationCategoryName)
