@@ -121,20 +121,35 @@ function MultiLineGraph(sampleData, elementName){
 			.attr("dy", ".71em")
 			.style("text-anchor", "end")
 			.text("Fatalities");
-			
+		
+		
+		//---- add the title ----	
 		vis.append("g")
 			.append("text")
 				.attr("transform", "rotate(0)")
 				.attr("x", width/2)
-				.attr("y", -75)
+				.attr("y", -85)
 				.attr("dy", ".71em")
 				.attr("font-size", 24)
 				.attr("font-family", "arial")
 				.attr("text-anchor", "middle")
 				.attr("fill", "rgb(0, 0, 0)")
 				.text(sampleData.weatherLocation);
-	
-	
+				
+		//---- add the missing states value string ----	
+		if(sampleData.missing_state_values != ''){			
+			vis.append("g")
+				.append("text")
+					.attr("transform", "rotate(0)")
+					.attr("x", width/2)
+					.attr("y", -60)
+					.attr("dy", ".71em")
+					.attr("font-size", 18)
+					.attr("font-family", "arial")
+					.attr("text-anchor", "middle")
+					.attr("fill", "rgb(0, 0, 0)")
+					.text("No records found for: " + sampleData.missing_state_values);
+		}
 	
 		console.log('-------- ADDING HIDDEN POINTS -----------\n'); 
 		sampleData.state_category_data[0].time_category_data.forEach(function(d) {

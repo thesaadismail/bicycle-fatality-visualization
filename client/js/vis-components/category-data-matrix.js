@@ -38,7 +38,48 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 		dataMatrix_YAxis = new HeatchartMatrix(yAxisElementName, yAxisJsonData, 37.5, 350, HeatchartMatrix.Axis.AxisType_Y, this.cellSelectedCallback);
 		dataMatrix_YAxis.initDataMatrix();
 		
-		
+		var svg = d3.select("#data-matrix-colormap").append("svg").attr("width", 65).attr("height", 300);
+		gradient = svg
+			.append("svg:defs")
+		    .append("svg:linearGradient")
+		    .attr("id", "gradient")
+		    .attr("x1", "0%")
+		    .attr("y1", "0%")
+		    .attr("x2", "0%")
+		    .attr("y2", "100%")
+		    .attr("spreadMethod", "pad");
+
+		// Define the gradient colors
+		gradient.append("svg:stop")
+		    .attr("offset", "0%")
+		    .attr("stop-color", "#ff7f0e")
+		    .attr("stop-opacity", 1);
+
+		gradient.append("svg:stop")
+		    .attr("offset", "100%")
+		    .attr("stop-color", "#ffffff")
+		    .attr("stop-opacity", 1);
+
+		// Fill the circle with the gradient
+		rect = svg.append('rect')
+		    .attr('x', 5)
+		    .attr('y', 3)
+		    .attr("width", 31).attr("height", 200)
+		    .attr('fill', 'url(#gradient)')
+		    .attr('stroke', "#7e7e7e")
+		    .attr('stroke-width', 1);
+
+		var rect2 = svg.append('rect')
+		    .attr('x', 5)
+		    .attr('y', 212)
+		    .attr("width", 31).attr("height", 31)
+		    .attr('fill', '#dbdbdb')
+		    .attr('stroke', "#7e7e7e")
+		    .attr('stroke-width', 1);
+
+		svg.append('text').attr('x', 40).attr('y', 242).text(0);
+		var mintext = svg.append('text').attr('x', 40).attr('y', 201).text("min");
+		var maxtext = svg.append('text').attr('x', 40).attr('y', 15).text("max");
 	}
 /*
 	===========================================
