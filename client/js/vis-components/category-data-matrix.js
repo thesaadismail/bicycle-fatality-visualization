@@ -173,8 +173,8 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 		//console.log(newData);
 		dataMatrix_Main.updateDataset(newData);
 		dataMatrix_Main.updateHeatchart();	
-		mintext.text(min1);
-		maxtext.text(max1);	
+		// mintext.text(min1);
+		// maxtext.text(max1);	
 	}
 	
 	this.updateXAxis_Location = function(newData){
