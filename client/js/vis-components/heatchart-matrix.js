@@ -17,7 +17,7 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 	var sampleJsonDataForCDM = cells;
 	var matrixAxisType = axisType;
 	var enableLawMode = false;
-	var yAxisWidth = 215;
+	var yAxisWidth = 120;
 	var xAxisHeight = 250;
 	//cell attributes
 	var cellMargin = 2.5;

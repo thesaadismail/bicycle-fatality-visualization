@@ -57,10 +57,6 @@ body {
     margin-right: 10px;
 }
 
-#filter-container {
-    margin-left: 15px;
-}
-
 /* 
 	Data Matrix Overview Styles 
 */
@@ -89,10 +85,11 @@ div#heatchartContainer {
 #filter-container {
     /*border: 1px solid;*/
     height: 340px;
-    width: 450px;
+    width: 430px;
     padding-top: 10px;
-    padding-left: 10px;
+    padding-left: 0px;
     font-weight: bold;
+    margin-left: 0px;
 }
 
 
