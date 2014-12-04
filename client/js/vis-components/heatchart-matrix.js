@@ -18,7 +18,7 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 	var matrixAxisType = axisType;
 	var enableLawMode = false;
 	var yAxisWidth = 120;
-	var xAxisHeight = 250;
+	var xAxisHeight = 220;
 	//cell attributes
 	var cellMargin = 2.5;
 	var tooltip = d3.select("#category-filter-overview").append("div").style("position", "absolute").style("z-index", "10").style("visibility", "hidden").style("background-color", "rgba(255, 255, 255, 0.7)").style('border', '2px solid').style("border-radius", "5px").style("padding", "5px");
