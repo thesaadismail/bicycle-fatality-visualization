@@ -259,11 +259,26 @@ function processCDMWeatherAxisJSON(data) {
 	return parentJSONObject;
 }
 
-function processCDMLocationAxisJSON(data) {
-//console.log(data);
-	if(data.length == 0)
+function processCDMLocationAxisJSON(dataFromServer) {
+	var data = [];
+	if(data.length != 15)
 	{
-		return sampleJsonDataForCDM_XAxis;
+		for(i = 0; i<xAxisCategoryNameArray.length; i++)
+		{
+			filteredData = dataFromServer.filter(function(dataObj) {
+				return dataObj["Location"] == xAxisCategoryNameArray[i];
+			});
+			
+			if(filteredData.length > 0)
+			{
+				data.push(filteredData[0]);
+			}
+			else
+			{
+				var dataJsonObj = {"Location":xAxisCategoryNameArray[i], "Num_of_Fatalities":0};
+				data.push(dataJsonObj);
+			}
+		}
 	}
 	//setup parent json object
 	var parentJSONObject = {};
@@ -805,6 +820,8 @@ var sampleJsonDataForCDM_YAxis = {
 		"num_of_fatalities_law_prohibited": 45
 	}]
 };
+
+var xAxisCategoryNameArray = ["Bicycle Lane","Driveway Access","Intersection-In Marked Crosswalk","Intersection-Not In Crosswalk","Intersection-Unknown Location","Intersection-Unmarked Crosswalk","Median or Crossing Island","Non-Intersec-On Roadway","Non-Intersec-On Roadway (Unknown)","Non-Intersection-In Marked Crosswalk","Non-Trafficway Area","Parking Lane or Zone","Shared-Use Path or Trail","Shoulder or Roadside","Sidewalk"];
 var sampleJsonDataForCDM_XAxis = {
 	"data_group_id": 2,
 	"category_data": [{
