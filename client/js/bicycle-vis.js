@@ -102,52 +102,26 @@ function retrieveDataBasedOnFilters() {
 
 	$("#multiLineTimeOfDay").empty();
 	
-	displayLoadingIcon();
+	displayLoadingIcon();	
 	
-	if(isLawModeSelected())
-	{
-		$.ajax({
-			type: 'post',
-			url: 'php/update_law.php',
-			cache: false,
-			data: {
-				result: JSON.stringify(buttonstatus)
-			},
-			success: function(data, status) {
-					
-				updateCategoryDataMatrixData();
-					
-				replaceAllTimeSliders();
-					
-				hideLoadingIcon();
-					
-			},
-			error: function(xhr, desc, err) {
-				console.log("error: " + xhr);
-				console.log("Details: " + desc + "\nError:" + err);
-			}
-		}); // end ajax call		
-	}
-	else
-	{
-		$.ajax({
-			type: 'post',
-			url: 'php/update.php',
-			cache: false,
-			data: {
-				result: JSON.stringify(buttonstatus)
-			},
-			success: function(data, status) {
-				updateCategoryDataMatrixData();
-				replaceAllTimeSliders();
-				hideLoadingIcon();
-			},
-			error: function(xhr, desc, err) {
-				console.log("error: " + xhr);
-				console.log("Details: " + desc + "\nError:" + err);
-			}
-		}); // end ajax call
-	}
+	$.ajax({
+		type: 'post',
+		url: 'php/update.php',
+		cache: false,
+		data: {
+			result: JSON.stringify(buttonstatus)
+		},
+		success: function(data, status) {
+			updateCategoryDataMatrixData();
+			replaceAllTimeSliders();
+			hideLoadingIcon();
+		},
+		error: function(xhr, desc, err) {
+			console.log("error: " + xhr);
+			console.log("Details: " + desc + "\nError:" + err);
+		}
+	}); // end ajax call
+	
 
 }
 //**************************FOR TIME SLIDER************************************
