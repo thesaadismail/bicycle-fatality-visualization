@@ -9,6 +9,7 @@
     $connection = mysql_select_db($database, $server);
 	
 	
+	
 	$myquery="
   	SELECT Weather, Location, Sum(
 	CASE WHEN casenum IS NULL
