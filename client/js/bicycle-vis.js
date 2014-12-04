@@ -440,7 +440,7 @@ var statelist = [
 var buttonstatus = {
 	"prohibited": 1,
 	"start": 1,
-	"end": 1,
+	"end": 12,
 	"law": 0,
 	"weekdays": 1,
 	"weekends": 1,
