@@ -1,4 +1,5 @@
 var categoryDataMatrix;
+var loadingIconCount = 0;
 
 // var lawmode = 0;
 // var dowmode = [1, 1];
@@ -15,12 +16,32 @@ function init() {
 	retrieveDataBasedOnFilters();
 }
 
+function displayLoadingIcon()
+{
+	if(loadingIconCount == 0)
+	{
+		$("#loading-icon-div").visible();
+	}
+	loadingIconCount++;	
+}
+
+function hideLoadingIcon()
+{
+	loadingIconCount--;	
+	if(loadingIconCount == 0)
+	{
+		$("#loading-icon-div").invisible()();
+	}
+}
+
 function updateClicked() {
 	//updateTimeSlider();
 	updateCategoryDataMatrixData();
 }
 
 function onCDMCellClick(weather, location){
+	
+	displayLoadingIcon();
 	
 	var cat_clicked = {"weather":weather, "location":location};
 	$.ajax({
@@ -34,6 +55,8 @@ function onCDMCellClick(weather, location){
 			d3.json('php/lineGraphData.php', function(error, data) {
 				//processedJsonObject = processOverviewJSON(data);
 				processMultiLineJSONData(data);
+				
+				hideLoadingIcon();
 				//initTimeSlider(processedJsonObject);
 			});
 		},
@@ -45,6 +68,9 @@ function onCDMCellClick(weather, location){
 }
 
 function retrieveDataBasedOnFilters() {
+
+	displayLoadingIcon();
+	
 	$.ajax({
 		type: 'post',
 		url: 'php/update.php',
@@ -54,6 +80,7 @@ function retrieveDataBasedOnFilters() {
 		},
 		success: function(data, status) {
 			updateClicked();
+			hideLoadingIcon();
 		},
 		error: function(xhr, desc, err) {
 			console.log("error: " + xhr);
@@ -99,7 +126,7 @@ function processOverviewJSON(data){
 //**************************FOR TIME SLIDER************************************
 
 function updateCategoryDataMatrixData() {
-
+	displayLoadingIcon();
 	d3.json('php/cdmMain.php', function(mainError, mainData) {
 		d3.json('php/cdmLocationAxis.php', function(LocationAxisError, locationAxisData) {
 			processedJsonObjectForLocationAxis = processCDMLocationAxisJSON(locationAxisData);
@@ -111,6 +138,7 @@ function updateCategoryDataMatrixData() {
 			
 			processedJsonObjectForXAxis = processCDMWeatherAxisBasedOnMainJSON(processedJsonObjectForMain);
 			categoryDataMatrix.updateYAxis_Weather(processedJsonObjectForXAxis);
+			hideLoadingIcon();
 		});
 	});
 	
