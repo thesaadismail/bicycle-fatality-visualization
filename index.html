@@ -32,21 +32,17 @@
         <div id="filter-container">
             <div class="filter_options" style="padding-top:3px;">
                 <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-md-3">
                         <h5>Days of Week</h5>
-                        <!-- <input class="filter_button" id="DOW_all_button" type="checkbox"> All</input><br> -->
-                        <input class="filter_button" id="DOW_wd_button" type="checkbox"> Weekdays</input><br>
-                        <input class="filter_button" id="DOW_we_button" type="checkbox"> Weekends</input><br>
+                        <input class="filter_button" id="DOW_wd_button" type="checkbox"> Weekdays</input> <br>
+                        <input class="filter_button" id="DOW_we_button" type="checkbox"> Weekends</input> <br>
                     </div>
-                    <div class="col-md-5">
-                        <!-- <button id="update-button" onClick="updateClicked()">Refresh Information</button>
-                        <br>
-                        <br> -->
+                    <div class="col-md-3">
                         <h5>Law Mode</h5>
-                        <input class="filter_button" id="law_button" type="checkbox" onclick="lawModeToggled()"> On</input><br>
-						<br>
+                        <input class="filter_button" id="law_button" type="checkbox" onclick="lawModeToggled()"> On</input> <br>
+					</div><div class="col-md-3">
 		                <div id="lawmode-switch-div" style="visibility:hidden">
-		                For Category Matrix Only:
+		                <h5>For Category Matrix Only:</h5>
 			                <div class="onoffswitch">
 								<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked onclick="cdmLawOptionToggled()">
 								<label class="onoffswitch-label" for="myonoffswitch">
@@ -63,76 +59,76 @@
                         <div class="col-md-4">
                             <h5>US States</h5>
                         </div>
-                        <div class="col-md-2" style="padding-top:9px;color:blue">
+                        <div class="col-md-2" style="padding-top:9px;color:#7f7f7f">
                             <input class="filter_button" id="state_all_button" type="checkbox"> All</input>
                         </div>
-                        <div class="col-md-2" style="padding-top:9px;color:blue">
-                            <input class="filter_button" id="state_avg_button" type="checkbox"> Avg</input>
+                        <div class="col-md-2" style="padding-top:9px;color:#7f7f7f">
+                            <input class="filter_button" id="state_avg_button" type="checkbox"> Avg.</input>
                         </div>
                         <div class="col-md-2" style="padding-top:10px;">
-                            <input class="filter_button" id="state_45_button" type="checkbox"> SC</input>
+                            <input class="filter_button" id="state_45_button" type="checkbox"><text id="state_45_text" style="color:black"> SC</input>
                         </div>
                     </div>
                     <div class="row">
                     <div class="col-md-2">
-                        <input class="filter_button" id="state_1_button" type="checkbox"> AL</input><br>
-                        <input class="filter_button" id="state_2_button" type="checkbox"> AL</input><br>
-                        <input class="filter_button" id="state_4_button" type="checkbox"> AZ</input><br>
-                        <input class="filter_button" id="state_5_button" type="checkbox"> AR</input><br>
-                        <input class="filter_button" id="state_6_button" type="checkbox"> CA</input><br>
-                        <input class="filter_button" id="state_8_button" type="checkbox"> CO</input><br>
-                        <input class="filter_button" id="state_9_button" type="checkbox"> CT</input><br>
-                        <input class="filter_button" id="state_10_button" type="checkbox"> DE</input><br>
-                        <input class="filter_button" id="state_11_button" type="checkbox"> DC</input><br>
-                        <input class="filter_button" id="state_12_button" type="checkbox"> FL</input><br>
+                        <input class="filter_button" id="state_1_button" type="checkbox"><text id="state_1_text" style="color:black"> AL</text></input><br>
+                        <input class="filter_button" id="state_2_button" type="checkbox"><text id="state_2_text" style="color:black"> AK</text></input><br>
+                        <input class="filter_button" id="state_4_button" type="checkbox"><text id="state_4_text" style="color:black"> AZ</text></input><br>
+                        <input class="filter_button" id="state_5_button" type="checkbox"><text id="state_5_text" style="color:black"> AR</text></input><br>
+                        <input class="filter_button" id="state_6_button" type="checkbox"><text id="state_6_text" style="color:black"> CA</text></input><br>
+                        <input class="filter_button" id="state_8_button" type="checkbox"><text id="state_8_text" style="color:black"> CO</text></input><br>
+                        <input class="filter_button" id="state_9_button" type="checkbox"><text id="state_9_text" style="color:black"> CT</text></input><br>
+                        <input class="filter_button" id="state_10_button" type="checkbox"><text id="state_10_text" style="color:black"> DE</text></input><br>
+                        <input class="filter_button" id="state_11_button" type="checkbox"><text id="state_11_text" style="color:black"> DC</text></input><br>
+                        <input class="filter_button" id="state_12_button" type="checkbox"><text id="state_12_text" style="color:black"> FL</text></input><br>
                     </div>
                     <div class="col-md-2">
-                        <input class="filter_button" id="state_13_button" type="checkbox"> GA</input><br>
-                        <input class="filter_button" id="state_15_button" type="checkbox"> HI</input><br>
-                        <input class="filter_button" id="state_16_button" type="checkbox"> ID</input><br>
-                        <input class="filter_button" id="state_17_button" type="checkbox"> IL</input><br>
-                        <input class="filter_button" id="state_18_button" type="checkbox"> IN</input><br>
-                        <input class="filter_button" id="state_19_button" type="checkbox"> IA</input><br>
-                        <input class="filter_button" id="state_20_button" type="checkbox"> KS</input><br>
-                        <input class="filter_button" id="state_21_button" type="checkbox"> KY</input><br>
-                        <input class="filter_button" id="state_22_button" type="checkbox"> LA</input><br>
-                        <input class="filter_button" id="state_23_button" type="checkbox"> ME</input><br>
+                        <input class="filter_button" id="state_13_button" type="checkbox"><text id="state_13_text" style="color:black"> GA</text></input><br>
+                        <input class="filter_button" id="state_15_button" type="checkbox"><text id="state_15_text" style="color:black"> HI</text></input><br>
+                        <input class="filter_button" id="state_16_button" type="checkbox"><text id="state_16_text" style="color:black"> ID</text></input><br>
+                        <input class="filter_button" id="state_17_button" type="checkbox"><text id="state_17_text" style="color:black"> IL</text></input><br>
+                        <input class="filter_button" id="state_18_button" type="checkbox"><text id="state_18_text" style="color:black"> IN</text></input><br>
+                        <input class="filter_button" id="state_19_button" type="checkbox"><text id="state_19_text" style="color:black"> IA</text></input><br>
+                        <input class="filter_button" id="state_20_button" type="checkbox"><text id="state_20_text" style="color:black"> KS</text></input><br>
+                        <input class="filter_button" id="state_21_button" type="checkbox"><text id="state_21_text" style="color:black"> KY</text></input><br>
+                        <input class="filter_button" id="state_22_button" type="checkbox"><text id="state_22_text" style="color:black"> LA</text></input><br>
+                        <input class="filter_button" id="state_23_button" type="checkbox"><text id="state_23_text" style="color:black"> ME</text></input><br>
                     </div>
                     <div class="col-md-2">
-                        <input class="filter_button" id="state_24_button" type="checkbox"> MD</input><br>
-                        <input class="filter_button" id="state_25_button" type="checkbox"> MA</input><br>
-                        <input class="filter_button" id="state_26_button" type="checkbox"> MI</input><br>
-                        <input class="filter_button" id="state_27_button" type="checkbox"> MN</input><br>
-                        <input class="filter_button" id="state_28_button" type="checkbox"> MS</input><br>
-                        <input class="filter_button" id="state_29_button" type="checkbox"> MO</input><br>
-                        <input class="filter_button" id="state_30_button" type="checkbox"> MT</input><br>
-                        <input class="filter_button" id="state_31_button" type="checkbox"> NE</input><br>
-                        <input class="filter_button" id="state_32_button" type="checkbox"> NV</input><br>
-                        <input class="filter_button" id="state_33_button" type="checkbox"> NH</input><br>
+                        <input class="filter_button" id="state_24_button" type="checkbox"><text id="state_24_text" style="color:black"> MD</text></input><br>
+                        <input class="filter_button" id="state_25_button" type="checkbox"><text id="state_25_text" style="color:black"> MA</text></input><br>
+                        <input class="filter_button" id="state_26_button" type="checkbox"><text id="state_26_text" style="color:black"> MI</text></input><br>
+                        <input class="filter_button" id="state_27_button" type="checkbox"><text id="state_27_text" style="color:black"> MN</text></input><br>
+                        <input class="filter_button" id="state_28_button" type="checkbox"><text id="state_28_text" style="color:black"> MS</text></input><br>
+                        <input class="filter_button" id="state_29_button" type="checkbox"><text id="state_29_text" style="color:black"> MO</text></input><br>
+                        <input class="filter_button" id="state_30_button" type="checkbox"><text id="state_30_text" style="color:black"> MT</text></input><br>
+                        <input class="filter_button" id="state_31_button" type="checkbox"><text id="state_31_text" style="color:black"> NE</text></input><br>
+                        <input class="filter_button" id="state_32_button" type="checkbox"><text id="state_32_text" style="color:black"> NV</text></input><br>
+                        <input class="filter_button" id="state_33_button" type="checkbox"><text id="state_33_text" style="color:black"> NH</text></input><br>
                     </div>
                     <div class="col-md-2">
-                        <input class="filter_button" id="state_34_button" type="checkbox"> NJ</input><br>
-                        <input class="filter_button" id="state_35_button" type="checkbox"> NM</input><br>
-                        <input class="filter_button" id="state_36_button" type="checkbox"> NY</input><br>
-                        <input class="filter_button" id="state_37_button" type="checkbox"> NC</input><br>
-                        <input class="filter_button" id="state_38_button" type="checkbox"> ND</input><br>
-                        <input class="filter_button" id="state_39_button" type="checkbox"> OH</input><br>
-                        <input class="filter_button" id="state_40_button" type="checkbox"> OK</input><br>
-                        <input class="filter_button" id="state_41_button" type="checkbox"> OR</input><br>
-                        <input class="filter_button" id="state_42_button" type="checkbox"> PA</input><br>
-                        <input class="filter_button" id="state_44_button" type="checkbox"> RI</input><br>
+                        <input class="filter_button" id="state_34_button" type="checkbox"><text id="state_34_text" style="color:black"> NJ</text></input><br>
+                        <input class="filter_button" id="state_35_button" type="checkbox"><text id="state_35_text" style="color:black"> NM</text></input><br>
+                        <input class="filter_button" id="state_36_button" type="checkbox"><text id="state_36_text" style="color:black"> NY</text></input><br>
+                        <input class="filter_button" id="state_37_button" type="checkbox"><text id="state_37_text" style="color:black"> NC</text></input><br>
+                        <input class="filter_button" id="state_38_button" type="checkbox"><text id="state_38_text" style="color:black"> ND</text></input><br>
+                        <input class="filter_button" id="state_39_button" type="checkbox"><text id="state_39_text" style="color:black"> OH</text></input><br>
+                        <input class="filter_button" id="state_40_button" type="checkbox"><text id="state_40_text" style="color:black"> OK</text></input><br>
+                        <input class="filter_button" id="state_41_button" type="checkbox"><text id="state_41_text" style="color:black"> OR</text></input><br>
+                        <input class="filter_button" id="state_42_button" type="checkbox"><text id="state_42_text" style="color:black"> PA</text></input><br>
+                        <input class="filter_button" id="state_44_button" type="checkbox"><text id="state_44_text" style="color:black"> RI</text></input><br>
                     </div>
                     <div class="col-md-2">
-                        <input class="filter_button" id="state_46_button" type="checkbox"> SD</input><br>
-                        <input class="filter_button" id="state_47_button" type="checkbox"> TN</input><br>
-                        <input class="filter_button" id="state_48_button" type="checkbox"> TX</input><br>
-                        <input class="filter_button" id="state_49_button" type="checkbox"> UT</input><br>
-                        <input class="filter_button" id="state_50_button" type="checkbox"> VT</input><br>
-                        <input class="filter_button" id="state_51_button" type="checkbox"> VA</input><br>
-                        <input class="filter_button" id="state_53_button" type="checkbox"> WA</input><br>
-                        <input class="filter_button" id="state_54_button" type="checkbox"> WV</input><br>
-                        <input class="filter_button" id="state_55_button" type="checkbox"> WI</input><br>
-                        <input class="filter_button" id="state_56_button" type="checkbox"> WY</input><br>
+                        <input class="filter_button" id="state_46_button" type="checkbox"><text id="state_46_text" style="color:black"> SD</text></input><br>
+                        <input class="filter_button" id="state_47_button" type="checkbox"><text id="state_47_text" style="color:black"> TN</text></input><br>
+                        <input class="filter_button" id="state_48_button" type="checkbox"><text id="state_48_text" style="color:black"> TX</text></input><br>
+                        <input class="filter_button" id="state_49_button" type="checkbox"><text id="state_49_text" style="color:black"> UT</text></input><br>
+                        <input class="filter_button" id="state_50_button" type="checkbox"><text id="state_50_text" style="color:black"> VT</text></input><br>
+                        <input class="filter_button" id="state_51_button" type="checkbox"><text id="state_51_text" style="color:black"> VA</text></input><br>
+                        <input class="filter_button" id="state_53_button" type="checkbox"><text id="state_53_text" style="color:black"> WA</text></input><br>
+                        <input class="filter_button" id="state_54_button" type="checkbox"><text id="state_54_text" style="color:black"> WV</text></input><br>
+                        <input class="filter_button" id="state_55_button" type="checkbox"><text id="state_55_text" style="color:black"> WI</text></input><br>
+                        <input class="filter_button" id="state_56_button" type="checkbox"><text id="state_56_text" style="color:black"> WY</text></input><br>
                     </div>
                     </div>
                 </div>

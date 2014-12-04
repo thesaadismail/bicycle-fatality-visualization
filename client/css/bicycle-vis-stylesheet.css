@@ -2,7 +2,7 @@
 	General Page Styles 
 */
 body {
-  font: 12px sans-serif;
+  font: 12px Arial,sans-serif;
 }
 .canvas {
   padding-left: 15px;
@@ -22,13 +22,13 @@ body {
       font-size: 11px;
     }
     .brush .extent {
-      stroke: gray;
+      stroke: #c7c7c7;
 	  stroke-width: 2.5;
       fill-opacity: .125;
       shape-rendering: crispEdges;
     }
     .area {
-      fill: steelblue;
+      fill: #7f7f7f;
       clip-path: url(#clip);
     }
 
@@ -78,7 +78,7 @@ div#heatchartContainer {
 #filter-container {
     /*border: 1px solid;*/
     height: 340px;
-    width: 400px;
+    width: 450px;
     padding-top: 10px;
     padding-left: 10px;
     font-weight: bold;
@@ -142,12 +142,12 @@ On Off Swtich CSS
 .onoffswitch-inner:before {
     content: "Prohibited";
     padding-left: 10px;
-    background-color: #FF0000; color: #FFFFFF;
+    background-color: #d62728; color: #FFFFFF;
 }
 .onoffswitch-inner:after {
     content: "Allowed";
     padding-right: 10px;
-    background-color: #C17FFF; color: #FFFFFF;
+    background-color: #1f77b4; color: #FFFFFF;
     text-align: right;
 }
 .onoffswitch-switch {
