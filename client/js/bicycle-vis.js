@@ -150,7 +150,10 @@ function updateCategoryDataMatrixData() {
 	displayLoadingIcon();
 	d3.json('php/cdmMain.php', function(mainError, mainData) {
 		d3.json('php/cdmLocationAxis.php', function(LocationAxisError, locationAxisData) {
+			
+			
 			processedJsonObjectForLocationAxis = processCDMLocationAxisJSON(locationAxisData);
+			//console.log(processedJsonObjectForLocationAxis);
 			categoryDataMatrix.updateXAxis_Location(processedJsonObjectForLocationAxis);
 			
 			
@@ -221,6 +224,11 @@ function processCDMWeatherAxisJSON(data) {
 }
 
 function processCDMLocationAxisJSON(data) {
+//console.log(data);
+	if(data.length == 0)
+	{
+		return sampleJsonDataForCDM_XAxis;
+	}
 	//setup parent json object
 	var parentJSONObject = {};
 	parentJSONObject["data_group_id"] = 2;
@@ -465,7 +473,7 @@ function initControl() {
 		// if (eval(statemode.join('+')) == 0) {
 		// 	console.log("Select states!!!!!!!!!!");
 		// } 
-		console.log(buttonstatus);
+		//console.log(buttonstatus);
 		retrieveDataBasedOnFilters();
 	});
 }
@@ -706,45 +714,50 @@ var sampleJsonDataForCDM_YAxis = {
 var sampleJsonDataForCDM_XAxis = {
 	"data_group_id": 2,
 	"category_data": [{
-		"category_location": "sidewalk",
-		"num_of_fatalities": 62,
-		"num_of_fatalities_law_allowed": 45,
-		"num_of_fatalities_law_prohibited": 45
+		"category_location": "Bicycle Lane",
+		"num_of_fatalities": 0,
 	}, {
-		"category_location": "crosswalk",
-		"num_of_fatalities": 2,
-		"num_of_fatalities_law_allowed": 45,
-		"num_of_fatalities_law_prohibited": 45
+		"category_location": "Driveway Access",
+		"num_of_fatalities": 0,
 	}, {
-		"category_location": "road",
-		"num_of_fatalities": 14,
-		"num_of_fatalities_law_allowed": 45,
-		"num_of_fatalities_law_prohibited": 45
+		"category_location": "Intersection-In Marked Crosswalk",
+		"num_of_fatalities": 0,
 	}, {
-		"category_location": "building",
-		"num_of_fatalities": 21,
-		"num_of_fatalities_law_allowed": 45,
-		"num_of_fatalities_law_prohibited": 45
+		"category_location": "Intersection-Not In Crosswalk",
+		"num_of_fatalities": 0,
 	}, {
-		"category_location": "intersection",
-		"num_of_fatalities": 35,
-		"num_of_fatalities_law_allowed": 45,
-		"num_of_fatalities_law_prohibited": 45
+		"category_location": "Intersection-Unknown Location",
+		"num_of_fatalities": 0,
 	}, {
-		"category_location": "middle lane",
-		"num_of_fatalities": 4,
-		"num_of_fatalities_law_allowed": 45,
-		"num_of_fatalities_law_prohibited": 45
+		"category_location": "Intersection-Unmarked Crosswalk",
+		"num_of_fatalities": 0,
 	}, {
-		"category_location": "right lane",
-		"num_of_fatalities": 13,
-		"num_of_fatalities_law_allowed": 45,
-		"num_of_fatalities_law_prohibited": 45
+		"category_location": "Median or Crossing Island",
+		"num_of_fatalities": 0,
 	}, {
-		"category_location": "bicycle lane",
-		"num_of_fatalities": 45,
-		"num_of_fatalities_law_allowed": 45,
-		"num_of_fatalities_law_prohibited": 45
+		"category_location": "Non-Intersec-On Roadway",
+		"num_of_fatalities": 0,
+	}, {
+		"category_location": "Non-Intersec-On Roadway (Unknown)",
+		"num_of_fatalities": 0,
+	}, {
+		"category_location": "Non-Intersection-In Marked Crosswalk",
+		"num_of_fatalities": 0,
+	}, {
+		"category_location": "Non-Trafficway Area",
+		"num_of_fatalities": 0,
+	}, {
+		"category_location": "Parking Lane or Zone",
+		"num_of_fatalities": 0,
+	}, {
+		"category_location": "Shared-Use Path or Trail",
+		"num_of_fatalities": 0,
+	}, {
+		"category_location": "Shoulder or Roadside",
+		"num_of_fatalities": 0,
+	}, {
+		"category_location": "Sidewalk",
+		"num_of_fatalities": 0,
 	}]
 };
 var sampleJsonDataForCDM = {
