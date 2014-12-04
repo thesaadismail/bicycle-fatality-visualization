@@ -38,7 +38,7 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 		dataMatrix_YAxis = new HeatchartMatrix(yAxisElementName, yAxisJsonData, 37.5, 350, HeatchartMatrix.Axis.AxisType_Y, this.cellSelectedCallback);
 		dataMatrix_YAxis.initDataMatrix();
 		
-		var svg = d3.select("#data-matrix-colormap").append("svg").attr("id","svgsvg").attr("width", 65).attr("height", 300);
+		var svg = d3.select("#data-matrix-colormap").append("svg").attr("id","svgsvg").attr("width", 70).attr("height", 300);
 		gradient = svg
 			.append("svg:defs")
 		    .append("svg:linearGradient")
@@ -172,8 +172,9 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 	this.updateMain = function(newData){
 		//console.log(newData);
 		dataMatrix_Main.updateDataset(newData);
-		dataMatrix_Main.updateHeatchart();
-		
+		dataMatrix_Main.updateHeatchart();	
+		mintext.text(min1);
+		maxtext.text(max1);	
 	}
 	
 	this.updateXAxis_Location = function(newData){
@@ -290,6 +291,8 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 				    .attr("stop-color", "#ffffff")
 				    .attr("stop-opacity", 1);
 		rect.attr("fill",'url(#gradient)');
+		mintext.text(min1);
+		maxtext.text(max1);
 	}
 	this.enableProhibitedLawMode = function()
 	{
@@ -320,6 +323,8 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 				    .attr("stop-color", "#ffffff")
 				    .attr("stop-opacity", 1);
 		rect.attr("fill",'url(#gradient)');
+		mintext.text(min1);
+		maxtext.text(max1);
 	}
 	this.disableLawMode = function()
 	{
@@ -350,6 +355,8 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 				    .attr("stop-color", "#ffffff")
 				    .attr("stop-opacity", 1);
 		rect.attr("fill",'url(#gradient)');
+		mintext.text(min1);
+		maxtext.text(max1);
 	}
 	
 	this.initCategoryDataMatrix();

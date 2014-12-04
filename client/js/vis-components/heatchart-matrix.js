@@ -109,6 +109,8 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 			var maxMinDict = determineMaxMinForMain(sampleJsonData, max, min);
 			var max = maxMinDict.max;
 			var min = maxMinDict.min;
+			max1 = max;
+			min1 = min;
 			
 			var heatchartCanvas = d3.select(elementName).select("svg");
 			var selectedHeatChart = heatchartCanvas.selectAll("g").data(sampleJsonData);
