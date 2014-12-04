@@ -161,7 +161,7 @@ function MultiLineGraph(sampleData, elementName){
 				.attr("stroke-width", 1)
 				.attr("stroke-opacity", 0)
 				.attr("stroke", "rgb(64, 64, 64)")
-				.attr("fill", "rgb(255, 0, 0)")
+				.attr("fill", "#d62728")
 				.attr("fill-opacity", 0)
 		});
 		
@@ -203,7 +203,7 @@ function MultiLineGraph(sampleData, elementName){
 				.attr("d", line(sampleData.us_average_data.time_category_data))
 				.attr("stroke-width", 2)
 				.attr("stroke-opacity", 0.5)
-				.attr("stroke", "rgb(0, 255, 0)")
+				.attr("stroke", "#2ca02c")
 				.attr("fill", "none")
 				.on('mouseover', function(d){
 					mousedLine = this.getAttribute('idKey');
@@ -232,7 +232,7 @@ function MultiLineGraph(sampleData, elementName){
 								.attr("d", line(d.time_category_data))
 								.attr("stroke-width", 2)
 								.attr("stroke-opacity", 0.5)
-								.attr("stroke", "rgb(0, 0, 255)")
+								.attr("stroke", "#1f77b4")
 								.attr("fill", "none")
 								.on('mouseover', function(d){
 									mousedLine = this.getAttribute('idKey');

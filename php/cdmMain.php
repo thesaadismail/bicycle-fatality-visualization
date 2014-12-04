@@ -22,7 +22,7 @@
 	LEFT OUTER JOIN current_data ON Temp.Weather_ID = current_data.atmcond
 	AND Temp.Location_ID = current_data.nmlocat
 	GROUP BY Weather, Location
-	ORDER BY Weather DESC 
+	ORDER BY Weather, Location ASC 
 	";
 	ChromePhp::log("QUERYING cdmMain =>");     
 	

@@ -322,7 +322,10 @@ function processMultiLineJSONData(statesData, usAverageData, weatherCategoryName
 	//console.log(usAverageData);
 	//setup parent json object
 	var parentJSONObject = {};
-	parentJSONObject["weatherLocation"] = weatherCategoryName+" and "+locationCategoryName;
+	var andstring = " and ";
+	if(weatherCategoryName=="" || locationCategoryName=="")
+		andstring="";
+	parentJSONObject["weatherLocation"] = weatherCategoryName+andstring+locationCategoryName;
 	
 	if(isLawModeSelected())
 	{
@@ -500,6 +503,7 @@ function initControl() {
 	d3.selectAll('.filter_button').property('checked', true);
 	d3.selectAll('.filter_button2').property('checked', true);
 	d3.select('#law_button').property('checked', false);
+	
 	// on change
 	d3.selectAll(".filter_button").on("change", function() {
 		if (this.id == 'law_button') {
@@ -545,11 +549,25 @@ function lawModeToggled()
 	{
 		$("#lawmode-switch-div").visible();
 		categoryDataMatrix.enableProhibitedLawMode();
+		for (i = 0; i < statelist.length; i++) {
+			if (lawstatus[statelist[i]] == 1) {
+				d3.select('#state_' + statelist[i] + '_text').attr("style", "color:#1f77b4");
+			} else {
+				d3.select('#state_' + statelist[i] + '_text').attr("style", "color:#d62728");
+			}
+		}
 	}
 	else
 	{
 		$("#lawmode-switch-div").invisible();
 		categoryDataMatrix.disableLawMode();
+		for (i = 0; i < statelist.length; i++) {
+			if (lawstatus[statelist[i]] == 1) {
+				d3.select('#state_' + statelist[i] + '_text').attr("style", "color:black");
+			} else {
+				d3.select('#state_' + statelist[i] + '_text').attr("style", "color:black");
+			}
+		}
 	}
 	//	retrieveDataBasedOnFilters();
 }
