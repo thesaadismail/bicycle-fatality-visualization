@@ -30,7 +30,7 @@ function onCDMCellClick(weather, location){
 		success: function(data, status) {
 			d3.json('php/lineGraphData.php', function(error, data) {
 				//processedJsonObject = processOverviewJSON(data);
-				console.log(data);
+				processMultiLineJSONData(data);
 				//initTimeSlider(processedJsonObject);
 			});
 		},
@@ -222,6 +222,87 @@ function processCDMMainJSON(data) {
 	return parentJSONObject;
 }
 
+
+function processMultiLineJSONData(statesData, usAverageData) {
+	console.log(statesData);
+	
+	//setup parent json object
+	var parentJSONObject = {};
+	parentJSONObject["weatherLocation"] = "testing-testing";
+	parentJSONObject["law_mode"] = 0;
+	
+	parentJSONObject["us_average_data"] = {};	
+	var usAverageData = parentJSONObject["us_average_data"];
+	
+	//setup us average data
+	
+	parentJSONObject["state_category_data"] = [];	
+	var stateCategoryDataArray = parentJSONObject["state_category_data"];
+	
+	statesData.forEach(function(d) {
+		filteredStateCategories = stateCategoryDataArray.filter(function(stateCategoryObject) {
+			return stateCategoryObject["category_state"] == d.category_state;
+		});
+		
+		if (filteredStateCategories.length > 0) {
+			//right now we can just select the first category that was filtered
+			selectedStateCategory = filteredStateCategories[0];
+			
+			var timeCategoryDataArrayForState = selectedStateCategory["time_category_data"];
+			
+			//get time category
+			filteredTimeCategories = timeCategoryDataArrayForState.filter(function(timeCategoryObject) {
+				return timeCategoryObject["key"] == determineTimeGroupBasedOnHour(d.hour);
+			});
+			
+			if (filteredTimeCategories.length > 0) {
+				//right now we can just select the first category that was filtered
+				selectedTimeCategory = filteredTimeCategories[0];
+				selectedTimeCategory["value"] = parseInt(parseInt(selectedTimeCategory["value"])+d.fatalities);
+			}
+			else
+			{
+				//if time category does not exist create a new one
+				var timeCategoryDataForHour = {};
+				timeCategoryDataForHour["key"] = determineTimeGroupBasedOnHour(parseInt(d.hour));
+				timeCategoryDataForHour["value"] = parseInt(d.fatalities);
+			
+				timeCategoryDataArrayForState.push(timeCategoryDataForHour);
+			}
+			
+		} else {
+			selectedStateCategory = {};
+			selectedStateCategory["category_state"] = d.category_state;
+			
+			if(parseInt(d.law) == 1)
+			{
+				selectedStateCategory["law_data"] = "yes";
+			}
+			else
+			{
+				selectedStateCategory["law_data"] = "no";
+			}
+			
+			selectedStateCategory["time_category_data"] = [];
+			var timeCategoryDataArrayForState = selectedStateCategory["time_category_data"];
+			
+			var timeCategoryDataForHour = {};
+			timeCategoryDataForHour["key"] = determineTimeGroupBasedOnHour(parseInt(d.hour));
+			timeCategoryDataForHour["value"] = parseInt(d.fatalities);
+			
+			timeCategoryDataArrayForState.push(timeCategoryDataForHour);
+			
+			stateCategoryDataArray.push(selectedStateCategory);
+		}
+	});
+	
+	console.log(parentJSONObject);
+}
+
+var determineTimeGroupBasedOnHour = function(hour)
+{
+	return Math.ceil(hour/3);
+}
 
 // Control //
 
