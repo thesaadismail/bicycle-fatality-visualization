@@ -1,4 +1,5 @@
 var categoryDataMatrix;
+
 // var lawmode = 0;
 // var dowmode = [1, 1];
 // var statemode = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
@@ -231,7 +232,15 @@ function processMultiLineJSONData(statesData, usAverageData) {
 	//setup parent json object
 	var parentJSONObject = {};
 	parentJSONObject["weatherLocation"] = "testing-testing";
-	parentJSONObject["law_mode"] = 0;
+	
+	if($("#law_button").is(":checked"))
+	{
+		parentJSONObject["law_mode"] = 1;
+	}
+	else
+	{
+		parentJSONObject["law_mode"] = 0;
+	}
 	
 	parentJSONObject["us_average_data"] = {};	
 	var usAverageData = parentJSONObject["us_average_data"];
