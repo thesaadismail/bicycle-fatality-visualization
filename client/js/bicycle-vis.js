@@ -8,6 +8,7 @@ var multiLineG;
 // var dowmode = [1, 1];
 // var statemode = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
 
+
 function init() {
 	initializeTimeSlider();
 	categoryDataMatrix = new CategoryDataMatrix("#data-matrix-container", null, "#data-matrix-xaxis-container", null, "#data-matrix-yaxis-container", null, categoriesSelectedCallback);
@@ -725,6 +726,59 @@ var buttonstatus = {
 	"54": 1,
 	"55": 1,
 	"56": 1
+};
+var lawstatus = {
+	"1":1,
+	"2":0,
+	"4":0,
+	"5":0,
+	"6":1,
+	"8":0,
+	"9":1,
+	"10":1,
+	"11":1,
+	"12":1,
+	"13":1,
+	"15":1,
+	"16":0,
+	"17":0,
+	"18":0,
+	"19":0,
+	"20":0,
+	"21":0,
+	"22":1,
+	"23":1,
+	"24":1,
+	"25":1,
+	"26":0,
+	"27":0,
+	"28":0,
+	"29":0,
+	"30":0,
+	"31":0,
+	"32":0,
+	"33":1,
+	"34":1,
+	"35":1,
+	"36":1,
+	"37":1,
+	"38":0,
+	"39":0,
+	"40":0,
+	"41":1,
+	"42":1,
+	"44":1,
+	"45":0,
+	"46":0,
+	"47":1,
+	"48":0,
+	"49":0,
+	"50":0,
+	"51":0,
+	"53":0,
+	"54":1,
+	"55":0,
+	"56":0
 };
 /* var sampleOverviewTimesliderData = {
 	"data_group_id": 1,

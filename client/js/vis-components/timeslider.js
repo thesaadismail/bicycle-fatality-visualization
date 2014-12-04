@@ -105,7 +105,7 @@ function initTimeSlider(overviewDataset){
     var OVmonthNameFormat = d3.time.format("%m");
     buttonstatus["start"] = +OVmonthNameFormat(tmp[0]);
     buttonstatus["end"] = +OVmonthNameFormat(tmp[1]);
-    console.log(buttonstatus);
+    // console.log(buttonstatus);
     retrieveDataBasedOnFilters()
   }
   
