@@ -12,7 +12,7 @@
 	
 	$myquery="
 		SELECT accmon month_id, count( * ) num_of_fatalities
-		FROM current_data
+		FROM data_all
 		GROUP BY accmon
 	";
 	
