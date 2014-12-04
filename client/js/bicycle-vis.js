@@ -500,6 +500,13 @@ function initControl() {
 	d3.selectAll('.filter_button').property('checked', true);
 	d3.selectAll('.filter_button2').property('checked', true);
 	d3.select('#law_button').property('checked', false);
+	for (i = 0; i < statelist.length; i++) {
+		if (lawstatus[statelist[i]] == 1) {
+			d3.select('#state_' + statelist[i] + '_text').attr("style", "color:#1f77b4");
+		} else {
+			d3.select('#state_' + statelist[i] + '_text').attr("style", "color:#d62728");
+		}
+	}
 	// on change
 	d3.selectAll(".filter_button").on("change", function() {
 		if (this.id == 'law_button') {
