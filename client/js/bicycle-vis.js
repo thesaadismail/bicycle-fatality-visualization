@@ -671,8 +671,8 @@ var categoriesSelectedCallback = function(isSelected, weatherCategoryName, locat
 var generateMultiLineGraphDivName = function(weatherCategoryName, locationCategoryName)
 {
 	var divName = weatherCategoryName+"-"+locationCategoryName;
-	divName = divName.replace("(", "");
-	divName = divName.replace(")", "");
+	divName = divName.replace(/\(/g, "");
+	divName = divName.replace(/\)/g, "");
 	divName = divName.replace(/ /g, "-");
 	return divName;
 }
