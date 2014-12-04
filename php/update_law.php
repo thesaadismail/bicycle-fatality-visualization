@@ -14,7 +14,7 @@
 	$selectedStates = "first";
 	$startmonth = $data['start'];
 	$endmonth = $data['end'];
-	$lawtype = $data['lawtype'];
+	$lawtype = $data['allowed'];
 	$lawmode = $data['law'];
 	
 	for ($x = 1; $x <= 56; $x++) {		//count($data)
