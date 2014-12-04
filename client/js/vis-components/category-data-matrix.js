@@ -173,6 +173,20 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 		//console.log(newData);
 		dataMatrix_Main.updateDataset(newData);
 		dataMatrix_Main.updateHeatchart();	
+		for(row = 0; row<selectedCells_Main.length; row++)
+		{
+			for(col = 0; col<selectedCells_Main[0].length; col++)
+			{
+				if(selectedCells_Main[row][col] == true)
+				{
+					dataMatrix_Main.selectCellInMatrix(row, col);
+				}
+				else
+				{
+					dataMatrix_Main.unselectCellInMatrix(row, col);
+				}
+			}
+		}
 		// mintext.text(min1);
 		// maxtext.text(max1);	
 	}
@@ -180,12 +194,41 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 	this.updateXAxis_Location = function(newData){
 		dataMatrix_XAxis.updateDataset(newData);
 		dataMatrix_XAxis.updateXAxisComponent();
+	
+		for(col = 0; col<selectedCells_XAxis[0].length; col++)
+		{
+				if(selectedCells_XAxis[0][col] == true)
+				{
+					dataMatrix_XAxis.selectCellInMatrix(0, col);
+				}
+				else
+				{
+					dataMatrix_XAxis.unselectCellInMatrix(0, col);
+				}
+		}
+
+		//dataMatrix_XAxis.unselectAllCellsInMatrix();
 	}
 	
 	this.updateYAxis_Weather = function(newData){
 		//console.log(newData);
 		dataMatrix_YAxis.updateDataset(newData);
 		dataMatrix_YAxis.updateYAxisComponent();
+		//dataMatrix_YAxis.unselectAllCellsInMatrix();
+		
+		
+		for(row = 0; row<selectedCells_YAxis.length; row++)
+		{
+					//console.log(selectedCells_YAxis[row][0]);
+				if(selectedCells_YAxis[row][0] == true)
+				{
+					dataMatrix_YAxis.selectCellInMatrix(row, 0);
+				}
+				else
+				{
+					dataMatrix_YAxis.unselectCellInMatrix(row, 0);
+				}
+		}
 	}
 	
 	var createYAxisDummyData = function(numOfWeatherCategories){
@@ -361,4 +404,3 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 	
 	this.initCategoryDataMatrix();
 }
-
