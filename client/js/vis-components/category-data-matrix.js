@@ -78,8 +78,8 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 		    .attr('stroke-width', 1);
 
 		svg.append('text').attr('x', 40).attr('y', 242).text(0);
-		mintext = svg.append('text').attr('x', 40).attr('y', 201).text("max");
-		maxtext = svg.append('text').attr('x', 40).attr('y', 15).text("min");
+		mintext = svg.append('text').attr('x', 40).attr('y', 201).text("min");
+		maxtext = svg.append('text').attr('x', 40).attr('y', 15).text("max");
 	}
 /*
 	===========================================
@@ -268,6 +268,7 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 		dataMatrix_XAxis.updateColor(lawmodeAllowedColor);
 		dataMatrix_YAxis.updateColor(lawmodeAllowedColor);
 		var newclr = "#1f77b4";
+		d3.selectAll("defs").remove();
 		var gradient = d3.select("#svgsvg")
 					.append("svg:defs")
 				    .append("svg:linearGradient")
@@ -297,6 +298,7 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 		dataMatrix_XAxis.updateColor(lawmodeProhibitedColor);
 		dataMatrix_YAxis.updateColor(lawmodeProhibitedColor);
 		var newclr = "#d62728";
+		d3.selectAll("defs").remove();
 		var gradient = d3.select("#svgsvg")
 					.append("svg:defs")
 				    .append("svg:linearGradient")
@@ -326,6 +328,7 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 		dataMatrix_XAxis.updateColor(regularModeColor);
 		dataMatrix_YAxis.updateColor(regularModeColor);
 		var newclr = "#ff7f0e";
+		d3.selectAll("defs").remove();
 		var gradient = d3.select("#svgsvg")
 					.append("svg:defs")
 				    .append("svg:linearGradient")
