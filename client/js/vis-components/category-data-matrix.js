@@ -231,6 +231,33 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 		}
 	}
 	
+	this.deselectAllElements = function()
+	{
+	//main
+	for(row = 0; row<selectedCells_Main.length; row++)
+		{
+			for(col = 0; col<selectedCells_Main[0].length; col++)
+			{
+					selectedCells_YAxis[row][col] == false;
+					dataMatrix_XAxis.unselectCellInMatrix(row, col);
+			}
+		}
+	
+	//xaxis
+	for(col = 0; col<selectedCells_XAxis[0].length; col++)
+		{
+					selectedCells_YAxis[0][col] == false;
+					dataMatrix_XAxis.unselectCellInMatrix(0, col);
+		}
+	
+	//yaxis
+			for(row = 0; row<selectedCells_YAxis.length; row++)
+		{
+					selectedCells_YAxis[row][0] == false;
+					dataMatrix_YAxis.unselectCellInMatrix(row, 0);
+		}
+	}
+	
 	var createYAxisDummyData = function(numOfWeatherCategories){
 		var parentJSONObject = {};
 		parentJSONObject["data_group_id"] = 2;
