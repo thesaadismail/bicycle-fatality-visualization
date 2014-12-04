@@ -33,7 +33,7 @@ function initTimeSlider(overviewDataset){
   var OVbrush = d3.svg.brush()
     .x(OVx)
 	.extent([0, 1])
-    .on("brush", OVbrushed);
+    .on("brushend", OVbrushed);
 
   var OVarea = d3.svg.area()
     .interpolate("monotone")
@@ -105,7 +105,7 @@ function initTimeSlider(overviewDataset){
     var OVmonthNameFormat = d3.time.format("%m");
     buttonstatus["start"] = +OVmonthNameFormat(tmp[0]);
     buttonstatus["end"] = +OVmonthNameFormat(tmp[1]);
-    // console.log(buttonstatus);
+    console.log(buttonstatus);
     retrieveDataBasedOnFilters()
   }
   
