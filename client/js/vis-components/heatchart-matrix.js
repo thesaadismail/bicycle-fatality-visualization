@@ -34,7 +34,7 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 			numCols = 1;
 	}
 	//color attributes
-	var color = d3.interpolateRgb("#fff", "#F4A460"),
+	var color = d3.interpolateRgb("#ffffff", "#ff7f0e"),
 		cellStrokeColor = "#7e7e7e",
 		selectedCellStrokeColor = "#663300";
 		

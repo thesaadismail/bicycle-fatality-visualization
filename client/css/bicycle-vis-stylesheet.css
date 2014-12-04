@@ -28,7 +28,7 @@ body {
       shape-rendering: crispEdges;
     }
     .area {
-      fill: #7f7f7f;
+      fill: #ff7f0e;
       clip-path: url(#clip);
     }
 

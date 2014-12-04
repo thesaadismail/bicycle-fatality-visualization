@@ -5,9 +5,9 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 	var selectedCells_Main;
 	var selectedCells_XAxis;
 	var selectedCells_YAxis;
-	var regularModeColor = d3.interpolateRgb("#fff", "#F4A460"),
-		lawmodeAllowedColor = d3.interpolateRgb("#fff", "#00f"),
-		lawmodeProhibitedColor = d3.interpolateRgb("#fff", "#f00");
+	var regularModeColor = d3.interpolateRgb("#ffffff", "#ff7f0e"),
+		lawmodeAllowedColor = d3.interpolateRgb("#ffffff", "#1f77b4"),
+		lawmodeProhibitedColor = d3.interpolateRgb("#ffffff", "#d62728");
 	
 	this.initCategoryDataMatrix = function() {
 		selectedCells_Main = createDefaultSelectedCells(10, 15);
