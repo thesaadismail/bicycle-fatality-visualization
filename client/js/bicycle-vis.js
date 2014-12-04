@@ -2,6 +2,8 @@ var categoryDataMatrix;
 var loadingIconCount = 0;
 var selectedLineGraphIDArray = [];
 
+var multiLineG;
+
 // var lawmode = 0;
 // var dowmode = [1, 1];
 // var statemode = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
@@ -76,7 +78,7 @@ function retrieveUSAverageDataOnCDMSelection(stateData, weather, location, divNa
 		success: function(usAverageData, status) {
 			//console.log(usAverageData);
 			processedMultiLineData = processMultiLineJSONData(stateData, usAverageData, weather, location);
-			console.log(processedMultiLineData);
+				console.log(usAverageData);
 				multiLineG = new MultiLineGraph(processedMultiLineData, "#"+divName);
 				multiLineG.initTimeOfDay();
 			hideLoadingIcon();
@@ -356,6 +358,30 @@ function processMultiLineJSONData(statesData, usAverageData, weatherCategoryName
 		}		
 	});	
 	
+	
+	
+		usAvgCategoryJsonObj = usAverageTimeCategoryDataArray[i];
+		timeBlocksArray = usAverageJsonObject["time_category_data"];
+		
+		for(timeBlocks = 0; timeBlocks<8; timeBlocks++)
+		{
+			//get time category
+			filteredTimeCategories = timeBlocksArray.filter(function(timeCategoryObject) {
+				return timeCategoryObject["key"] == timeBlocks;
+			});
+			
+			if(filteredTimeCategories.length == 0)
+			{
+				var timeCategoryDataForHour = {};
+				timeCategoryDataForHour["key"] = timeBlocks;
+				timeCategoryDataForHour["values"] = 0;
+		
+				timeBlocksArray.push(timeCategoryDataForHour);
+			}
+			
+			timeBlocksArray.sort(function(a,b) {return a.key - b.key});
+		}
+	
 	//console.log(usAverageJsonObject);
 	
 	//setup state category data	
@@ -444,7 +470,11 @@ function processMultiLineJSONData(statesData, usAverageData, weatherCategoryName
 				timeBlocksArray.push(timeCategoryDataForHour);
 			}
 		}
+		
+		timeBlocksArray.sort(function(a,b) {return a.key - b.key});
+		//console.log(stateCategoryJsonObj);
 	}
+	
 	
 	return parentJSONObject;
 }
@@ -559,21 +589,33 @@ var categoriesSelectedCallback = function(isSelected, weatherCategoryName, locat
 		locationCategoryName = "";
 	}
 	
+	var divName = generateMultiLineGraphDivName(weatherCategoryName, locationCategoryName);
+	
 	if(isSelected)
-	{
-		$( "#multiLineTimeOfDay" ).empty();
-		
+	{	
 		jQuery('<div/>', {
-			id: "lineGraphDiv",
+			id: divName,
 		}).appendTo('#multiLineTimeOfDay');
 		
-		retrieveDataOnCDMSelection(weatherCategoryName, locationCategoryName, "lineGraphDiv");
+		selectedLineGraphIDArray.push(divName);
+		
+		retrieveDataOnCDMSelection(weatherCategoryName, locationCategoryName, divName);
 		console.log("Categories Selected: ["+weatherCategoryName+", "+locationCategoryName+"]");
 	}
 	else
 	{
+		$("#"+divName).remove();
 		console.log("Categories DE-Selected: ["+weatherCategoryName+", "+locationCategoryName+"]");
 	}
+}
+
+var generateMultiLineGraphDivName = function(weatherCategoryName, locationCategoryName)
+{
+	var divName = weatherCategoryName+"-"+locationCategoryName;
+	divName = divName.replace("(", "");
+	divName = divName.replace(")", "");
+	divName = divName.replace(/ /g, "-");
+	return divName;
 }
 
 var isLawModeSelected = function()
