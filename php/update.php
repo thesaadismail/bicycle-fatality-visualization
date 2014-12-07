@@ -44,7 +44,7 @@
 	$myquery="ALTER VIEW current_data 
 				AS SELECT d.statenum, d.casenum, d.atmcond,  d.accdate, d.accday, d.acchr, d.accmin, d.accmon, d.acctime , d.dayofweek, d.lightcond, d.nmlocat
 				FROM data_all d ".$law.
-				" d.statenum IN (".$selectedStates.") AND d.accmon BETWEEN ".$startmonth." AND ".$endmonth.$days;
+				" d.statenum IN (".$selectedStates.") AND d.ptype IN (6,7) AND d.accmon BETWEEN ".$startmonth." AND ".$endmonth.$days;
 	ChromePhp::log($myquery);
 	
 	$query = mysql_query($myquery);

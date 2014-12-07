@@ -45,7 +45,7 @@
 	$myquery="	ALTER VIEW for_line_graph  
 				AS SELECT statenum, casenum, atmcond,  accdate, accday, acchr, accmin, accmon, acctime , dayofweek, lightcond, nmlocat
 				FROM data_all
-				WHERE ".$weatherclause . $locationclause . " statenum IN (".$selectedStates.") AND accmon BETWEEN ".$startmonth." AND ".$endmonth.$days;
+				WHERE ".$weatherclause . $locationclause . " statenum IN (".$selectedStates.") AND  ptype IN (6,7) AND accmon BETWEEN ".$startmonth." AND ".$endmonth.$days;
 	
 	/* $myquery1="	ALTER VIEW for_line_graph  
 				AS SELECT statenum, casenum, atmcond,  accdate, accday, acchr, accmin, accmon, acctime , dayofweek, lightcond, nmlocat

@@ -12,7 +12,7 @@
 	
 	$myquery="
 		SELECT accmon month_id, count( * ) num_of_fatalities
-		FROM data_all WHERE accmon>0
+		FROM data_all WHERE accmon>0 AND ptype IN (6,7) 
 		GROUP BY accmon
 	";
 	
