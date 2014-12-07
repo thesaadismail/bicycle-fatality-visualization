@@ -2,7 +2,7 @@
 	include 'ChromePhp.php';
 	
 	include 'dbinfo.php';
-	ChromePhp::log("START cdmMain =>");     
+	//ChromePhp::log("START cdmMain =>");     
 	
     $server = mysql_connect($host, $username, $password);
     $connection = mysql_select_db($database, $server);
@@ -24,7 +24,7 @@
 	GROUP BY Weather, Location
 	ORDER BY Weather, Location ASC 
 	";
-	ChromePhp::log("QUERYING cdmMain =>");     
+	//ChromePhp::log("QUERYING cdmMain =>");     
 	
 	$query = mysql_query($myquery);
 			
@@ -40,7 +40,7 @@
 	}
 	
 	echo json_encode($data);		
-	ChromePhp::log("END cdmMain =>");    
+	//ChromePhp::log("END cdmMain =>");    
     mysql_close($server);
-	ChromePhp::log("SERVER CLOSED cdmMain =>");    
+	//ChromePhp::log("SERVER CLOSED cdmMain =>");    
 ?>	

@@ -156,7 +156,6 @@ function retrieveDataBasedOnFilters() {
 function initializeTimeSlider(){
 	d3.json('php/overviewData.php', function(error, data) {
 		processedJsonObject = processOverviewJSON(data);
-		//console.log(processedJsonObject);
 		initTimeSlider(processedJsonObject);
 	});
 }
@@ -178,6 +177,7 @@ function processOverviewJSON(data){
 	
 	data.forEach(function(d) {
 		var tempJsonObject = {};
+		console.log(d.month_id);
 		tempJsonObject["month_id"] = d.month_id-1;
 		tempJsonObject["num_of_fatalities"] = d.num_of_fatalities;
 		sampleOverviewTimesliderData.push(tempJsonObject);		

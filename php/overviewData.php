@@ -1,7 +1,7 @@
 
 <?php
-	/* include $_SERVER['DOCUMENT_ROOT'].'/php/ChromePhp.php';
-	ChromePhp::log('Hello console!');
+	include 'ChromePhp.php';
+/*	ChromePhp::log('Hello console!');
 	ChromePhp::warn('something went wrong!');
 */	
 	include 'dbinfo.php';
@@ -12,7 +12,7 @@
 	
 	$myquery="
 		SELECT accmon month_id, count( * ) num_of_fatalities
-		FROM data_all
+		FROM data_all WHERE accmon>0
 		GROUP BY accmon
 	";
 	

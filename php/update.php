@@ -1,7 +1,7 @@
 <?php
 	include 'dbinfo.php';
     include 'ChromePhp.php';
-	ChromePhp::log('Hello console!');
+	ChromePhp::log('update.php ##########################');
 	//ChromePhp::warn('something went wrong!');
 	
     $server = mysql_connect($host, $username, $password);
@@ -23,14 +23,13 @@
 	if($weekdays == 1 && $weekends == 0) $days = " AND dayofweek in (2,3,4,5,6)";
 	if($weekdays == 0 && $weekends == 1) $days = " AND dayofweek in (1,7)"; 
 	
-	$law = "";
-	ChromePhp::log('law law law!');
+	$law = " WHERE ";
 	ChromePhp::log($data);
 	if($lawmode == 1 && $lawallowed == 1) 
-		$law = " AND s.allowed=1";
+		$law = "WHERE d.statenum IN (SELECT id FROM state WHERE allowed =1) AND";
 	else if($lawmode == 1 && $lawallowed == 0)
-		$law = " AND s.allowed=0";
-		
+		$law = "WHERE d.statenum IN (SELECT id FROM state WHERE allowed =0) AND";
+	
 	
 	for ($x = 1; $x <= 56; $x++) {		//count($data)
 		if($data[$x]!=null && $data[$x]==1)
@@ -44,8 +43,8 @@
 	
 	$myquery="ALTER VIEW current_data 
 				AS SELECT d.statenum, d.casenum, d.atmcond,  d.accdate, d.accday, d.acchr, d.accmin, d.accmon, d.acctime , d.dayofweek, d.lightcond, d.nmlocat
-				FROM data_all d
-				WHERE d.statenum IN (".$selectedStates.") AND d.accmon BETWEEN ".$startmonth." AND ".$endmonth.$days.$law;
+				FROM data_all d ".$law.
+				" d.statenum IN (".$selectedStates.") AND d.accmon BETWEEN ".$startmonth." AND ".$endmonth.$days;
 	ChromePhp::log($myquery);
 	
 	$query = mysql_query($myquery);
@@ -59,4 +58,5 @@
 	echo "query result"; 
 	
     mysql_close($server);
+	ChromePhp::log("closing server..........update.php");
 ?>
