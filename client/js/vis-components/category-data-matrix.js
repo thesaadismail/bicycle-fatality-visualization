@@ -187,8 +187,8 @@ function CategoryDataMatrix(mainElementName, mainJsonData, xAxisElementName, xAx
 				}
 			}
 		}
-		// mintext.text(min1);
-		// maxtext.text(max1);	
+		mintext.text(min1);
+		maxtext.text(max1);	
 	}
 	
 	this.updateXAxis_Location = function(newData){

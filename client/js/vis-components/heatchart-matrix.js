@@ -55,6 +55,14 @@ function HeatchartMatrix(elementName, cells, widthAttr, heightAttr, axisType, ce
 					ADD ELEMENTS
 	===========================================
 	*/
+
+	var scalechange = function(number) {
+		// return number;
+		// return Math.log(number+1);
+		// return Math.sqrt(number);
+		return Math.pow(number,1/3);
+	};
+
 	var createHeatchart = function() {
 			var sampleJsonData = sampleJsonDataForCDM["category_data"];
 			
@@ -389,7 +397,7 @@ var determineMaxMinForYAxis = function(sampleJsonData, max, min)
 				}
 				else
 				{
-				return color((d["num_of_fatalities"] - min) / (max - min));
+				return color( (scalechange(d["num_of_fatalities"]) - scalechange(min)) / (scalechange(max) - scalechange(min)) );
 				}
 			}).attr("stroke", cellStrokeColor).attr("cell", function(d) {
 				return "r" + d.row + "c" + d.col;
