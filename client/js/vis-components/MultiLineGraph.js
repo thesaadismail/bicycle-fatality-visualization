@@ -137,7 +137,7 @@ function MultiLineGraph(sampleData, elementName){
 				.text(sampleData.weatherLocation);
 				
 		//---- add the missing states value string ----	
-		if(sampleData.missing_state_values != ''){			
+/* 		if(sampleData.missing_state_values != ''){			
 			vis.append("g")
 				.append("text")
 					.attr("transform", "rotate(0)")
@@ -149,7 +149,7 @@ function MultiLineGraph(sampleData, elementName){
 					.attr("text-anchor", "middle")
 					.attr("fill", "rgb(0, 0, 0)")
 					.text("No records found for: " + sampleData.missing_state_values);
-		}
+		} */
 	
 		console.log('-------- ADDING HIDDEN POINTS -----------\n'); 
 		sampleData.state_category_data[0].time_category_data.forEach(function(d) {
